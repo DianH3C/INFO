@@ -1,11 +1,53 @@
---- 17:26:28.13 ALL CAnalyzer 
-ProductMode must be "all" or "simware",but INPUT is "D:\Source\B46D001"!
-LintMode must be "basic" or "advance",but INPUT is "D:\Source\B46D001"!
-Open "D:\Source\B46D001" Failed (3), not exist
---- BEG 17:26:28.13  CAnalyzer:ALL  SrcVer: B47000
---- END 17:26:28.17  2016-07-23
+--- 14:34:45.23 ALL CAnalyzer E:\INFO\liangjinchao\Project\\INFO\src
+    E:\INFO\liangjinchao\Project\INFO\src\info_data.c L0 Info 766 [] [6BF9E86EAE460210B7B52A80DCFBF11B] 
+        Header file 'D:\CATool\lintware\linux\mips\string.h' not used in module 'E:\INFO\liangjinchao\Project\INFO\src\info_data.c' 
+
+    E:\INFO\liangjinchao\Project\INFO\src\info_data.c L0 Info 766 [] [44C995A53B8EB0805587F0829586DD96] 
+        Header file 'E:\INFO\liangjinchao\Project\\public\include\comware\sys\string_ex.h' not used in module 'E:\INFO\liangjinchao\Project\INFO\src\info_data.c' 
+
+    E:\INFO\liangjinchao\Project\INFO\src\info_data.c L0 Info 766 [] [96143C39C35C390DF46329549CDB711B] 
+        Header file 'E:\INFO\liangjinchao\Project\INFO\src\info_dbg.h' not used in module 'E:\INFO\liangjinchao\Project\INFO\src\info_data.c' 
+
+    E:\INFO\liangjinchao\Project\INFO\src\info_dbg.c L0 Info 766 [] [D8850DBD9415453BDFE0385BCF844F45] 
+        Header file 'E:\INFO\liangjinchao\Project\\public\include\comware\sys\string_ex.h' not used in module 'E:\INFO\liangjinchao\Project\INFO\src\info_dbg.c' 
+
+    E:\INFO\liangjinchao\Project\INFO\src\info_main.c L0 Info 766 [] [4F151EB2D106AE36664380E2C89CFBBF] 
+        Header file 'E:\INFO\liangjinchao\Project\\public\include\comware\sys\string_ex.h' not used in module 'E:\INFO\liangjinchao\Project\INFO\src\info_main.c' 
+
+    E:\INFO\liangjinchao\Project\INFO\src\info_parse.c L0 Info 766 [] [526822FC1DBD076CA53BB83D67B5969F] 
+        Header file 'E:\INFO\liangjinchao\Project\\public\include\comware\sys\string_ex.h' not used in module 'E:\INFO\liangjinchao\Project\INFO\src\info_parse.c' 
+
+    E:\INFO\liangjinchao\Project\INFO\src\info_proc.c L0 Info 766 [] [F4ADA042B30A07573C8DD6C78594CA3F] 
+        Header file 'D:\CATool\lintware\linux\mips\string.h' not used in module 'E:\INFO\liangjinchao\Project\INFO\src\info_proc.c' 
+
+    E:\INFO\liangjinchao\Project\INFO\src\info_proc.c L0 Info 766 [] [F71761D06DEC376B337E35FD8506C796] 
+        Header file 'E:\INFO\liangjinchao\Project\\public\include\comware\sys\string_ex.h' not used in module 'E:\INFO\liangjinchao\Project\INFO\src\info_proc.c' 
+
+    E:\INFO\liangjinchao\Project\INFO\src\info_proc.c L0 Info 766 [] [377E842344B94357F63C6D89327A2158] 
+        Header file 'E:\INFO\liangjinchao\Project\INFO\src\info_parse.h' not used in module 'E:\INFO\liangjinchao\Project\INFO\src\info_proc.c' 
+
+    E:\INFO\liangjinchao\Project\INFO\src\info_proc.c L0 Info 766 [] [C99B5CCCF6BA0EE38A13B3EAFC7BC1C1] 
+        Header file 'E:\INFO\liangjinchao\Project\INFO\src\info_data.h' not used in module 'E:\INFO\liangjinchao\Project\INFO\src\info_proc.c' 
+
+Note 900 
+        Total 10 messages ( 1 Files), 0 Error, 0 Warning, 10 Info, 0 Note. [0/56] 
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Note 900 
+        Total 0 messages ( 0 Files), 0 Error, 0 Warning, 0 Info, 0 Note.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+Note 900 
+        Total 0 messages produced, 0 Error, 0 Warning, 0 Info, 0 Note.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+--- BEG 14:34:45.23  CAnalyzer:ALL  SrcVer: B47000
+--- END 14:34:50.99  2016-07-27
 --- Lintware    Rev  2014-09-25 11:10:04
 --- Codeware    Rev  2014-09-24 11:36:23
 --- Checkware   Rev  2014-09-18 15:12:23
-
 
