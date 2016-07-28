@@ -142,3 +142,15 @@ info_data.h (INFO\src):BOOL_T INFO_data_IsEmpty(VOID);
 ---- INFO_DATA_S Matches (2 in 1 files) ----
 info_data.c (INFO\src):    INFO_DATA_S *pstNext;   /* 数据组织相关[*] */
 info_data.c (INFO\src):}INFO_DATA_S;
+---- INFO_data_IsEmpty Matches (6 in 3 files) ----
+courseware_test.c (INFO\ut\test):    bIsEmpty = INFO_data_IsEmpty();
+courseware_test.c (INFO\ut\test):    bIsEmpty = INFO_data_IsEmpty();
+courseware_test.c (INFO\ut\test):    bIsEmpty = INFO_data_IsEmpty();
+courseware_test.c (INFO\ut\test):    bIsEmpty = INFO_data_IsEmpty();
+info_data.c (INFO\src):BOOL_T INFO_data_IsEmpty(VOID)
+info_data.h (INFO\src):BOOL_T INFO_data_IsEmpty(VOID);
+---- INFO_data_IsExist Matches (4 in 3 files) ----
+courseware_test.c (INFO\ut\test):    bIsExist = INFO_data_IsExist(10);
+courseware_test.c (INFO\ut\test):    bIsExist = INFO_data_IsExist(10);
+info_data.c (INFO\src):BOOL_T INFO_data_IsExist(IN UINT uiId)
+info_data.h (INFO\src):BOOL_T INFO_data_IsExist(IN UINT uiId);
