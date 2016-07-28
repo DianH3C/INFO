@@ -66,7 +66,7 @@ VOID INFO_proc_DisStruct(IN INFO_CFG_S *pstInputStruct)
     {
         printf("MALE\t");
     }
-    printf("%u\t%u\n", (*pstInputStruct).uiAge, (*pstInputStruct).uiHeight);
+    printf("%u\t%u\r\n", (*pstInputStruct).uiAge, (*pstInputStruct).uiHeight);
 }
 
 
@@ -101,11 +101,11 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
     /* 没有任何信息 */
     if (BOOL_TRUE == INFO_data_IsEmpty())
     {
-        printf("No info.\n");
+        printf("No info.\r\n");
     }
     else
     {
-        printf("ID\tName\tSex\tAge\tHeight\n");
+        printf("ID\tName\tSex\tAge\tHeight\r\n");
 
         /* 依次获取所有有数据的工号及其他信息 */
         uiId = INFO_data_GetFirst();
@@ -131,7 +131,7 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 
 /*****************************************************************************
     Func Name: INFO_proc_Add[*]
- Date Created: 2016-07-27
+ Date Created: 2016-07-29
        Author: xxxx 00000
   Description: 添加
         Input: IN const CHAR *pcInputStr    输入字符串
@@ -149,7 +149,42 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 *****************************************************************************/
 ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 {
-    return ERROR_SUCCESS;
+    ULONG ulErrCode = ERROR_FAILED;
+    const CHAR *pcErrInfo = NULL;
+    INFO_CFG_S stCfg = { 0 };
+
+    /* 解析输入字符串得到配置数据并存入stCfg中 */
+    INFO_parse_InputStr(pcInputStr, &stCfg);
+    if (INFO_ALL_ISVALID(&stCfg))
+    {
+        /* 数据输入不全或数据取值非法 */
+        pcErrInfo = "The parameter is incorrect.\r\n";
+        ulErrCode = ERROR_INVALID_PARAMETER;
+    }
+    else if (BOOL_TRUE == INFO_data_IsExist(stCfg.uiId))
+    {
+        /* 工号已经存在 */
+        pcErrInfo = "The item already exists.\r\n";
+        ulErrCode = ERROR_ALREADY_EXIST;
+    }
+    else
+    {
+        ulErrCode = INFO_data_AddData(&stCfg);
+
+        if (ERROR_SUCCESS != ulErrCode)
+        {
+            /* 资源不足添加失败 */
+            pcErrInfo = "Not enough resources are available to complete the operation.\r\n";
+        }
+        else
+        {
+            /* 添加成功 */
+            pcErrInfo = "YOu can see the newly added info through Display function .\r\n";
+        }
+    }
+
+    printf("%s", pcErrInfo);
+    return ulErrCode;
 }
 
 /*****************************************************************************

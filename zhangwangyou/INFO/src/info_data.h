@@ -13,7 +13,7 @@
   Modification History
   DATE        NAME             DESCRIPTION
 --------------------------------------------------------------------------------
-  YYYY-MM-DD  
+  YYYY-MM-DD
 
 *******************************************************************************/
 
@@ -30,6 +30,9 @@ BOOL_T INFO_data_IsExist(IN UINT uiId);
 
 /* 获取数据 */
 ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg);
+
+/* 增加数据节点 */
+ULONG INFO_data_AddData(IN INFO_CFG_S *pstCfg);
 
 /*************************************** 遍历 ***************************************/
 /* 判断整个数据组织是否为空 */

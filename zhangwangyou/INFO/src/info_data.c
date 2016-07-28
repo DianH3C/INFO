@@ -181,7 +181,7 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 
     if (NULL != pstNode)
     {
-        pstCfg = pstNode->stCfg;
+        *pstCfg = pstNode->stCfg;
         return ERROR_SUCCESS;
     }
     else
@@ -264,6 +264,89 @@ UINT INFO_data_GetNext(IN UINT uiId)
     else
     {
         return INFO_ID_INVALID;
+    }
+}
+
+/*****************************************************************************
+    Func Name: INFO_data_AddData[*]
+ Date Created: 2016-07-29
+       Author: xxxx 00000
+  Description: 增加一个数据节点
+        Input: IN INFO_CFG_S *pstCfg    新增数据
+       Output:
+       Return: ULONG, ERROR_SUCCESS     处理成功
+                      OTHER             处理失败
+      Caution: 此接口不检查工号是否已经存在，需外部函数进行检查
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+ULONG INFO_data_AddData(IN INFO_CFG_S *pstCfg)
+{
+    UINT uiRet = ERROR_FAILED;
+    BOOL_T bAddable = BOOL_FALSE;
+    BOOL_T bAddable_next = BOOL_FALSE;
+    INFO_DATA_S *pstNode = g_pstINFO_DATA_HEAD;
+    INFO_DATA_S *pstNewNode = NULL;
+
+    if (INFO_data_GetFirst() > pstCfg->uiId)
+    {
+        /* 头节点的工号比要增加的节点工号大 */
+        pstNewNode = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
+        if (NULL == pstNewNode)
+        {
+            uiRet = ERROR_NO_ENOUGH_RESOURCE;
+        }
+        else
+        {
+            uiRet = ERROR_SUCCESS;
+            g_pstINFO_DATA_HEAD = pstNewNode;
+            g_pstINFO_DATA_HEAD->pstNext = pstNode;
+            g_pstINFO_DATA_HEAD->bIsEmpty = BOOL_FALSE;
+            g_pstINFO_DATA_HEAD->stCfg = *pstCfg;
+        }
+    }
+    else
+    {
+        /* 遍历数据链表，定位插入工号的位置 */
+        while ((NULL != pstNode) && (BOOL_TRUE != pstNode->bIsEmpty))
+        {
+            bAddable_next = (NULL == pstNode->pstNext) || (pstCfg->uiId < pstNode->pstNext->stCfg.uiId);
+            bAddable = (pstCfg->uiId > pstNode->stCfg.uiId) && bAddable_next;
+            if (bAddable)
+            {
+                pstNewNode = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
+                if (NULL == pstNewNode)
+                {
+                    uiRet = ERROR_NO_ENOUGH_RESOURCE;
+                }
+                else
+                {
+                    uiRet = ERROR_SUCCESS;
+                    pstNewNode->pstNext = pstNode->pstNext;
+                    pstNewNode->bIsEmpty = BOOL_FALSE;
+                    pstNewNode->stCfg = *pstCfg;
+                    pstNode->pstNext = pstNewNode;
+                }
+                break;
+            }
+            else
+            {
+                pstNode = pstNode->pstNext;
+            }
+        }
+    }
+
+    if (ERROR_SUCCESS != uiRet)
+    {
+        return uiRet;
+    }
+    else
+    {
+        return ERROR_SUCCESS;
     }
 }
 
