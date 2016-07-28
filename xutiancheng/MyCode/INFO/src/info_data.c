@@ -42,6 +42,17 @@ typedef struct tagInfo_Data
                             /* 数据组织相关[*] */
     INFO_CFG_S stCfg;       /* 配置数据 */
 }INFO_DATA_S;
+
+/* 链表节点定义 */
+typedef struct INFO_DATA_NODE{
+
+    INFO_DATA_S node_content;    /* 节点存储的信息 */
+    INFO_DATA_NODE * node_next;  /* 指向下一个节点的指针 */
+};
+
+INFO_DATA_NODE sl_head;        /* 链表头节点 */
+INFO_DATA_NODE *sl_head_pointer = & sl_head;   /* 指向链表头节点的指针 */
+
 /*****************************************************************************
     Func Name: INFO_data_IsExist[*]
  Date Created: 201x-xx-xx
@@ -61,9 +72,11 @@ typedef struct tagInfo_Data
 *****************************************************************************/
 BOOL_T INFO_data_IsExist(IN UINT uiId)
 {
-    if ()
+    INFO_CFG_S * id_data ; /* 获取工号对应节点指针 */
+    id_data == info_data_Get(uiId)
+    if ( NULL != id_data )
     {
-
+        return BOOL_TRUE;
     }
     else
     {
@@ -141,7 +154,6 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 *****************************************************************************/
 ULONG INFO_data_Create(IN UINT uiId)
 {
-
     return ERROR_SUCCESS;
 }
 
@@ -191,6 +203,29 @@ UINT INFO_data_GetNext(IN UINT uiId)
 }
 
 /*****************************************************************************
+    Func Name: info_data_Get
+ Date Created: 201x-xx-xx
+       Author: xxxx 00000
+  Description: 返回工号对应节点的指针
+        Input: IN UINT uiId                 当前工号
+       Output:
+       Return: INFO_CFG_S * , != NULL       工号存在
+                     ==                     工号不存在
+      Caution: 此接口获取下一个工号不依赖于入参uiId本身是否有数据
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+INFO_DATA_NODE * info_data_Get(IN UINT uiId)
+{
+
+    return NULL;
+}
+
+/*****************************************************************************
     Func Name: INFO_data_Init[*]
  Date Created: 201x-xx-xx
        Author: xxxx 00000
@@ -209,6 +244,7 @@ UINT INFO_data_GetNext(IN UINT uiId)
 *****************************************************************************/
 ULONG INFO_data_Init(VOID)
 {
+    sl_head_pointer = (INFO_DATA_NODE *)malloc(sizeof());
     return ERROR_SUCCESS;
 }
 
