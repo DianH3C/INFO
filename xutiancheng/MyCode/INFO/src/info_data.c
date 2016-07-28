@@ -42,6 +42,17 @@ typedef struct tagInfo_Data
                             /* 数据组织相关[*] */
     INFO_CFG_S stCfg;       /* 配置数据 */
 }INFO_DATA_S;
+
+typedef struct tagInfo_Node
+{
+
+    INFO_DATA_S nodeContent;    /*节点内容*/
+    struct tagInfo_Node * nextNode;   /*指向下一个节点*/
+}INFO_NODE;
+
+INFO_NODE sl_head;  /*链表头节点*/
+INFO_NODE * sl_head_pointer = &sl_head; /*链表头节点指针*/
+
 /*****************************************************************************
     Func Name: INFO_data_IsExist[*]
  Date Created: 201x-xx-xx
@@ -61,14 +72,7 @@ typedef struct tagInfo_Data
 *****************************************************************************/
 BOOL_T INFO_data_IsExist(IN UINT uiId)
 {
-    if ()
-    {
-
-    }
-    else
-    {
-        return BOOL_FALSE;
-    }
+    return BOOL_FALSE;
 }
 
 /*****************************************************************************
@@ -90,14 +94,7 @@ BOOL_T INFO_data_IsExist(IN UINT uiId)
 *****************************************************************************/
 BOOL_T INFO_data_IsEmpty(VOID)
 {
-    if(INFO_ID_INVALID == INFO_data_GetFirst(VOID))
-    {
-        return BOOL_FALSE;
-    }
-    else
-    {
-        return BOOL_TRUE;
-    }
+    return BOOL_TRUE;
 }
 
 /*****************************************************************************
@@ -121,29 +118,6 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 {
     return ERROR_FAILED;
 }
-
-/*****************************************************************************
-    Func Name: INFO_data_Create
- Date Created: 201x-xx-xx
-       Author: xxxx 00000
-  Description: 为入参工号创建一个节点并将该节点加入链表
-        Input: IN UINT uiId             工号
-       Output:
-       Return: ULONG, ERROR_SUCCESS     处理成功
-                      OTHER             处理失败
-      Caution: 出参仅在返回成功时有效
-------------------------------------------------------------------------------
-  Modification History
-  DATE        NAME             DESCRIPTION
-  --------------------------------------------------------------------------
-  YYYY-MM-DD
-
-*****************************************************************************/
-ULONG INFO_data_Create(IN UINT uiId)
-{
-    return ERROR_SUCCESS;
-}
-
 
 /*****************************************************************************
     Func Name: INFO_data_GetFirst[*]
@@ -188,6 +162,29 @@ UINT INFO_data_GetNext(IN UINT uiId)
 {
     return INFO_ID_INVALID;
 }
+
+/*****************************************************************************
+    Func Name: INFO_data_Create
+ Date Created: 201x-xx-xx
+       Author: xxxx 00000
+  Description: 获取配置数据
+        Input: INFO_CFG_S *pstCfg   配置数据
+       Output:
+       Return: ULONG, ERROR_SUCCESS     处理成功
+                      OTHER             处理失败
+      Caution: 出参仅在返回成功时有效
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+VOID INFO_data_Create(IN INFO_CFG_S *pstCfg)
+{
+    printf("test for fun\n");
+}
+
 
 /*****************************************************************************
     Func Name: INFO_data_Init[*]

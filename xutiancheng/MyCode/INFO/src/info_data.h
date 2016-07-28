@@ -13,7 +13,7 @@
   Modification History
   DATE        NAME             DESCRIPTION
 --------------------------------------------------------------------------------
-  YYYY-MM-DD
+  YYYY-MM-DD  
 
 *******************************************************************************/
 
@@ -28,23 +28,9 @@ extern "C"{
 /* 判断指定工号的数据是否存在 */
 BOOL_T INFO_data_IsExist(IN UINT uiId);
 
-/* 创建数据 */
-BOOL_T INFO_data_Create(IN UINT uiId);
-
 /* 获取数据 */
 ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg);
 
-/* 根据ID设置姓名 */
-VOID INFO_data_SetName(IN UINT uiId,IN CHAR [] szNAME);
-
-/* 根据ID设置年龄 */
-VOID INFO_data_SetAge(IN UINT uiId,IN UINT uiAge);
-
-/* 根据ID设置身高 */
-VOID INFO_data_SetHeight(IN UINT uiId,IN UINT uiHeight);
-
-/* 根据ID设置性别 */
-VOID INFO_data_Set(IN UINT uiId,IN INFO_SEX_E enSex);
 /*************************************** 遍历 ***************************************/
 /* 判断整个数据组织是否为空 */
 BOOL_T INFO_data_IsEmpty(VOID);
