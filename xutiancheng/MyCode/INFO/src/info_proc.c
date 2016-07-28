@@ -83,6 +83,7 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 {
     INFO_CFG_S * pstCfg;    /*用户配置数据*/
     BOOL_T is_exist;    /*判断用户是否已经存在*/
+    ULONG is_success;   /*判断是否成功创建数据*/
 
     INFO_parse_InputStr(pcInputStr, pstCfg);  /*解析用户输入，得到出参配置数据*/
 
@@ -91,7 +92,14 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
     is_exist = INFO_data_IsExist(pstCfg->uiId);
     if(BOOL_FALSE == is_exist)
     {
-        INFO_data_Create(pstCfg->uiId);
+        is_success = INFO_data_Create(pstCfg->uiId);
+    }
+    if(ERROR_SUCCESS == is_success)
+    {
+        INFO_data_SetName(pstCfg->uiId,pstCfg->szName);
+        INFO_data_SetSex(pstCfg->uiId,pstCfg->enSex);
+        INFO_data_SetAge(pstCfg->uiId,pstCfg->uiAge);
+        INFO_data_SetHeight(pstCfg->uiId,pstCfg->uiHeight);
     }
     return ERROR_SUCCESS;
 }

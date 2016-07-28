@@ -141,7 +141,6 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 *****************************************************************************/
 ULONG INFO_data_Create(IN UINT uiId)
 {
-
     return ERROR_SUCCESS;
 }
 
