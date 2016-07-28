@@ -44,7 +44,12 @@ VOID INFO_data_SetAge(IN UINT uiId,IN UINT uiAge);
 VOID INFO_data_SetHeight(IN UINT uiId,IN UINT uiHeight);
 
 /* 根据ID设置性别 */
-VOID INFO_data_Set(IN UINT uiId,IN INFO_SEX_E enSex);
+VOID INFO_data_SetSex(IN UINT uiId,IN INFO_SEX_E enSex);
+
+/* 获取相应工号对应节点指针 */
+INFO_DATA_NODE * info_data_Get(IN UINT uiId);
+
+
 /*************************************** 遍历 ***************************************/
 /* 判断整个数据组织是否为空 */
 BOOL_T INFO_data_IsEmpty(VOID);
