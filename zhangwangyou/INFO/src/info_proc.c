@@ -37,8 +37,42 @@ extern "C"{
 
 
 /*****************************************************************************
+    Func Name: INFO_proc_DispSt[*]
+ Date Created: 2016-07-28
+       Author: xxxx 00000
+  Description: 显示单个结构体内数据
+        Input: IN INFO_CFG_S stInputSt      数据结构体
+       Output:
+
+       Return: VOID
+      Caution:
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  2014-11-05  peng yanyu       complete code
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+
+*****************************************************************************/
+VOID INFO_proc_DisStruct(IN INFO_CFG_S *pstInputStruct)
+{
+    printf("%u\t%s\t", (*pstInputStruct).uiId, (*pstInputStruct).szName);
+    if (INFO_SEX_FEMALE == (*pstInputStruct).enSex)
+    {
+        printf("FEMALE\t");
+    }
+    else
+    {
+        printf("MALE\t");
+    }
+    printf("%u\t%u\n", (*pstInputStruct).uiAge, (*pstInputStruct).uiHeight);
+}
+
+
+/*****************************************************************************
     Func Name: INFO_proc_Display[*]
- Date Created: 2016-07-27
+ Date Created: 2016-07-28
        Author: xxxx 00000
   Description: 显示
         Input: IN const CHAR *pcInputStr    输入字符串
@@ -59,6 +93,39 @@ extern "C"{
 ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 {
     IGNORE_PARAM(pcInputStr);
+
+    UINT uiId = INFO_ID_INVALID;
+    ULONG ulHaveGotData = ERROR_FAILED;
+    INFO_CFG_S stData = { 0 };
+
+    /* 没有任何信息 */
+    if (BOOL_TRUE == INFO_data_IsEmpty())
+    {
+        printf("No info.\n");
+    }
+    else
+    {
+        printf("ID\tName\tSex\tAge\tHeight\n");
+
+        /* 依次获取所有有数据的工号及其他信息 */
+        uiId = INFO_data_GetFirst();
+        ulHaveGotData = INFO_data_GetData(uiId, &stData);
+        if (ERROR_SUCCESS == ulHaveGotData)
+        {
+            INFO_proc_DisStruct(&stData);
+        }
+
+        uiId = INFO_data_GetNext(uiId);
+        while (INFO_ID_INVALID != uiId)
+        {
+            ulHaveGotData = INFO_data_GetData(uiId, &stData);
+            if (ERROR_SUCCESS == ulHaveGotData)
+            {
+                INFO_proc_DisStruct(&stData);
+            }
+            uiId = INFO_data_GetNext(uiId);
+        }
+    }
     return ERROR_SUCCESS;
 }
 
