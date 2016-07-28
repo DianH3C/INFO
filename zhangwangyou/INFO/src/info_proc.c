@@ -4,7 +4,7 @@
                               info_proc.c
   Project Code: Comware V700R001
    Module Name: INFO
-  Date Created: 201x-xx-xx
+  Date Created: 2016-07-27
         Author: xxxx 00000
    Description: 具体功能处理
 
@@ -38,7 +38,7 @@ extern "C"{
 
 /*****************************************************************************
     Func Name: INFO_proc_Display[*]
- Date Created: 201x-xx-xx
+ Date Created: 2016-07-27
        Author: xxxx 00000
   Description: 显示
         Input: IN const CHAR *pcInputStr    输入字符串
@@ -58,12 +58,13 @@ extern "C"{
 *****************************************************************************/
 ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 {
+    IGNORE_PARAM(pcInputStr);
     return ERROR_SUCCESS;
 }
 
 /*****************************************************************************
     Func Name: INFO_proc_Add[*]
- Date Created: 201x-xx-xx
+ Date Created: 2016-07-27
        Author: xxxx 00000
   Description: 添加
         Input: IN const CHAR *pcInputStr    输入字符串
@@ -86,7 +87,7 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 
 /*****************************************************************************
     Func Name: INFO_proc_Delete[*]
- Date Created: 201x-xx-xx
+ Date Created: 2016-07-27
        Author: xxxx 00000
   Description: 删除
         Input: IN const CHAR *pcInputStr    输入字符串
@@ -109,7 +110,7 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 
 /*****************************************************************************
     Func Name: INFO_proc_Modify[*]
- Date Created: 201x-xx-xx
+ Date Created: 2016-07-27
        Author: xxxx 00000
   Description: 修改
         Input: IN const CHAR *pcInputStr    输入字符串
@@ -132,7 +133,7 @@ ULONG INFO_proc_Modify(IN const CHAR *pcInputStr)
 
 /*****************************************************************************
     Func Name: INFO_proc_Exit
- Date Created: 201x-xx-xx
+ Date Created: 2016-07-27
        Author: xxxx 00000
   Description: 退出
         Input: IN const CHAR *pcInputStr    输入字符串
@@ -155,7 +156,7 @@ ULONG INFO_proc_Exit(IN const CHAR *pcInputStr)
 
 /*****************************************************************************
     Func Name: INFO_proc_OpenDebug
- Date Created: 201x-xx-xx
+ Date Created: 2016-07-27
        Author: xxxx 00000
   Description: 打开调试开关
         Input: IN const CHAR *pcInputStr    输入字符串
@@ -181,7 +182,7 @@ ULONG INFO_proc_OpenDebug(IN const CHAR *pcInputStr)
 
 /*****************************************************************************
     Func Name: INFO_proc_CloseDebug
- Date Created: 201x-xx-xx
+ Date Created: 2016-07-27
        Author: xxxx 00000
   Description: 关闭调试开关
         Input: IN const CHAR *pcInputStr    输入字符串

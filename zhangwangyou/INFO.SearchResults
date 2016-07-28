@@ -1,0 +1,144 @@
+---- INFO_proc_Display Matches (3 in 3 files) ----
+info_main.c (INFO\src):    [INFO_MENU_DISPLAY]     = {"Display",       INFO_proc_Display},
+info_proc.c (INFO\src):ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
+info_proc.h (INFO\src):ULONG INFO_proc_Display(IN const CHAR *pcInputStr);
+---- INFO_proc_Display Matches (3 in 3 files) ----
+info_main.c (INFO\src):    [INFO_MENU_DISPLAY]     = {"Display",       INFO_proc_Display},
+info_proc.c (INFO\src):ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
+info_proc.h (INFO\src):ULONG INFO_proc_Display(IN const CHAR *pcInputStr);
+---- INFO_MENU_UNSPEC Matches (4 in 1 files) ----
+info_main.c (INFO\src):    INFO_MENU_UNSPEC,
+info_main.c (INFO\src):#define INFO_MENU_ISVALID(enMenu)   ((INFO_MENU_UNSPEC < (enMenu)) && ((enMenu) < INFO_MENU_MAX))
+info_main.c (INFO\src):    for (enEach = (INFO_MENU_E)(INFO_MENU_UNSPEC + 1); enEach < INFO_MENU_MAX; enEach++)
+info_main.c (INFO\src):        enMenu = INFO_MENU_UNSPEC;
+---- INFO_CFG_S Matches (31 in 6 files) ----
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):INFO_CFG_S g_stMemberData[UT_CORRECTMEMBERNUM] = {
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+info.h (INFO\src):}INFO_CFG_S;
+info_data.c (INFO\src):    INFO_CFG_S stCfg;       /* 配置数据 */
+info_data.c (INFO\src):ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
+info_data.h (INFO\src):ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg);
+info_parse.c (INFO\src):STATIC VOID info_parse_Each(IN const CHAR *pcEach, OUT INFO_CFG_S *pstCfg)
+info_parse.c (INFO\src):VOID INFO_parse_InputStr(IN const CHAR *pcInputStr, OUT INFO_CFG_S *pstCfg)
+info_parse.c (INFO\src):    memset(pstCfg, 0, sizeof(INFO_CFG_S));
+info_parse.h (INFO\src):VOID INFO_parse_InputStr(IN const CHAR *pcInputStr, OUT INFO_CFG_S *pstCfg);
+---- INFO_DATA_S Matches (1 in 1 files) ----
+info_data.c (INFO\src):}INFO_DATA_S;
+---- INFO_data_Init Matches (42 in 4 files) ----
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode  = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    INFO_data_Init();
+courseware_test.c (INFO\ut\test):    INFO_data_Init();
+courseware_test.c (INFO\ut\test):    INFO_data_Init();
+courseware_test.c (INFO\ut\test):    INFO_data_Init();
+courseware_test.c (INFO\ut\test):    INFO_data_Init();
+courseware_test.c (INFO\ut\test):    INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode  = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode  = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode  = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode  = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode  = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode  = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode  = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode  = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_data_Init();
+courseware_test.c (INFO\ut\test):    INFO_data_Init();
+courseware_test.c (INFO\ut\test):    INFO_data_Init();
+info_data.c (INFO\src):ULONG INFO_data_Init(VOID)
+info_data.h (INFO\src):ULONG INFO_data_Init(VOID);
+info_main.c (INFO\src):    ulErrCode = INFO_data_Init();
+---- INFO_CFG_S Matches (31 in 6 files) ----
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):INFO_CFG_S g_stMemberData[UT_CORRECTMEMBERNUM] = {
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+courseware_test.c (INFO\ut\test):    INFO_CFG_S stCfg;
+info.h (INFO\src):}INFO_CFG_S;
+info_data.c (INFO\src):    INFO_CFG_S stCfg;       /* 配置数据 */
+info_data.c (INFO\src):ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
+info_data.h (INFO\src):ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg);
+info_parse.c (INFO\src):STATIC VOID info_parse_Each(IN const CHAR *pcEach, OUT INFO_CFG_S *pstCfg)
+info_parse.c (INFO\src):VOID INFO_parse_InputStr(IN const CHAR *pcInputStr, OUT INFO_CFG_S *pstCfg)
+info_parse.c (INFO\src):    memset(pstCfg, 0, sizeof(INFO_CFG_S));
+info_parse.h (INFO\src):VOID INFO_parse_InputStr(IN const CHAR *pcInputStr, OUT INFO_CFG_S *pstCfg);
+---- info_parse_Each Matches (2 in 1 files) ----
+info_parse.c (INFO\src):STATIC VOID info_parse_Each(IN const CHAR *pcEach, OUT INFO_CFG_S *pstCfg)
+info_parse.c (INFO\src):        info_parse_Each(pcEach, pstCfg);
+---- INFO_IOBUF_MAXLEN Matches (8 in 5 files) ----
+courseware_test.c (INFO\ut\test):    CHAR szInfo[INFO_IOBUF_MAXLEN];
+info.h (INFO\src):#define INFO_IOBUF_MAXLEN               512UL
+info_dbg.c (INFO\src):    CHAR szBuf[INFO_IOBUF_MAXLEN];
+info_main.c (INFO\src):    CHAR szBuf[INFO_IOBUF_MAXLEN];
+info_main.c (INFO\src):    CHAR szInputStr[INFO_IOBUF_MAXLEN];
+info_parse.c (INFO\src):        CHAR szData[INFO_IOBUF_MAXLEN];
+info_parse.c (INFO\src):    CHAR szString[INFO_IOBUF_MAXLEN];
+info_parse.c (INFO\src):    DBGASSERT(strlen(pcInputStr) < INFO_IOBUF_MAXLEN);
+---- INFO_data_IsEmpty Matches (6 in 3 files) ----
+courseware_test.c (INFO\ut\test):    bIsEmpty = INFO_data_IsEmpty();
+courseware_test.c (INFO\ut\test):    bIsEmpty = INFO_data_IsEmpty();
+courseware_test.c (INFO\ut\test):    bIsEmpty = INFO_data_IsEmpty();
+courseware_test.c (INFO\ut\test):    bIsEmpty = INFO_data_IsEmpty();
+info_data.c (INFO\src):BOOL_T INFO_data_IsEmpty(VOID)
+info_data.h (INFO\src):BOOL_T INFO_data_IsEmpty(VOID);
+---- INFO_DATA_S Matches (2 in 1 files) ----
+info_data.c (INFO\src):    INFO_DATA_S *pstNext;   /* 数据组织相关[*] */
+info_data.c (INFO\src):}INFO_DATA_S;
