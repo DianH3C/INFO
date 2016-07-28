@@ -35,7 +35,7 @@ BOOL_T INFO_data_Create(IN UINT uiId);
 ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg);
 
 /* 根据ID设置姓名 */
-VOID INFO_data_SetName(IN UINT uiId,IN CHAR [] szNAME);
+VOID INFO_data_SetName(IN UINT uiId,IN CHAR *szNAME);
 
 /* 根据ID设置年龄 */
 VOID INFO_data_SetAge(IN UINT uiId,IN UINT uiAge);

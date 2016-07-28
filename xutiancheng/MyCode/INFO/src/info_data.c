@@ -73,7 +73,7 @@ INFO_DATA_NODE *sl_head_pointer = & sl_head;   /* 指向链表头节点的指针 */
 BOOL_T INFO_data_IsExist(IN UINT uiId)
 {
     INFO_CFG_S * id_data ; /* 获取工号对应节点指针 */
-    id_data == info_data_Get(uiId)
+    id_data = info_data_Get(uiId);
     if ( NULL != id_data )
     {
         return BOOL_TRUE;
@@ -101,7 +101,7 @@ BOOL_T INFO_data_IsExist(IN UINT uiId)
   YYYY-MM-DD
 
 *****************************************************************************/
-BOOL_T INFO_data_IsEmpty(VOID)
+BOOL_T INFO_data_IsEmpty()
 {
     if(INFO_ID_INVALID == INFO_data_GetFirst(VOID))
     {
@@ -221,7 +221,6 @@ UINT INFO_data_GetNext(IN UINT uiId)
 *****************************************************************************/
 INFO_DATA_NODE * info_data_Get(IN UINT uiId)
 {
-
     return NULL;
 }
 
@@ -244,7 +243,7 @@ INFO_DATA_NODE * info_data_Get(IN UINT uiId)
 *****************************************************************************/
 ULONG INFO_data_Init(VOID)
 {
-    sl_head_pointer = (INFO_DATA_NODE *)malloc(sizeof());
+    sl_head_pointer = NULL;
     return ERROR_SUCCESS;
 }
 
