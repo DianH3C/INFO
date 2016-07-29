@@ -257,14 +257,52 @@ UINT INFO_data_GetNext(IN UINT uiId)
         }
     }
 
-    if (INFO_ID_INVALID != uiRet)
+    return uiRet;
+}
+
+/*****************************************************************************
+    Func Name: INFO_data_GetLast[*]
+ Date Created: 2016-07-28
+       Author: xxxx 00000
+  Description: 获取前一个有数据工号
+        Input: IN UINT uiId                 当前工号
+       Output:
+       Return: UINT, != INFO_ID_INVALID     前一个工号
+                     == INFO_ID_INVALID     未找到
+      Caution: 此接口获取下一个工号不依赖于入参uiId本身是否有数据
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+UINT INFO_data_GetLast(IN UINT uiId)
+{
+    UINT uiRet = INFO_ID_INVALID;
+    BOOL_T bIs_uiId = BOOL_FALSE;
+    INFO_DATA_S *pstNode = g_pstINFO_DATA_HEAD;
+
+    /* 遍历数据链表，查找工号 */
+    while ((NULL != pstNode) && (BOOL_TRUE != pstNode->bIsEmpty))
     {
-        return uiRet;
+        /* 下一个节点为指定工号所在节点 */
+        bIs_uiId = (NULL != pstNode->pstNext) \
+            && (BOOL_TRUE != pstNode->pstNext->bIsEmpty) \
+            && (uiId == pstNode->pstNext->stCfg.uiId);
+        if ((uiId > pstNode->stCfg.uiId) && bIs_uiId)
+        {
+            /* 比uiId小的第一个工号的节点 */
+            uiRet = pstNode->stCfg.uiId;
+            break;
+        }
+        else
+        {
+            pstNode = pstNode->pstNext;
+        }
     }
-    else
-    {
-        return INFO_ID_INVALID;
-    }
+
+    return uiRet;
 }
 
 /*****************************************************************************
@@ -286,7 +324,7 @@ UINT INFO_data_GetNext(IN UINT uiId)
 *****************************************************************************/
 ULONG INFO_data_AddData(IN INFO_CFG_S *pstCfg)
 {
-    UINT uiRet = ERROR_FAILED;
+    ULONG ulRet = ERROR_FAILED;
     BOOL_T bAddable = BOOL_FALSE;
     BOOL_T bAddable_next = BOOL_FALSE;
     INFO_DATA_S *pstNode = g_pstINFO_DATA_HEAD;
@@ -298,11 +336,11 @@ ULONG INFO_data_AddData(IN INFO_CFG_S *pstCfg)
         pstNewNode = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
         if (NULL == pstNewNode)
         {
-            uiRet = ERROR_NO_ENOUGH_RESOURCE;
+            ulRet = ERROR_NO_ENOUGH_RESOURCE;
         }
         else
         {
-            uiRet = ERROR_SUCCESS;
+            ulRet = ERROR_SUCCESS;
             g_pstINFO_DATA_HEAD = pstNewNode;
             g_pstINFO_DATA_HEAD->pstNext = pstNode;
             g_pstINFO_DATA_HEAD->bIsEmpty = BOOL_FALSE;
@@ -321,11 +359,11 @@ ULONG INFO_data_AddData(IN INFO_CFG_S *pstCfg)
                 pstNewNode = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
                 if (NULL == pstNewNode)
                 {
-                    uiRet = ERROR_NO_ENOUGH_RESOURCE;
+                    ulRet = ERROR_NO_ENOUGH_RESOURCE;
                 }
                 else
                 {
-                    uiRet = ERROR_SUCCESS;
+                    ulRet = ERROR_SUCCESS;
                     pstNewNode->pstNext = pstNode->pstNext;
                     pstNewNode->bIsEmpty = BOOL_FALSE;
                     pstNewNode->stCfg = *pstCfg;
@@ -340,14 +378,67 @@ ULONG INFO_data_AddData(IN INFO_CFG_S *pstCfg)
         }
     }
 
-    if (ERROR_SUCCESS != uiRet)
+    return ulRet;
+}
+
+/*****************************************************************************
+    Func Name: INFO_data_DelData[*]
+ Date Created: 2016-07-29
+       Author: xxxx 00000
+  Description: 删除一个数据节点
+        Input: IN UINT uiId                  要删除的节点工号
+        Output:
+        Return: ULONG, ERROR_SUCCESS         处理成功
+                       OTHER                 处理失败
+      Caution: 此接口不检查工号是否已经存在，需外部函数进行检查
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+ULONG INFO_data_DelData(IN UINT uiId)
+{
+    UINT uiId_last = INFO_ID_INVALID;
+    ULONG ulRet = ERROR_FAILED;
+    INFO_DATA_S *pstNode = g_pstINFO_DATA_HEAD;
+    INFO_DATA_S *pstNode_last = NULL;
+
+    if(uiId == pstNode->stCfg.uiId)
     {
-        return uiRet;
+        /* 要删除的节点是头节点 */
+        ulRet = ERROR_SUCCESS;
+        if (NULL == pstNode->pstNext)
+        {
+            /* 若头节点后面没有节点，则只清除头节点上的数据 */
+            memset(&(pstNode->stCfg), 0, sizeof(INFO_CFG_S));
+            pstNode->bIsEmpty = BOOL_TRUE;
+        }
+        else
+        {
+            g_pstINFO_DATA_HEAD = g_pstINFO_DATA_HEAD->pstNext;
+            free(pstNode);
+        }
     }
     else
     {
-        return ERROR_SUCCESS;
+        /* 要删除的节点不是头节点 */
+        uiId_last = INFO_data_GetLast(uiId);
+        if (INFO_ID_INVALID != uiId_last)
+        {
+            ulRet = ERROR_SUCCESS;
+            pstNode_last = INFO_data_FindNodeById(uiId_last);
+            if (NULL != pstNode_last)
+            {
+                pstNode = pstNode_last->pstNext;
+                pstNode_last->pstNext = pstNode->pstNext;
+                free(pstNode);
+            }
+        }
     }
+
+    return ulRet;
 }
 
 /*****************************************************************************

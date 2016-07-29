@@ -179,7 +179,7 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
         else
         {
             /* 添加成功 */
-            pcErrInfo = "YOu can see the newly added info through Display function .\r\n";
+            pcErrInfo = "You can see the newly added info through Display function .\r\n";
         }
     }
 
@@ -207,7 +207,56 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 *****************************************************************************/
 ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 {
-    return ERROR_SUCCESS;
+    ULONG ulErrCode = ERROR_FAILED;
+    UINT uiId = INFO_ID_INVALID;
+    const CHAR *pcErrInfo = NULL;
+
+
+    if (0 != strncmp(pcInputStr, "id", strlen("id")))
+    {
+        /* 工号不合法 */
+        pcErrInfo = "The parameter is incorrect.\r\n";
+        ulErrCode = ERROR_INVALID_PARAMETER;
+    }
+    else
+    {
+        /* 提取字符串"id=xx"中的数值xx */
+        if(-1 == sscanf(pcInputStr, "id=%u", &uiId))
+        {
+            /* 工号数值异常 */
+            pcErrInfo = "The parameter is incorrect.\r\n";
+            ulErrCode = ERROR_INVALID_PARAMETER;
+        }
+        else if (INFO_ID_ISVALID(uiId))
+        {
+            /* 工号数值异常 */
+            pcErrInfo = "The parameter is incorrect.\r\n";
+            ulErrCode = ERROR_INVALID_PARAMETER;
+        }
+        else if (BOOL_FALSE == INFO_data_IsExist(uiId))
+        {
+            /* 工号不存在 */
+            pcErrInfo = "The specified item was not found.\r\n";
+            ulErrCode = ERROR_NOT_FOUND;
+        }
+        else
+        {
+            /* 工号存在 */
+            ulErrCode = INFO_data_DelData(uiId);
+
+            if (ERROR_SUCCESS == ulErrCode)
+            {
+                pcErrInfo = "The info has been successfully deleted.\r\n";
+            }
+            else
+            {
+                pcErrInfo = "Fail to delete the info.\r\n";
+            }
+        }
+    }
+
+    printf("%s", pcErrInfo);
+    return ulErrCode;
 }
 
 /*****************************************************************************

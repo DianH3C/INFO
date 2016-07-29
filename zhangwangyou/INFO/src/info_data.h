@@ -34,13 +34,18 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg);
 /* 增加数据节点 */
 ULONG INFO_data_AddData(IN INFO_CFG_S *pstCfg);
 
+/* 删除数据节点 */
+ULONG INFO_data_DelData(IN UINT uiId);
+
 /*************************************** 遍历 ***************************************/
 /* 判断整个数据组织是否为空 */
 BOOL_T INFO_data_IsEmpty(VOID);
 
-/* 获取"第一个/下一个"有数据工号 */
+/* 获取"第一个/下一个/前一个v"有数据工号 */
 UINT INFO_data_GetFirst(VOID);
 UINT INFO_data_GetNext(IN UINT uiId);
+UINT INFO_data_GetLast(IN UINT uiId);
+
 
 /* 遍历接口 */
 #define INFO_FOREACH(uiId) \
