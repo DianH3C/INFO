@@ -37,6 +37,9 @@ ULONG INFO_data_AddData(IN INFO_CFG_S *pstCfg);
 /* 删除数据节点 */
 ULONG INFO_data_DelData(IN UINT uiId);
 
+/* 修改节点数据 */
+ULONG INFO_data_ModifyData(IN INFO_CFG_S *pstCfg);
+
 /*************************************** 遍历 ***************************************/
 /* 判断整个数据组织是否为空 */
 BOOL_T INFO_data_IsEmpty(VOID);
