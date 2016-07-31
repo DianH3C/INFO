@@ -360,6 +360,10 @@ ULONG INFO_data_Add(INFO_CFG_S stCfg)
     else
     {
         INFO_DATA_S *psttoadd = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
+        if(psttoadd == NULL)
+        {
+            return ERROR_NO_ENOUGH_RESOURCE;
+        }
         psttoadd->stCfg = stCfg;
         DBGASSERT(info_data_insert(psttoadd, &g_pstroot));
         return ERROR_SUCCESS;
@@ -444,14 +448,14 @@ YYYY-MM-DD
  *****************************************************************************/
 ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 {
-    INFO_DATA_S *psresult = info_data_search(uiId, g_pstroot);
-    if(psresult == NULL)
+    INFO_DATA_S *pstresult = info_data_search(uiId, g_pstroot);
+    if(pstresult == NULL)
     {
         return ERROR_FAILED;
     }
     else
     {
-        *pstCfg = psresult->stCfg;
+        *pstCfg = pstresult->stCfg;
         return ERROR_SUCCESS;
     }
 }
