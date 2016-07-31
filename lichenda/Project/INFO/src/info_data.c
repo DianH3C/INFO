@@ -316,11 +316,13 @@ STATIC BOOL_T info_data_insert(IN INFO_DATA_S *pstZ, OUT INFO_DATA_S **ppstroot)
 STATIC INFO_DATA_S* info_data_search(IN UINT uiId, IN INFO_DATA_S *pstroot)
 {
     INFO_DATA_S *pstX = pstroot;
+    BOOL_T bFound = BOOL_FALSE;
     while(pstX != g_pstnil)
     {
         if(uiId == pstX->stCfg.uiId)
         {
-            return pstX;
+            bFound = BOOL_TRUE;
+            break;
         }
         else if(uiId < pstX->stCfg.uiId)
         {
@@ -331,7 +333,13 @@ STATIC INFO_DATA_S* info_data_search(IN UINT uiId, IN INFO_DATA_S *pstroot)
             pstX = pstX->pstright;
         }
     }
-    return NULL;
+    if(bFound)
+    {
+        return pstX;
+    }
+    else{
+        return NULL;
+    }
 }
 
 /*****************************************************************************
@@ -351,23 +359,29 @@ DATE        NAME             DESCRIPTION
 YYYY-MM-DD
 
  *****************************************************************************/
-ULONG INFO_data_Add(INFO_CFG_S stCfg)
+ULONG INFO_data_Add(IN const CHAR *pcInputStr)
 {
+    INFO_CFG_S stCfg;
+    INFO_parse_InputStr(pcInputStr, &stCfg);
+    if(!INFO_ALL_ISVALID(&stCfg))
+    {
+        return ERROR_INVALID_PARAMETER;
+    }
+
     if(NULL != info_data_search(stCfg.uiId, g_pstroot))
     {
         return ERROR_ALREADY_EXIST;
     }
-    else
+
+    INFO_DATA_S *psttoadd = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
+    if(psttoadd == NULL)
     {
-        INFO_DATA_S *psttoadd = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
-        if(psttoadd == NULL)
-        {
-            return ERROR_NO_ENOUGH_RESOURCE;
-        }
-        psttoadd->stCfg = stCfg;
-        DBGASSERT(info_data_insert(psttoadd, &g_pstroot));
-        return ERROR_SUCCESS;
+        return ERROR_NO_ENOUGH_RESOURCE;
     }
+
+    psttoadd->stCfg = stCfg;
+    DBGASSERT(info_data_insert(psttoadd, &g_pstroot));
+    return ERROR_SUCCESS;
 }
 
 /*****************************************************************************

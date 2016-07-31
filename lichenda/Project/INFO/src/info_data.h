@@ -39,7 +39,7 @@ BOOL_T INFO_data_IsEmpty(VOID);
 UINT INFO_data_GetFirst(VOID);
 UINT INFO_data_GetNext(IN UINT uiId);
 
-ULONG INFO_data_Add(IN INFO_CFG_S stCfg);
+ULONG INFO_data_Add(IN const CHAR *pcInputStr);
 
 /* ±éÀú½Ó¿Ú */
 #define INFO_FOREACH(uiId) \

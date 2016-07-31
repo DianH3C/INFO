@@ -81,13 +81,7 @@ YYYY-MM-DD
  *****************************************************************************/
 ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 {
-    INFO_CFG_S stinput;
-    INFO_parse_InputStr(pcInputStr, &stinput);
-    if(INFO_ALL_ISVALID(&stinput))
-    {
-        return INFO_data_Add(stinput);
-    }
-    return ERROR_INVALID_PARAMETER;
+    return INFO_data_Add(stinput);
 }
 
 /*****************************************************************************
