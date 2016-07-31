@@ -39,6 +39,8 @@ BOOL_T INFO_data_IsEmpty(VOID);
 UINT INFO_data_GetFirst(VOID);
 UINT INFO_data_GetNext(IN UINT uiId);
 
+ULONG INFO_data_Add(INFO_CFG_S stCfg);
+
 /* ±éÀú½Ó¿Ú */
 #define INFO_FOREACH(uiId) \
 for ((uiId)  = INFO_data_GetFirst(); \

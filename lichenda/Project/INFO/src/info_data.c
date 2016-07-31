@@ -59,6 +59,22 @@ STATIC INFO_DATA_S * const g_pstnil = &g_stnill;
 /*根节点*/
 STATIC INFO_DATA_S *g_pstroot;
 
+/*****************************************************************************
+  Func Name: info_data_LeftRotate[*]
+  Date Created: 2016-07-30
+Author: lichenda
+Description: 二叉树左旋
+Input: IN INFO_DATA_S *pstX OUT INFO_DATA_S **ppstroot
+Output: 
+Return: BOOL_T, BOOL_TRUE   
+Caution: 
+------------------------------------------------------------------------------
+Modification History
+DATE        NAME             DESCRIPTION
+--------------------------------------------------------------------------
+YYYY-MM-DD
+
+ *****************************************************************************/
 STATIC BOOL_T info_data_LeftRotate(IN INFO_DATA_S *pstX, OUT INFO_DATA_S **ppstroot)
 {
     INFO_DATA_S *pstY = pstX->pstright;
@@ -85,6 +101,22 @@ STATIC BOOL_T info_data_LeftRotate(IN INFO_DATA_S *pstX, OUT INFO_DATA_S **ppstr
     return BOOL_TRUE;
 }
 
+/*****************************************************************************
+  Func Name: info_data_RightRotate[*]
+  Date Created: 2016-07-30
+Author: lichenda
+Description: 二叉树右旋
+Input: IN INFO_DATA_S *pstX OUT INFO_DATA_S **ppstroot
+Output: 
+Return: BOOL_T, BOOL_TRUE   
+Caution: 
+------------------------------------------------------------------------------
+Modification History
+DATE        NAME             DESCRIPTION
+--------------------------------------------------------------------------
+YYYY-MM-DD
+
+ *****************************************************************************/
 STATIC BOOL_T info_data_RightRotate(IN INFO_DATA_S *pstX, INFO_DATA_S **ppstroot)
 {
     INFO_DATA_S *pstY = pstX->pstleft;
@@ -110,6 +142,23 @@ STATIC BOOL_T info_data_RightRotate(IN INFO_DATA_S *pstX, INFO_DATA_S **ppstroot
     pstX->pstparent = pstY;
     return BOOL_TRUE;
 }
+
+/*****************************************************************************
+  Func Name: info_data_fixup_right[*]
+  Date Created: 2016-07-30
+Author: lichenda
+Description: 红黑树性质保持-右
+Input: IN INFO_DATA_S *pstZ OUT INFO_DATA_S **ppstroot
+Output: 
+Return: BOOL_T, BOOL_TRUE   
+Caution: 
+------------------------------------------------------------------------------
+Modification History
+DATE        NAME             DESCRIPTION
+--------------------------------------------------------------------------
+YYYY-MM-DD
+
+ *****************************************************************************/
 STATIC BOOL_T info_data_fixup_right(IN INFO_DATA_S *pstZ, OUT INFO_DATA_S **ppstroot)
 {
     INFO_DATA_S *pstY;
@@ -134,6 +183,23 @@ STATIC BOOL_T info_data_fixup_right(IN INFO_DATA_S *pstZ, OUT INFO_DATA_S **ppst
     }
     return BOOL_TRUE;
 }
+
+/*****************************************************************************
+  Func Name: info_data_fixup_left[*]
+  Date Created: 2016-07-30
+Author: lichenda
+Description: 红黑树性质保持-左
+Input: IN INFO_DATA_S *pstZ OUT INFO_DATA_S **ppstroot
+Output: 
+Return: BOOL_T, BOOL_TRUE   
+Caution: 
+------------------------------------------------------------------------------
+Modification History
+DATE        NAME             DESCRIPTION
+--------------------------------------------------------------------------
+YYYY-MM-DD
+
+ *****************************************************************************/
 STATIC BOOL_T info_data_fixup_left(IN INFO_DATA_S *pstZ, OUT INFO_DATA_S **ppstroot)
 {
     INFO_DATA_S *pstY;
@@ -160,8 +226,22 @@ STATIC BOOL_T info_data_fixup_left(IN INFO_DATA_S *pstZ, OUT INFO_DATA_S **ppstr
     return BOOL_TRUE;
 }
 
+/*****************************************************************************
+  Func Name: info_data_fixup[*]
+  Date Created: 2016-07-30
+Author: lichenda
+Description: 红黑树性质保持
+Input: IN INFO_DATA_S *pstZ OUT INFO_DATA_S **ppstroot
+Output: 
+Return: BOOL_T, BOOL_TRUE   
+Caution: 
+------------------------------------------------------------------------------
+Modification History
+DATE        NAME             DESCRIPTION
+--------------------------------------------------------------------------
+YYYY-MM-DD
 
-
+ *****************************************************************************/
 STATIC BOOL_T info_data_fixup(IN INFO_DATA_S *pstZ, OUT INFO_DATA_S **ppstroot)
 {
 
@@ -180,8 +260,111 @@ STATIC BOOL_T info_data_fixup(IN INFO_DATA_S *pstZ, OUT INFO_DATA_S **ppstroot)
     return BOOL_TRUE;
 }
 
+/*****************************************************************************
+  Func Name: info_data_LeftRotate[*]
+  Date Created: 2016-07-30
+Author: lichenda
+Description: 红黑树插入
+Input: IN INFO_DATA_S *pstZ OUT INFO_DATA_S **ppstroot
+Output: 
+Return: BOOL_T, BOOL_TRUE   
+Caution: 
+------------------------------------------------------------------------------
+Modification History
+DATE        NAME             DESCRIPTION
+--------------------------------------------------------------------------
+YYYY-MM-DD
+
+ *****************************************************************************/
+STATIC BOOL_T info_data_insert(IN INFO_DATA_S *pstZ, OUT INFO_DATA_S **ppstroot)
+{
+    INFO_DATA_S *pstY = g_pstnil;
+    INFO_DATA_S *pstX = *ppstroot;
+    while(pstX != g_pstnil)
+    {
+        pstY = pstX;
+        if(pstZ->stCfg.uiId < pstX->stCfg.uiId)
+        {
+            pstX = pstX->pstleft;
+        }
+        else
+        {
+            pstX = pstX->pstright;
+        }
+    }
+    pstZ->pstparent = pstY;
+    if(pstY == g_pstnil)
+    {
+        *ppstroot = pstZ;
+    }
+    else if(pstZ->stCfg.uiId < pstY->stCfg.uiId)
+    {
+        pstY->pstleft = pstZ;
+    }
+    else
+    {
+        pstY->pstright = pstZ;
+    }
+    pstZ->pstleft = g_pstnil;
+    pstZ->pstright = g_pstnil;
+    pstZ->encolor = INFO_COLOR_RED;
+    DBGASSERT(info_data_fixup(pstZ, ppstroot));
+    return BOOL_TRUE;
+}
 
 
+STATIC INFO_DATA_S* info_data_search(IN UINT uiId, IN INFO_DATA_S *pstroot)
+{
+    INFO_DATA_S *pstX = pstroot;
+    while(pstX != g_pstnil)
+    {
+        if(uiId == pstX->stCfg.uiId)
+        {
+            return pstX;
+        }
+        else if(uiId < pstX->stCfg.uiId)
+        {
+            pstX = pstX->pstleft;
+        }
+        else
+        {
+            pstX = pstX->pstright;
+        }
+    }
+    return NULL;
+}
+
+/*****************************************************************************
+  Func Name: INFO_data_IsExist[*]
+  Date Created: 201x-xx-xx
+Author: xxxx 00000
+Description: 添加一个员工信息
+Input: IN INFO_CFG_S stCfg
+Output: 
+Return: BOOL_T, BOOL_TRUE    添加成功
+BOOL_FALSE   添加失败
+Caution: 
+------------------------------------------------------------------------------
+Modification History
+DATE        NAME             DESCRIPTION
+--------------------------------------------------------------------------
+YYYY-MM-DD
+
+ *****************************************************************************/
+ULONG INFO_data_Add(INFO_CFG_S stCfg)
+{
+    if(NULL != info_data_search(stCfg.uiId, g_pstroot))
+    {
+        return ERROR_ALREADY_EXIST;
+    }
+    else
+    {
+        INFO_DATA_S *psttoadd = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
+        psttoadd->stCfg = stCfg;
+        DBGASSERT(info_data_insert(psttoadd, &g_pstroot));
+        return ERROR_SUCCESS;
+    }
+}
 
 /*****************************************************************************
   Func Name: INFO_data_IsExist[*]
@@ -202,7 +385,15 @@ YYYY-MM-DD
  *****************************************************************************/
 BOOL_T INFO_data_IsExist(IN UINT uiId)
 {
-    return BOOL_FALSE;
+    if(NULL != info_data_search(uiId, g_pstroot))
+    {
+        return BOOL_TRUE;
+    }
+    else
+    {
+        return BOOL_FALSE;
+    }
+
 }
 
 /*****************************************************************************
@@ -224,7 +415,14 @@ YYYY-MM-DD
  *****************************************************************************/
 BOOL_T INFO_data_IsEmpty(VOID)
 {
-    return BOOL_TRUE;
+    if(g_pstroot == g_pstnil)
+    {
+        return BOOL_TRUE;
+    }
+    else
+    {
+        return BOOL_FALSE;
+    }
 }
 
 /*****************************************************************************
@@ -246,7 +444,16 @@ YYYY-MM-DD
  *****************************************************************************/
 ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 {
-    return ERROR_FAILED;
+    INFO_DATA_S *psresult = info_data_search(uiId, g_pstroot);
+    if(psresult == NULL)
+    {
+        return ERROR_FAILED;
+    }
+    else
+    {
+        *pstCfg = psresult->stCfg;
+        return ERROR_SUCCESS;
+    }
 }
 
 /*****************************************************************************
@@ -312,6 +519,7 @@ YYYY-MM-DD
  *****************************************************************************/
 ULONG INFO_data_Init(VOID)
 {
+    g_pstroot = g_pstnil;
     return ERROR_SUCCESS;
 }
 

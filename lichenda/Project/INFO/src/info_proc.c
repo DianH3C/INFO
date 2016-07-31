@@ -1,20 +1,20 @@
 /*******************************************************************************
- Copyright (c) 2011, Hangzhou H3C Technologies Co., Ltd. All rights reserved.
---------------------------------------------------------------------------------
-                              info_proc.c
+  Copyright (c) 2011, Hangzhou H3C Technologies Co., Ltd. All rights reserved.
+  --------------------------------------------------------------------------------
+  info_proc.c
   Project Code: Comware V700R001
-   Module Name: INFO
+  Module Name: INFO
   Date Created: 201x-xx-xx
-        Author: xxxx 00000
-   Description: æﬂÃÂπ¶ƒ‹¥¶¿Ì
+Author: xxxx 00000
+Description: ÂÖ∑‰ΩìÂäüËÉΩÂ§ÑÁêÜ
 
 --------------------------------------------------------------------------------
-  Modification History
-  DATE        NAME             DESCRIPTION
+Modification History
+DATE        NAME             DESCRIPTION
 --------------------------------------------------------------------------------
-  YYYY-MM-DD
+YYYY-MM-DD
 
-*******************************************************************************/
+ *******************************************************************************/
 
 #ifdef __cplusplus
 extern "C"{
@@ -37,116 +37,122 @@ extern "C"{
 
 
 /*****************************************************************************
-    Func Name: INFO_proc_Display[*]
- Date Created: 201x-xx-xx
-       Author: xxxx 00000
-  Description: œ‘ æ
-        Input: IN const CHAR *pcInputStr     ‰»Î◊÷∑˚¥Æ
-       Output:
+  Func Name: INFO_proc_Display[*]
+  Date Created: 201x-xx-xx
+Author: xxxx 00000
+Description: ÊòæÁ§∫
+Input: IN const CHAR *pcInputStr    ËæìÂÖ•Â≠óÁ¨¶‰∏≤
+Output:
 
-       Return: ULONG, ERROR_SUCCESS         ¥¶¿Ì≥…π¶
-                      OTHER                 ¥¶¿Ì ß∞‹
-      Caution:
+Return: ULONG, ERROR_SUCCESS         Â§ÑÁêÜÊàêÂäü
+OTHER                 Â§ÑÁêÜÂ§±Ë¥•
+Caution:
 ------------------------------------------------------------------------------
-  Modification History
-  DATE        NAME             DESCRIPTION
-  2014-11-05  peng yanyu       complete code
-  --------------------------------------------------------------------------
-  YYYY-MM-DD
+Modification History
+DATE        NAME             DESCRIPTION
+2014-11-05  peng yanyu       complete code
+--------------------------------------------------------------------------
+YYYY-MM-DD
 
 
-*****************************************************************************/
+ *****************************************************************************/
 ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 {
     return ERROR_SUCCESS;
 }
 
 /*****************************************************************************
-    Func Name: INFO_proc_Add[*]
- Date Created: 201x-xx-xx
-       Author: xxxx 00000
-  Description: ÃÌº”
-        Input: IN const CHAR *pcInputStr     ‰»Î◊÷∑˚¥Æ
-       Output:
-       Return: ULONG, ERROR_SUCCESS         ¥¶¿Ì≥…π¶
-                      OTHER                 ¥¶¿Ì ß∞‹
-      Caution:
+  Func Name: INFO_proc_Add[*]
+  Date Created: 201x-xx-xx
+Author: xxxx 00000
+Description: Ê∑ªÂä†
+Input: IN const CHAR *pcInputStr    ËæìÂÖ•Â≠óÁ¨¶‰∏≤
+Output:
+Return: ULONG, ERROR_SUCCESS         Â§ÑÁêÜÊàêÂäü
+OTHER                 Â§ÑÁêÜÂ§±Ë¥•
+Caution:
 ------------------------------------------------------------------------------
-  Modification History
-  DATE        NAME             DESCRIPTION
-  2014-11-05  peng yanyu       complete code
-  --------------------------------------------------------------------------
-  YYYY-MM-DD
+Modification History
+DATE        NAME             DESCRIPTION
+2014-11-05  peng yanyu       complete code
+--------------------------------------------------------------------------
+YYYY-MM-DD
 
-*****************************************************************************/
+ *****************************************************************************/
 ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 {
-    return ERROR_SUCCESS;
+    INFO_CFG_S stinput;
+    INFO_parse_InputStr(pcInputStr, &stinput);
+    if(INFO_ALL_ISVALID(&stinput))
+    {
+        return INFO_data_Add(stinput);
+    }
+    return ERROR_INVALID_PARAMETER;
 }
 
 /*****************************************************************************
-    Func Name: INFO_proc_Delete[*]
- Date Created: 201x-xx-xx
-       Author: xxxx 00000
-  Description: …æ≥˝
-        Input: IN const CHAR *pcInputStr     ‰»Î◊÷∑˚¥Æ
-       Output:
-       Return: ULONG, ERROR_SUCCESS         ¥¶¿Ì≥…π¶
-                      OTHER                 ¥¶¿Ì ß∞‹
-      Caution:
+  Func Name: INFO_proc_Delete[*]
+  Date Created: 201x-xx-xx
+Author: xxxx 00000
+Description: Âà†Èô§
+Input: IN const CHAR *pcInputStr    ËæìÂÖ•Â≠óÁ¨¶‰∏≤
+Output:
+Return: ULONG, ERROR_SUCCESS         Â§ÑÁêÜÊàêÂäü
+OTHER                 Â§ÑÁêÜÂ§±Ë¥•
+Caution:
 ------------------------------------------------------------------------------
-  Modification History
-  DATE        NAME             DESCRIPTION
-  2014-11-05  peng yanyu       complete code
-  --------------------------------------------------------------------------
-  YYYY-MM-DD
+Modification History
+DATE        NAME             DESCRIPTION
+2014-11-05  peng yanyu       complete code
+--------------------------------------------------------------------------
+YYYY-MM-DD
 
-*****************************************************************************/
+ *****************************************************************************/
 ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 {
     return ERROR_SUCCESS;
 }
 
 /*****************************************************************************
-    Func Name: INFO_proc_Modify[*]
- Date Created: 201x-xx-xx
-       Author: xxxx 00000
-  Description: –ﬁ∏ƒ
-        Input: IN const CHAR *pcInputStr     ‰»Î◊÷∑˚¥Æ
-       Output:
-       Return: ULONG, ERROR_SUCCESS         ¥¶¿Ì≥…π¶
-                      OTHER                 ¥¶¿Ì ß∞‹
-      Caution: ÷ß≥÷Ωˆ–ﬁ∏ƒ≤ø∑÷≈‰÷√ ˝æ›
+  Func Name: INFO_proc_Modify[*]
+  Date Created: 201x-xx-xx
+Author: xxxx 00000
+Description: ‰øÆÊîπ
+Input: IN const CHAR *pcInputStr    ËæìÂÖ•Â≠óÁ¨¶‰∏≤
+Output:
+Return: ULONG, ERROR_SUCCESS         Â§ÑÁêÜÊàêÂäü
+OTHER                 Â§ÑÁêÜÂ§±Ë¥•
+Caution: ÊîØÊåÅ‰ªÖ‰øÆÊîπÈÉ®ÂàÜÈÖçÁΩÆÊï∞ÊçÆ
 ------------------------------------------------------------------------------
-  Modification History
-  DATE        NAME             DESCRIPTION
-  2014-11-05  peng yanyu       complete code
-  --------------------------------------------------------------------------
-  YYYY-MM-DD
+Modification History
+DATE        NAME             DESCRIPTION
+2014-11-05  peng yanyu       complete code
+--------------------------------------------------------------------------
+YYYY-MM-DD
 
-*****************************************************************************/
+ *****************************************************************************/
 ULONG INFO_proc_Modify(IN const CHAR *pcInputStr)
 {
     return ERROR_SUCCESS;
 }
 
 /*****************************************************************************
-    Func Name: INFO_proc_Exit
- Date Created: 201x-xx-xx
-       Author: xxxx 00000
-  Description: ÕÀ≥ˆ
-        Input: IN const CHAR *pcInputStr     ‰»Î◊÷∑˚¥Æ
-       Output:
-       Return: ULONG, ERROR_SUCCESS         ¥¶¿Ì≥…π¶
-                      OTHER                 ¥¶¿Ì ß∞‹
-      Caution:
+  Func Name: INFO_proc_Exit
+  Date Created: 201x-xx-xx
+Author: xxxx 00000
+Description: ÈÄÄÂá∫
+Input: IN const CHAR *pcInputStr    ËæìÂÖ•Â≠óÁ¨¶‰∏≤
+Output:
+Return: ULONG, ERROR_SUCCESS         Â§ÑÁêÜÊàêÂäü
+OTHER                 Â§ÑÁêÜÂ§±Ë¥•
+Caution:
 ------------------------------------------------------------------------------
-  Modification History
-  DATE        NAME             DESCRIPTION
-  --------------------------------------------------------------------------
-  YYYY-MM-DD
+Modification History
+DATE        NAME             DESCRIPTION
+--------------------------------------------------------------------------
+YYYY-MM-DD
 
-*****************************************************************************/
+ *****************************************************************************/
 ULONG INFO_proc_Exit(IN const CHAR *pcInputStr)
 {
     IGNORE_PARAM(pcInputStr);
@@ -154,22 +160,22 @@ ULONG INFO_proc_Exit(IN const CHAR *pcInputStr)
 }
 
 /*****************************************************************************
-    Func Name: INFO_proc_OpenDebug
- Date Created: 201x-xx-xx
-       Author: xxxx 00000
-  Description: ¥Úø™µ˜ ‘ø™πÿ
-        Input: IN const CHAR *pcInputStr     ‰»Î◊÷∑˚¥Æ
-       Output:
-       Return: ULONG, ERROR_SUCCESS         ¥¶¿Ì≥…π¶
-                      OTHER                 ¥¶¿Ì ß∞‹
-      Caution:
+  Func Name: INFO_proc_OpenDebug
+  Date Created: 201x-xx-xx
+Author: xxxx 00000
+Description: ÊâìÂºÄË∞ÉËØïÂºÄÂÖ≥
+Input: IN const CHAR *pcInputStr    ËæìÂÖ•Â≠óÁ¨¶‰∏≤
+Output:
+Return: ULONG, ERROR_SUCCESS         Â§ÑÁêÜÊàêÂäü
+OTHER                 Â§ÑÁêÜÂ§±Ë¥•
+Caution:
 ------------------------------------------------------------------------------
-  Modification History
-  DATE        NAME             DESCRIPTION
-  --------------------------------------------------------------------------
-  YYYY-MM-DD
+Modification History
+DATE        NAME             DESCRIPTION
+--------------------------------------------------------------------------
+YYYY-MM-DD
 
-*****************************************************************************/
+ *****************************************************************************/
 ULONG INFO_proc_OpenDebug(IN const CHAR *pcInputStr)
 {
     IGNORE_PARAM(pcInputStr);
@@ -180,22 +186,22 @@ ULONG INFO_proc_OpenDebug(IN const CHAR *pcInputStr)
 }
 
 /*****************************************************************************
-    Func Name: INFO_proc_CloseDebug
- Date Created: 201x-xx-xx
-       Author: xxxx 00000
-  Description: πÿ±’µ˜ ‘ø™πÿ
-        Input: IN const CHAR *pcInputStr     ‰»Î◊÷∑˚¥Æ
-       Output:
-       Return: ULONG, ERROR_SUCCESS         ¥¶¿Ì≥…π¶
-                      OTHER                 ¥¶¿Ì ß∞‹
-      Caution:
+  Func Name: INFO_proc_CloseDebug
+  Date Created: 201x-xx-xx
+Author: xxxx 00000
+Description: ÂÖ≥Èó≠Ë∞ÉËØïÂºÄÂÖ≥
+Input: IN const CHAR *pcInputStr    ËæìÂÖ•Â≠óÁ¨¶‰∏≤
+Output:
+Return: ULONG, ERROR_SUCCESS         Â§ÑÁêÜÊàêÂäü
+OTHER                 Â§ÑÁêÜÂ§±Ë¥•
+Caution:
 ------------------------------------------------------------------------------
-  Modification History
-  DATE        NAME             DESCRIPTION
-  --------------------------------------------------------------------------
-  YYYY-MM-DD
+Modification History
+DATE        NAME             DESCRIPTION
+--------------------------------------------------------------------------
+YYYY-MM-DD
 
-*****************************************************************************/
+ *****************************************************************************/
 ULONG INFO_proc_CloseDebug(IN const CHAR *pcInputStr)
 {
     IGNORE_PARAM(pcInputStr);
