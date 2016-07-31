@@ -32,9 +32,11 @@ extern "C"{
 #include <sys/list.h>
 #include <sys/string_ex.h>
 
+
 /* module   private */
 #include "info.h"
 #include "info_dbg.h"
+#include "info_parse.h"
 
 /*ºìºÚÊ÷ÑÕÉ«*/
 typedef enum tagColor{
@@ -381,6 +383,7 @@ ULONG INFO_data_Add(IN const CHAR *pcInputStr)
 
     psttoadd->stCfg = stCfg;
     DBGASSERT(info_data_insert(psttoadd, &g_pstroot));
+
     return ERROR_SUCCESS;
 }
 
@@ -493,7 +496,17 @@ YYYY-MM-DD
  *****************************************************************************/
 UINT INFO_data_GetFirst(VOID)
 {
-    return INFO_ID_INVALID;
+    INFO_DATA_S *pstX = g_pstroot;
+    if(pstX == g_pstnil)
+    {
+        return INFO_ID_INVALID;
+    }
+
+    while(pstX->pstleft != g_pstnil)
+    {
+        pstX = pstX->pstleft;
+    }
+    return pstX->stCfg.uiId;
 }
 
 /*****************************************************************************
@@ -515,7 +528,36 @@ YYYY-MM-DD
  *****************************************************************************/
 UINT INFO_data_GetNext(IN UINT uiId)
 {
-    return INFO_ID_INVALID;
+    INFO_DATA_S *pstX = g_pstroot;
+
+    if(pstX == g_pstnil)
+    {
+        return INFO_ID_INVALID;
+    }
+
+    UINT uitmp = 0;
+
+    while(pstX != g_pstnil)
+    {
+        if(pstX->stCfg.uiId > uiId)
+        {
+            uitmp = pstX->stCfg.uiId;
+            pstX = pstX->pstleft;
+        }
+        else
+        {
+            pstX = pstX->pstright;
+        }
+
+    }
+    if(uitmp == 0)
+    {
+        return INFO_ID_INVALID;
+    }
+    else
+    {
+        return uitmp;
+    }
 }
 
 /*****************************************************************************

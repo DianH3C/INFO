@@ -81,7 +81,7 @@ YYYY-MM-DD
  *****************************************************************************/
 ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 {
-    return INFO_data_Add(stinput);
+    return INFO_data_Add(pcInputStr);
 }
 
 /*****************************************************************************
