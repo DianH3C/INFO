@@ -3,6 +3,8 @@
 2.注意代码在本地的路径名中不能包含中文
 3.代码上传一份即可（Main）
 
+实现方法不限，可以用数组、链表、哈希表、二叉树、sqlite....
+
 
 Github网址：https://github.com/DianH3C/INFO
 
