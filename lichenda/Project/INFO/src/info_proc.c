@@ -58,6 +58,26 @@ YYYY-MM-DD
  *****************************************************************************/
 ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 {
+    UINT uiId;
+    INT icx;
+    INFO_CFG_S stCfg;
+    CHAR szbuffer[100];
+    INFO_FOREACH(uiId)
+    {
+        DBGASSERT(INFO_data_GetData(uiId, &stCfg));
+        icx = scnprintf(szbuffer, (size_t)100,
+                "id=%u name=%s sex=%u age=%u height=%u\n",
+                stCfg.uiId, stCfg.szName,stCfg.enSex, stCfg.uiAge, stCfg.uiHeight);
+        if(icx >= 0 && icx < 100)
+        {
+            puts(szbuffer);
+        }
+        else
+        {
+            INFO_dbg_Print("INFO_proc_Display"," buffer not enough");
+        }
+
+    }
     return ERROR_SUCCESS;
 }
 

@@ -388,6 +388,7 @@ ULONG INFO_data_Add(IN const CHAR *pcInputStr)
 
     if(NULL != info_data_search(stCfg.uiId, g_pstroot))
     {
+        INFO_dbg_Print("INFO_data_Add"," already exist");
         return ERROR_ALREADY_EXIST;
     }
 
@@ -916,7 +917,7 @@ ULONG INFO_data_Modify(IN const CHAR *pcInputStr)
         pstresult->stCfg.uiHeight = stCfg.uiHeight;
     }
     return ERROR_SUCCESS;
-        
+
 }
 /*****************************************************************************
   Func Name: INFO_data_Init[*]
@@ -942,6 +943,41 @@ ULONG INFO_data_Init(VOID)
 }
 
 /*****************************************************************************
+  Func Name: info_data_DelTree[*]
+  Date Created: 201x-xx-xx
+Author: xxxx 00000
+Description: É¾³ý¶þ²æÊ÷
+Input: INFO_DATA_S *pstroot
+Output:
+Return: 
+------------------------------------------------------------------------------
+Modification History
+DATE        NAME             DESCRIPTION
+--------------------------------------------------------------------------
+YYYY-MM-DD
+
+ *****************************************************************************/
+STATIC VOID info_data_DelTree(INFO_DATA_S *pstroot)
+{
+    if(pstroot == g_pstnil)
+    {
+        return;
+    }
+    if(pstroot->pstleft != g_pstnil)
+    {
+        info_data_DelTree(pstroot->pstleft);
+        pstroot->pstleft = g_pstnil;
+    }
+    if(pstroot->pstright != g_pstnil)
+    {
+        info_data_DelTree(pstroot->pstright);
+        pstroot->pstright = g_pstnil;
+    }
+    free(pstroot);
+
+}
+
+/*****************************************************************************
   Func Name: INFO_data_Fini[*]
   Date Created: 201x-xx-xx
 Author: xxxx 00000
@@ -959,6 +995,8 @@ YYYY-MM-DD
  *****************************************************************************/
 VOID INFO_data_Fini(VOID)
 {
+    info_data_DelTree(g_pstroot);
+    g_pstroot = g_pstnil;
     return;
 }
 
