@@ -104,7 +104,16 @@ YYYY-MM-DD
  *****************************************************************************/
 ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 {
-    return ERROR_SUCCESS;
+    INFO_CFG_S stCfg;
+    INFO_parse_InputStr(pcInputStr, &stCfg);
+    if(INFO_ID_ISVALID(stCfg.uiId))
+    {
+        return INFO_data_Delete(stCfg.uiId);
+    }
+    else
+    {
+        return ERROR_INVALID_PARAMETER;
+    }
 }
 
 /*****************************************************************************

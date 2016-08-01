@@ -13,7 +13,7 @@ Description: 内部数据操作
 Modification History
 DATE        NAME             DESCRIPTION
 --------------------------------------------------------------------------------
-YYYY-MM-DD  
+YYYY-MM-DD
 
  *******************************************************************************/
 
@@ -49,8 +49,8 @@ typedef struct tagInfo_Data
 {
     INFO_COLOR_E encolor;     /* 颜色 */
     struct tagInfo_Data *pstleft;     /* 左子树 */
-    struct tagInfo_Data *pstright;    /* 右子树 */ 
-    struct  tagInfo_Data *pstparent;   /* 父节点 */ 
+    struct tagInfo_Data *pstright;    /* 右子树 */
+    struct  tagInfo_Data *pstparent;   /* 父节点 */
     INFO_CFG_S stCfg;       /* 配置数据 */
 }INFO_DATA_S;
 
@@ -67,9 +67,9 @@ STATIC INFO_DATA_S *g_pstroot;
 Author: lichenda
 Description: 二叉树左旋
 Input: IN INFO_DATA_S *pstX OUT INFO_DATA_S **ppstroot
-Output: 
-Return: BOOL_T, BOOL_TRUE   
-Caution: 
+Output:
+Return: BOOL_T, BOOL_TRUE
+Caution:
 ------------------------------------------------------------------------------
 Modification History
 DATE        NAME             DESCRIPTION
@@ -109,9 +109,9 @@ STATIC BOOL_T info_data_LeftRotate(IN INFO_DATA_S *pstX, OUT INFO_DATA_S **ppstr
 Author: lichenda
 Description: 二叉树右旋
 Input: IN INFO_DATA_S *pstX OUT INFO_DATA_S **ppstroot
-Output: 
-Return: BOOL_T, BOOL_TRUE   
-Caution: 
+Output:
+Return: BOOL_T, BOOL_TRUE
+Caution:
 ------------------------------------------------------------------------------
 Modification History
 DATE        NAME             DESCRIPTION
@@ -123,7 +123,7 @@ STATIC BOOL_T info_data_RightRotate(IN INFO_DATA_S *pstX, INFO_DATA_S **ppstroot
 {
     INFO_DATA_S *pstY = pstX->pstleft;
     pstX->pstleft = pstY->pstright;
-    if (pstY->pstright != g_pstnil) 
+    if (pstY->pstright != g_pstnil)
     {
         pstY->pstright->pstparent = pstX;
     }
@@ -151,9 +151,9 @@ STATIC BOOL_T info_data_RightRotate(IN INFO_DATA_S *pstX, INFO_DATA_S **ppstroot
 Author: lichenda
 Description: 红黑树性质保持-右
 Input: IN INFO_DATA_S *pstZ OUT INFO_DATA_S **ppstroot
-Output: 
-Return: BOOL_T, BOOL_TRUE   
-Caution: 
+Output:
+Return: BOOL_T, BOOL_TRUE
+Caution:
 ------------------------------------------------------------------------------
 Modification History
 DATE        NAME             DESCRIPTION
@@ -161,27 +161,27 @@ DATE        NAME             DESCRIPTION
 YYYY-MM-DD
 
  *****************************************************************************/
-STATIC BOOL_T info_data_fixup_right(IN INFO_DATA_S *pstZ, OUT INFO_DATA_S **ppstroot)
+STATIC BOOL_T info_data_fixup_left(IN INFO_DATA_S **ppstZ, OUT INFO_DATA_S **ppstroot)
 {
     INFO_DATA_S *pstY;
-    pstY = pstZ->pstparent->pstparent->pstright;
+    pstY = (*ppstZ)->pstparent->pstparent->pstright;
     if(pstY->encolor == INFO_COLOR_RED)
     {
-        pstZ->pstparent->encolor = INFO_COLOR_BLACK;
+        (*ppstZ)->pstparent->encolor = INFO_COLOR_BLACK;
         pstY->encolor = INFO_COLOR_BLACK;
-        pstZ->pstparent->pstparent->encolor = INFO_COLOR_RED;
-        pstZ = pstZ->pstparent->pstparent;
+        (*ppstZ)->pstparent->pstparent->encolor = INFO_COLOR_RED;
+        *ppstZ = (*ppstZ)->pstparent->pstparent;
     }
     else
     {
-        if(pstZ == pstZ->pstparent->pstright)
+        if(*ppstZ == (*ppstZ)->pstparent->pstright)
         {
-            pstZ = pstZ->pstparent;
-            DBGASSERT(info_data_LeftRotate(pstZ, ppstroot));
+            *ppstZ = (*ppstZ)->pstparent;
+            DBGASSERT(info_data_LeftRotate(*ppstZ, ppstroot));
         }
-        pstZ->pstparent->encolor = INFO_COLOR_BLACK;
-        pstZ->pstparent->pstparent->encolor = INFO_COLOR_RED;
-        DBGASSERT(info_data_RightRotate(pstZ->pstparent->pstparent, ppstroot));
+        (*ppstZ)->pstparent->encolor = INFO_COLOR_BLACK;
+        (*ppstZ)->pstparent->pstparent->encolor = INFO_COLOR_RED;
+        DBGASSERT(info_data_RightRotate((*ppstZ)->pstparent->pstparent, ppstroot));
     }
     return BOOL_TRUE;
 }
@@ -192,9 +192,9 @@ STATIC BOOL_T info_data_fixup_right(IN INFO_DATA_S *pstZ, OUT INFO_DATA_S **ppst
 Author: lichenda
 Description: 红黑树性质保持-左
 Input: IN INFO_DATA_S *pstZ OUT INFO_DATA_S **ppstroot
-Output: 
-Return: BOOL_T, BOOL_TRUE   
-Caution: 
+Output:
+Return: BOOL_T, BOOL_TRUE
+Caution:
 ------------------------------------------------------------------------------
 Modification History
 DATE        NAME             DESCRIPTION
@@ -202,28 +202,28 @@ DATE        NAME             DESCRIPTION
 YYYY-MM-DD
 
  *****************************************************************************/
-STATIC BOOL_T info_data_fixup_left(IN INFO_DATA_S *pstZ, OUT INFO_DATA_S **ppstroot)
+STATIC BOOL_T info_data_fixup_right(IN INFO_DATA_S **ppstZ, OUT INFO_DATA_S **ppstroot)
 {
     INFO_DATA_S *pstY;
-    pstY = pstZ->pstparent->pstparent->pstleft;
+    pstY = (*ppstZ)->pstparent->pstparent->pstleft;
     if(pstY->encolor == INFO_COLOR_RED)
     {
-        pstZ->pstparent->encolor = INFO_COLOR_BLACK;
+        (*ppstZ)->pstparent->encolor = INFO_COLOR_BLACK;
         pstY->encolor = INFO_COLOR_BLACK;
-        pstZ->pstparent->pstparent->encolor = INFO_COLOR_RED;
-        pstZ = pstZ->pstparent->pstparent;
+        (*ppstZ)->pstparent->pstparent->encolor = INFO_COLOR_RED;
+        *ppstZ = (*ppstZ)->pstparent->pstparent;
     }
     else
     {
 
-        if(pstZ == pstZ->pstparent->pstleft)
+        if(*ppstZ == (*ppstZ)->pstparent->pstleft)
         {
-            pstZ = pstZ->pstparent;
-            DBGASSERT(info_data_RightRotate(pstZ, ppstroot));
+            *ppstZ = (*ppstZ)->pstparent;
+            DBGASSERT(info_data_RightRotate(*ppstZ, ppstroot));
         }
-        pstZ->pstparent->encolor = INFO_COLOR_BLACK;
-        pstZ->pstparent->pstparent->encolor = INFO_COLOR_RED;
-        DBGASSERT(info_data_LeftRotate(pstZ->pstparent->pstparent, ppstroot));
+        (*ppstZ)->pstparent->encolor = INFO_COLOR_BLACK;
+        (*ppstZ)->pstparent->pstparent->encolor = INFO_COLOR_RED;
+        DBGASSERT(info_data_LeftRotate((*ppstZ)->pstparent->pstparent, ppstroot));
     }
     return BOOL_TRUE;
 }
@@ -234,9 +234,9 @@ STATIC BOOL_T info_data_fixup_left(IN INFO_DATA_S *pstZ, OUT INFO_DATA_S **ppstr
 Author: lichenda
 Description: 红黑树性质保持
 Input: IN INFO_DATA_S *pstZ OUT INFO_DATA_S **ppstroot
-Output: 
-Return: BOOL_T, BOOL_TRUE   
-Caution: 
+Output:
+Return: BOOL_T, BOOL_TRUE
+Caution:
 ------------------------------------------------------------------------------
 Modification History
 DATE        NAME             DESCRIPTION
@@ -246,16 +246,15 @@ YYYY-MM-DD
  *****************************************************************************/
 STATIC BOOL_T info_data_fixup(IN INFO_DATA_S *pstZ, OUT INFO_DATA_S **ppstroot)
 {
-
     while(pstZ->pstparent->encolor == INFO_COLOR_RED)
     {
-        if(pstZ->pstparent == pstZ->pstparent->pstparent->pstright)
+        if(pstZ->pstparent == pstZ->pstparent->pstparent->pstleft)
         {
-            DBGASSERT(info_data_fixup_right(pstZ, ppstroot));
+            DBGASSERT(info_data_fixup_left(&pstZ, ppstroot));
         }
         else
         {
-            DBGASSERT(info_data_fixup_left(pstZ, ppstroot));
+            DBGASSERT(info_data_fixup_right(&pstZ, ppstroot));
         }
     }
     (*ppstroot)->encolor = INFO_COLOR_BLACK;
@@ -268,9 +267,9 @@ STATIC BOOL_T info_data_fixup(IN INFO_DATA_S *pstZ, OUT INFO_DATA_S **ppstroot)
 Author: lichenda
 Description: 红黑树插入
 Input: IN INFO_DATA_S *pstZ OUT INFO_DATA_S **ppstroot
-Output: 
-Return: BOOL_T, BOOL_TRUE   
-Caution: 
+Output:
+Return: BOOL_T, BOOL_TRUE
+Caution:
 ------------------------------------------------------------------------------
 Modification History
 DATE        NAME             DESCRIPTION
@@ -314,7 +313,24 @@ STATIC BOOL_T info_data_insert(IN INFO_DATA_S *pstZ, OUT INFO_DATA_S **ppstroot)
     return BOOL_TRUE;
 }
 
+/*****************************************************************************
+  Func Name: info_data_search[*]
+  Date Created: 2016-07-31
+Author: lichenda
+Description: 在红黑树中查找
+Input: IN UINT uiId             工号
+IN INFO_DATA_S *pstroot  根节点
+Output: OUT INFO_DATA_S*   节点指针
+Return: ULONG, ERROR_SUCCESS     处理成功
+OTHER             处理失败
+Caution: 出参仅在返回成功时有效
+------------------------------------------------------------------------------
+Modification History
+DATE        NAME             DESCRIPTION
+--------------------------------------------------------------------------
+YYYY-MM-DD
 
+ *****************************************************************************/
 STATIC INFO_DATA_S* info_data_search(IN UINT uiId, IN INFO_DATA_S *pstroot)
 {
     INFO_DATA_S *pstX = pstroot;
@@ -350,10 +366,10 @@ STATIC INFO_DATA_S* info_data_search(IN UINT uiId, IN INFO_DATA_S *pstroot)
 Author: xxxx 00000
 Description: 添加一个员工信息
 Input: IN INFO_CFG_S stCfg
-Output: 
+Output:
 Return: BOOL_T, BOOL_TRUE    添加成功
 BOOL_FALSE   添加失败
-Caution: 
+Caution:
 ------------------------------------------------------------------------------
 Modification History
 DATE        NAME             DESCRIPTION
@@ -382,7 +398,10 @@ ULONG INFO_data_Add(IN const CHAR *pcInputStr)
     }
 
     psttoadd->stCfg = stCfg;
-    DBGASSERT(info_data_insert(psttoadd, &g_pstroot));
+    if(!info_data_insert(psttoadd, &g_pstroot))
+    {
+        free(psttoadd);  
+    }
 
     return ERROR_SUCCESS;
 }
@@ -393,10 +412,10 @@ ULONG INFO_data_Add(IN const CHAR *pcInputStr)
 Author: xxxx 00000
 Description: 判断指定工号的数据是否存在
 Input: IN UINT uiId         工号
-Output: 
+Output:
 Return: BOOL_T, BOOL_TRUE    存在
 BOOL_FALSE   不存在
-Caution: 
+Caution:
 ------------------------------------------------------------------------------
 Modification History
 DATE        NAME             DESCRIPTION
@@ -422,11 +441,11 @@ BOOL_T INFO_data_IsExist(IN UINT uiId)
   Date Created: 201x-xx-xx
 Author: xxxx 00000
 Description: 判断整个数据组织是否为空
-Input: 
-Output: 
+Input:
+Output:
 Return: BOOL_T, BOOL_TRUE    数据组织为空
 BOOL_FALSE   数据组织非空
-Caution: 
+Caution:
 ------------------------------------------------------------------------------
 Modification History
 DATE        NAME             DESCRIPTION
@@ -478,15 +497,40 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 }
 
 /*****************************************************************************
+  Func Name: info_data_minimum[*]
+  Date Created: 201x-xx-xx
+Author: xxxx 00000
+Description: 获取子树最小节点
+Input: 子树根节点
+Output:
+Return: INFO_DATA_S  最小节点
+Caution:
+------------------------------------------------------------------------------
+Modification History
+DATE        NAME             DESCRIPTION
+--------------------------------------------------------------------------
+YYYY-MM-DD
+ *****************************************************************************/
+INFO_DATA_S *info_data_minimum(INFO_DATA_S *pstX)
+{
+    while(pstX->pstleft != g_pstnil)
+    {
+        pstX = pstX->pstleft;
+    }
+    return pstX;
+}
+
+
+/*****************************************************************************
   Func Name: INFO_data_GetFirst[*]
   Date Created: 201x-xx-xx
 Author: xxxx 00000
 Description: 获取第一个有数据工号
 Input: VOID
-Output: 
+Output:
 Return: UINT, != INFO_ID_INVALID     第一个有数据的工号
 == INFO_ID_INVALID     未找到
-Caution: 
+Caution:
 ------------------------------------------------------------------------------
 Modification History
 DATE        NAME             DESCRIPTION
@@ -501,11 +545,7 @@ UINT INFO_data_GetFirst(VOID)
     {
         return INFO_ID_INVALID;
     }
-
-    while(pstX->pstleft != g_pstnil)
-    {
-        pstX = pstX->pstleft;
-    }
+    pstX = info_data_minimum(pstX);
     return pstX->stCfg.uiId;
 }
 
@@ -515,7 +555,7 @@ UINT INFO_data_GetFirst(VOID)
 Author: xxxx 00000
 Description: 获取下一个有数据工号
 Input: IN UINT uiId                 当前工号
-Output: 
+Output:
 Return: UINT, != INFO_ID_INVALID     下一个工号
 == INFO_ID_INVALID     未找到
 Caution: 此接口获取下一个工号不依赖于入参uiId本身是否有数据
@@ -560,13 +600,188 @@ UINT INFO_data_GetNext(IN UINT uiId)
     }
 }
 
+
+
+STATIC BOOL_T info_data_DelFixUp_left(IN INFO_DATA_S **ppstNode, OUT INFO_DATA_S **ppstroot)
+{
+    INFO_DATA_S *pstW = (*ppstNode)->pstparent->pstright;
+    if(pstW->encolor == INFO_COLOR_RED)
+    {
+        /*case 1 */
+        pstW->encolor = INFO_COLOR_BLACK;
+        (*ppstNode)->pstparent->encolor = INFO_COLOR_RED;
+        DBGASSERT(info_data_LeftRotate((*ppstNode)->pstparent, ppstroot));
+        pstW = (*ppstNode)->pstparent->pstright;
+    }
+    if(pstW->pstleft->encolor == INFO_COLOR_BLACK &&
+            pstW->pstright->encolor == INFO_COLOR_BLACK)
+    {
+        /*case 2 */
+        pstW->encolor = INFO_COLOR_RED;
+        *ppstNode = (*ppstNode)->pstparent;
+    }
+    else
+    {
+        if(pstW->pstright->encolor == INFO_COLOR_BLACK)
+        {
+            /*case 3 */
+            pstW->pstleft->encolor = INFO_COLOR_BLACK;
+            pstW->encolor = INFO_COLOR_RED;
+            DBGASSERT(info_data_RightRotate(pstW, ppstroot));
+            pstW = pstW->pstparent->pstright;
+        }
+        /*case 4 */
+        pstW->encolor = (*ppstNode)->pstparent->encolor;
+        (*ppstNode)->pstparent->encolor = INFO_COLOR_BLACK;
+        pstW->pstright->encolor = INFO_COLOR_BLACK;
+        DBGASSERT(info_data_LeftRotate((*ppstNode)->pstparent, ppstroot));
+        *ppstNode = *ppstroot;
+
+    }
+
+    return BOOL_TRUE;
+}
+STATIC BOOL_T info_data_DelFixUp_right(IN INFO_DATA_S **ppstNode, OUT INFO_DATA_S **ppstroot)
+{
+    INFO_DATA_S *pstW = (*ppstNode)->pstparent->pstleft;
+    if(pstW->encolor == INFO_COLOR_RED)
+    {
+        /*case 1 */
+        pstW->encolor = INFO_COLOR_BLACK;
+        (*ppstNode)->pstparent->encolor = INFO_COLOR_RED;
+        DBGASSERT(info_data_RightRotate((*ppstNode)->pstparent, ppstroot));
+        pstW = (*ppstNode)->pstparent->pstleft;
+    }
+    if(pstW->pstleft->encolor == INFO_COLOR_BLACK &&
+            pstW->pstright->encolor == INFO_COLOR_BLACK)
+    {
+        /*case 2 */
+        pstW->encolor = INFO_COLOR_RED;
+        *ppstNode = (*ppstNode)->pstparent;
+    }
+    else
+    {
+        if(pstW->pstleft->encolor == INFO_COLOR_BLACK)
+        {
+            /*case 3 */
+            pstW->pstright->encolor = INFO_COLOR_BLACK;
+            pstW->encolor = INFO_COLOR_RED;
+            DBGASSERT(info_data_LeftRotate(pstW, ppstroot));
+            pstW = pstW->pstparent->pstleft;
+        }
+        /*case 4 */
+        pstW->encolor = (*ppstNode)->pstparent->encolor;
+        (*ppstNode)->pstparent->encolor = INFO_COLOR_BLACK;
+        pstW->pstleft->encolor = INFO_COLOR_BLACK;
+        DBGASSERT(info_data_RightRotate((*ppstNode)->pstparent, ppstroot));
+        *ppstNode = *ppstroot;
+
+    }
+
+    return BOOL_TRUE;
+}
+STATIC BOOL_T info_data_DelFixUp(IN INFO_DATA_S *pstNode, OUT INFO_DATA_S **ppstroot)
+{
+    while(pstNode != *ppstroot && pstNode->encolor == INFO_COLOR_BLACK)
+    {
+        if(pstNode == pstNode->pstparent->pstleft)
+        {
+            DBGASSERT(info_data_DelFixUp_left(&pstNode, ppstroot));
+        }
+        else
+        {
+            DBGASSERT(info_data_DelFixUp_right(&pstNode, ppstroot));
+        }
+    }
+    pstNode->encolor = INFO_COLOR_BLACK;
+    return BOOL_TRUE;
+}
+
+STATIC BOOL_T info_data_transplant(IN const INFO_DATA_S *pstU,IN INFO_DATA_S *pstV, IN INFO_DATA_S **ppstroot)
+{
+    if(pstU->pstparent == g_pstnil)
+    {
+        *ppstroot = pstV;
+    }
+    else
+    {
+        if(pstU == pstU->pstparent->pstleft)
+        {
+            pstU->pstparent->pstleft = pstV;
+        }
+        else
+        {
+            pstU->pstparent->pstright = pstV;
+        }
+    }
+    pstV->pstparent = pstU->pstparent;
+    return BOOL_TRUE;
+
+}
+
+STATIC BOOL_T info_data_Del(IN INFO_DATA_S *pstZ, OUT INFO_DATA_S **ppstroot)
+{
+    INFO_DATA_S *pstY = pstZ;
+    INFO_DATA_S *pstX = NULL;
+    INFO_COLOR_E enYOriginColor = pstY->encolor;
+    if(pstZ->pstleft == g_pstnil)
+    {
+        pstX = pstZ->pstright;
+        DBGASSERT(info_data_transplant(pstZ, pstZ->pstright, ppstroot));
+    }
+    else if(pstZ->pstright == g_pstnil)
+    {
+        pstX = pstZ->pstleft;
+        DBGASSERT(info_data_transplant(pstZ, pstZ->pstleft, ppstroot));
+    }
+    else
+    {
+        pstY = info_data_minimum(pstZ->pstright);
+        enYOriginColor = pstY->encolor;
+        pstX = pstY->pstright;
+        if(pstY->pstparent == pstZ)
+        {
+            pstX->pstparent = pstY;
+        }
+        else
+        {
+            DBGASSERT(info_data_transplant(pstY, pstY->pstright, ppstroot));
+            pstY->pstright = pstZ->pstright;
+            pstY->pstright->pstparent = pstY;
+        }
+        DBGASSERT(info_data_transplant(pstZ, pstY, ppstroot));
+        pstY->pstleft = pstZ->pstleft;
+        pstY->pstleft->pstparent = pstY;
+        pstY->encolor = pstZ->encolor;
+    }
+
+    if(enYOriginColor == INFO_COLOR_BLACK)
+    {
+        DBGASSERT(info_data_DelFixUp(pstX, ppstroot));
+    }
+    return BOOL_TRUE;
+}
+
+
+
+ULONG INFO_data_Delete(IN UINT uiId)
+{
+    INFO_DATA_S *psttarget = info_data_search(uiId, g_pstroot);
+    if(psttarget != NULL)
+    {
+        DBGASSERT(info_data_Del(psttarget, &g_pstroot));
+        free(psttarget);
+    }
+    return ERROR_SUCCESS;
+}
+
 /*****************************************************************************
   Func Name: INFO_data_Init[*]
   Date Created: 201x-xx-xx
 Author: xxxx 00000
 Description: 模块初始化
-Input: 
-Output: 
+Input:
+Output:
 Return: ULONG, ERROR_SUCCESS     处理成功
 OTHER             处理失败
 Caution: 目前始终成功
@@ -588,8 +803,8 @@ ULONG INFO_data_Init(VOID)
   Date Created: 201x-xx-xx
 Author: xxxx 00000
 Description: 模块退出
-Input: 
-Output: 
+Input:
+Output:
 Return: VOID
 Caution: 调用此接口前，必须已经初始化过
 ------------------------------------------------------------------------------
@@ -607,4 +822,3 @@ VOID INFO_data_Fini(VOID)
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
