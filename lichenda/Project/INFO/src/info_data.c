@@ -4,7 +4,7 @@
   info_data.c
   Project Code: Comware V700R001
   Module Name: INFO
-  Date Created: 201x-xx-xx
+  Date Created: 2016-08-01
 Author: xxxx 00000
 Description: 内部数据操作
 包括创建、删除、设置、获取、遍历
@@ -409,7 +409,7 @@ ULONG INFO_data_Add(IN const CHAR *pcInputStr)
 
 /*****************************************************************************
   Func Name: INFO_data_IsExist[*]
-  Date Created: 201x-xx-xx
+  Date Created: 2016-07-31
 Author: xxxx 00000
 Description: 判断指定工号的数据是否存在
 Input: IN UINT uiId         工号
@@ -439,7 +439,7 @@ BOOL_T INFO_data_IsExist(IN UINT uiId)
 
 /*****************************************************************************
   Func Name: INFO_data_IsEmpty[*]
-  Date Created: 201x-xx-xx
+  Date Created: 2016-08-01
 Author: xxxx 00000
 Description: 判断整个数据组织是否为空
 Input:
@@ -468,7 +468,7 @@ BOOL_T INFO_data_IsEmpty(VOID)
 
 /*****************************************************************************
   Func Name: INFO_data_GetData[*]
-  Date Created: 201x-xx-xx
+  Date Created: 2016-07-28
 Author: xxxx 00000
 Description: 获取配置数据
 Input: IN UINT uiId             工号
@@ -499,7 +499,7 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 
 /*****************************************************************************
   Func Name: info_data_minimum[*]
-  Date Created: 201x-xx-xx
+  Date Created: 201x-08-01
 Author: xxxx 00000
 Description: 获取子树最小节点
 Input: 子树根节点
@@ -524,7 +524,7 @@ INFO_DATA_S *info_data_minimum(INFO_DATA_S *pstX)
 
 /*****************************************************************************
   Func Name: INFO_data_GetFirst[*]
-  Date Created: 201x-xx-xx
+  Date Created: 2016-07-31
 Author: xxxx 00000
 Description: 获取第一个有数据工号
 Input: VOID
@@ -552,7 +552,7 @@ UINT INFO_data_GetFirst(VOID)
 
 /*****************************************************************************
   Func Name: INFO_data_GetNext[*]
-  Date Created: 201x-xx-xx
+  Date Created: 2016-07-31
 Author: xxxx 00000
 Description: 获取下一个有数据工号
 Input: IN UINT uiId                 当前工号
@@ -921,7 +921,7 @@ ULONG INFO_data_Modify(IN const CHAR *pcInputStr)
 }
 /*****************************************************************************
   Func Name: INFO_data_Init[*]
-  Date Created: 201x-xx-xx
+  Date Created: 2016-07-31
 Author: xxxx 00000
 Description: 模块初始化
 Input:
@@ -944,7 +944,7 @@ ULONG INFO_data_Init(VOID)
 
 /*****************************************************************************
   Func Name: info_data_DelTree[*]
-  Date Created: 201x-xx-xx
+  Date Created: 2016-07-31
 Author: xxxx 00000
 Description: 删除二叉树
 Input: INFO_DATA_S *pstroot
@@ -979,7 +979,7 @@ STATIC VOID info_data_DelTree(INFO_DATA_S *pstroot)
 
 /*****************************************************************************
   Func Name: INFO_data_Fini[*]
-  Date Created: 201x-xx-xx
+  Date Created: 2016-07-31
 Author: xxxx 00000
 Description: 模块退出
 Input:
