@@ -154,3 +154,39 @@ courseware_test.c (INFO\ut\test):    bIsExist = INFO_data_IsExist(10);
 courseware_test.c (INFO\ut\test):    bIsExist = INFO_data_IsExist(10);
 info_data.c (INFO\src):BOOL_T INFO_data_IsExist(IN UINT uiId)
 info_data.h (INFO\src):BOOL_T INFO_data_IsExist(IN UINT uiId);
+---- INFO_proc_Delete Matches (10 in 4 files) ----
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_proc_Delete("id=11");
+courseware_test.c (INFO\ut\test):        ulErrCode = INFO_proc_Delete(g_szCorrectMemberInfo[iCurMember]);
+courseware_test.c (INFO\ut\test):        ulErrCode = INFO_proc_Delete(g_szCorrectMemberInfo[iCurMember]);
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_proc_Delete("id=1000");
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_proc_Delete("id=0");
+courseware_test.c (INFO\ut\test):    ulErrCode = INFO_proc_Delete("id=100001");
+courseware_test.c (INFO\ut\test):        ulErrCode = INFO_proc_Delete(pcString);
+info_main.c (INFO\src):    [INFO_MENU_DELETE]      = {"Delete",        INFO_proc_Delete},
+info_proc.c (INFO\src):ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
+info_proc.h (INFO\src):ULONG INFO_proc_Delete(IN const CHAR *pcInputStr);
+---- memset Matches (6 in 2 files) ----
+info_parse.c (INFO\src):121
+    memset(pstCfg, 0, sizeof(INFO_CFG_S));
+
+    /* 解析用户输入字符串 */
+stub.c (INFO\ut\stub):62
+    memset(g_astDldpFunc, 0, sizeof(g_astDldpFunc));
+    g_uiFuncIndex = 0;
+    return;
+stub.c (INFO\ut\stub):106
+    memset(g_acTmp[0], 0, 1024);
+    return (VOID *)g_acTmp[0];
+}
+stub.c (INFO\ut\stub):117
+        memset(g_acTmp[0], 0, 1024);
+        return (VOID *)g_acTmp[0];
+    }
+stub.c (INFO\ut\stub):134
+        memset(g_acTmp[0], 0, 1024);
+        return (VOID *)g_acTmp[0];
+    }
+stub.c (INFO\ut\stub):143
+    memset(g_acTmp[1], 0, 1024);
+    return (VOID *)g_acTmp[1];
+
