@@ -6,13 +6,13 @@
    Module Name: INFO
   Date Created: 2011-12-29
         Author: guce 04152
-   Description: 
+   Description:
 
 --------------------------------------------------------------------------------
   Modification History
   DATE        NAME             DESCRIPTION
 --------------------------------------------------------------------------------
-  YYYY-MM-DD  
+  YYYY-MM-DD
 
 *******************************************************************************/
 
@@ -58,7 +58,7 @@ typedef struct tagInfo_Func
 }INFO_FUNC_S;
 
 /* 功能数据 */
-STATIC INFO_FUNC_S g_astInfoFunc[] = 
+STATIC INFO_FUNC_S g_astInfoFunc[] =
 {
     [INFO_MENU_ADD]         = {"Add",           INFO_proc_Add},
     [INFO_MENU_DELETE]      = {"Delete",        INFO_proc_Delete},
@@ -74,10 +74,10 @@ STATIC INFO_FUNC_S g_astInfoFunc[] =
  Date Created: 2011-12-29
        Author: guce 04152
   Description: 显示菜单
-        Input: 
-       Output: 
+        Input:
+       Output:
        Return: VOID
-      Caution: 
+      Caution:
 ------------------------------------------------------------------------------
   Modification History
   DATE        NAME             DESCRIPTION
@@ -96,7 +96,7 @@ STATIC VOID info_main_DisplayMenu(VOID)
         printf("%u.%s\r\n", enEach, g_astInfoFunc[enEach].pcMenu);
     }
     printf("\r\n");
-    
+
     return;
 }
 
@@ -106,9 +106,9 @@ STATIC VOID info_main_DisplayMenu(VOID)
        Author: guce 04152
   Description: 输出错误提示信息
         Input: IN ULONG ulErrCode   错误码
-       Output: 
+       Output:
        Return: VOID
-      Caution: 
+      Caution:
 ------------------------------------------------------------------------------
   Modification History
   DATE        NAME             DESCRIPTION
@@ -157,7 +157,7 @@ STATIC VOID info_main_DisplayErrInfo(IN ULONG ulErrCode)
 
     /* 输出 */
     printf("%s", pcErrInfo);
-    
+
     return;
 }
 
@@ -166,7 +166,7 @@ STATIC VOID info_main_DisplayErrInfo(IN ULONG ulErrCode)
  Date Created: 2011-12-29
        Author: guce 04152
   Description: 和用户交互，获取"菜单选择"
-        Input: 
+        Input:
        Output: OUT INFO_MENU_E *penMenu 菜单选择
        Return: ULONG, ERROR_SUCCESS     处理成功
                       OTHER             处理失败
@@ -290,10 +290,10 @@ STATIC VOID info_main_GetInputStr(IN INFO_MENU_E enMenu, IN ULONG ulInputLen, OU
  Date Created: 2011-12-29
        Author: guce 04152
   Description: 运行
-        Input: 
-       Output: 
+        Input:
+       Output:
        Return: VOID
-      Caution: 
+      Caution:
 ------------------------------------------------------------------------------
   Modification History
   DATE        NAME             DESCRIPTION
@@ -333,7 +333,7 @@ VOID INFO_Run(VOID)
             info_main_DisplayErrInfo(ulErrCode);
         }
     }while (INFO_MENU_EXIT != enMenu); /* 不退出则继续 */
-    
+
     return;
 }
 
@@ -342,11 +342,11 @@ VOID INFO_Run(VOID)
  Date Created: 2011-12-29
        Author: guce 04152
   Description: 初始化
-        Input: 
-       Output: 
+        Input:
+       Output:
        Return: ULONG, ERROR_SUCCESS     处理成功
                       OTHER             处理失败
-      Caution: 
+      Caution:
 ------------------------------------------------------------------------------
   Modification History
   DATE        NAME             DESCRIPTION
@@ -368,10 +368,10 @@ ULONG INFO_Init(VOID)
  Date Created: 2011-12-29
        Author: guce 04152
   Description: 退出
-        Input: 
-       Output: 
+        Input:
+       Output:
        Return: VOID
-      Caution: 
+      Caution:
 ------------------------------------------------------------------------------
   Modification History
   DATE        NAME             DESCRIPTION
@@ -393,10 +393,10 @@ VOID INFO_Fini(VOID)
   Description: 程序入口
         Input: IN INT iArgc         入参个数
                IN CHAR *apcArgv[]   入参指针
-       Output: 
+       Output:
        Return: INT, ERROR_SUCCESS   处理成功
                     OTHER           处理失败
-      Caution: 
+      Caution:
 ------------------------------------------------------------------------------
   Modification History
   DATE        NAME             DESCRIPTION

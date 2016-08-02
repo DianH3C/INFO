@@ -13,7 +13,7 @@
   Modification History
   DATE        NAME             DESCRIPTION
 --------------------------------------------------------------------------------
-  YYYY-MM-DD  
+  YYYY-MM-DD
 
 *******************************************************************************/
 
@@ -24,9 +24,27 @@
 extern "C"{
 #endif
 
+/*************************************** 内部函数 ***************************************/
+
 /*************************************** 数据操作 ***************************************/
+/*模块初始化和退出*/
+ULONG INFO_data_Init(VOID);
+VOID INFO_data_Fini(VOID);
+
+
 /* 判断指定工号的数据是否存在 */
 BOOL_T INFO_data_IsExist(IN UINT uiId);
+
+/*修改数据*/
+VOID INFO_data_SetName(IN UINT uiId,IN CHAR* szInName);
+VOID INFO_data_SetName(IN UINT uiId,IN INFO_SEX_E enInSex);
+VOID INFO_data_SetName(IN UINT uiId,IN UINT uiInAge);
+VOID INFO_data_SetName(IN UINT uiId,IN UINT uiInHeght);
+
+/*节点创建和删除*/
+VOID INFO_date_Create(IN UINT uiId);
+VOID INFO_data_Destroy(IN UINT uiId);
+
 
 /* 获取数据 */
 ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg);
