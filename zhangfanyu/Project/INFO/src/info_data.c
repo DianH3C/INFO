@@ -122,10 +122,10 @@ INFO_DATA_S* info_data_Get(IN UINT uiId)
 }
 /**********************************修改数据************************************/
 /*将入参工号的姓名改为入参姓名*/
-VOID INFO_data_SetName(IN UINT uiId,IN CHAR* szInName)
+VOID INFO_data_SetName(IN UINT uiId,IN CHAR szInName[])
 {
     INFO_DATA_S* pstCgNode=info_data_Get(uiId);
-    pstCgNode->stCfg.szName=szInName;
+    strlcpy(pstCgNode->stCfg.szName,szInName,INFO_NAME_MAXLEN + 1);
 }
 
 /*将入参工号的性别改为入参性别*/
@@ -407,6 +407,12 @@ VOID INFO_data_Fini(VOID)
 {
     INFO_DATA_S *pstMvNode=pstHEAD;
     INFO_DATA_S *pstTmpNode=pstHEAD;
+
+    if(pstHEAD==NULL)
+    {
+        return;
+    }
+
     while(pstMvNode->Info_Data_next != NULL)
     {
         pstTmpNode=pstMvNode;

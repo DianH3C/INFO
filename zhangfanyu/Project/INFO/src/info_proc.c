@@ -60,9 +60,9 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 {
     UINT uiId;
     INFO_CFG_S * pstCfg;
-    if(BOOL_FALSE == INFO_data_IsEmpty())
+    if(BOOL_TRUE == INFO_data_IsEmpty())
     {
-        printf("\n No info");
+        printf("\n No info\n");
         return ERROR_FAILED;
     }
     else
@@ -71,9 +71,9 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
          (uiId) != INFO_ID_INVALID;
          (uiId) = INFO_data_GetNext(uiId))
          {
-            INFO_data_GetData(uiId,pstCfg)
+            INFO_data_GetData(uiId,pstCfg);
             printf("ID:%d\tName:%s\tSex:%d\tAge:%d\tHeight:%d\n",
-            pstCfg.uiId,pstCfg.szName,pstCfg.enSex,pstCfg.uiAge,pstCfg.uiHeight);
+            pstCfg->uiId,pstCfg->szName,pstCfg->enSex,pstCfg->uiAge,pstCfg->uiHeight);
          }
          return ERROR_SUCCESS;
     }
