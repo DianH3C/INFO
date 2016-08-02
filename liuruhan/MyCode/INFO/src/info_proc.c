@@ -58,30 +58,35 @@ extern "C"{
 *****************************************************************************/
 ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 {
-    char *sex;
-	UINT infoLine;
-    if(INFO_DATA_LINE == INFO_FIRST)
+    char *cSex;
+	UINT uiLine;
+	
+    if(INFO_data_IsEmpty())
 	{
 	    printf("No info!");
 		return ERROR_SUCCESS;
 	}
 
 	printf("ID:    Age:     Sex:    Height:     Name:");
-	for(infoLine = INFO_FIRST; infoLine < INFO_DATA_LINE; infoLine ++)
+	for(uiLine = INFO_FIRST; uiLine < INFO_DATA_MAX; uiLine ++)
     { 
-        if(alData[infoLine].stCfg.enSex == INFO_SEX_FEMALE)
+        if(alData[uiLine].stCfg.uiId == INFO_ID_INVALID)
         {
-            sex = "FEMALE";
+             continue;
+		}
+        if(alData[uiLine].stCfg.enSex == INFO_SEX_FEMALE)
+        {
+            cSex = "FEMALE";
 		}
 		else
 		{
-            sex = "MALE";
+            cSex = "MALE";
 		}
-        printf("%u %u %u %s %s",alData[infoLine].stCfg.uiId,
-			                     alData[infoLine].stCfg.uiAge,
-			                      alData[infoLine].stCfg.uiHeight,
-			                       sex,
-			                        alData[infoLine].stCfg.szName); 
+        printf("%u %u %u %s %s",alData[uiLine].stCfg.uiId,
+			                     alData[uiLine].stCfg.uiAge,
+			                      alData[uiLine].stCfg.uiHeight,
+			                       cSex,
+			                        alData[uiLine].stCfg.szName); 
 	}
     return ERROR_SUCCESS;
 }
@@ -105,23 +110,31 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 
 *****************************************************************************/
 ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
-{
-    UINT infoLine = INFO_FIRST; 
-	INFO_CFG_S newData;
-
-	newData = INFO_parse_InputStr(pcInputStr);
-	if(!INFO_ALL_ISVALID(newData))
+{ 
+    UINT uiLine = INFO_FIRST;
+	INFO_CFG_S *sNewData;
+    INFO_CFG_S *sIsGetData;
+	
+	INFO_parse_InputStr(pcInputStr,sNewData);
+    INFO_data_GetData(sNewData->uiId,sIsGetData);
+	
+	if(!INFO_ALL_ISVALID(sNewData))
 	{
 	    return ERROR_INVALID_PARAMETER;
 	}
 
-	for(infoLine = INFO_FIRST; infoLine < INFO_DATA_LINE; infoLine ++)
+    if(sIsGetData->uiId != 0)
 	{
-        if(alData[infoLine].stCfg.uiId == newData.uiId)
-        {
-            return ERROR_ALREADY_EXIST;
-		}
-	}
+	    return ERROR_ALREADY_EXIST;
+    }
+    for(uiLine = INFO_DATA_MAX; alData[uiLine].stCfg.uiId == INFO_ID_INVALID; uiLine --);
+	
+    alData[uiLine].stCfg.enSex = sNewData->enSex;
+	strncpy(alData[uiLine].stCfg.szName, sNewData->szName, sizeof(alData[uiLine].stCfg.szName) - 1);		
+	alData[uiLine].stCfg.uiAge= sNewData->uiAge;
+	alData[uiLine].stCfg.uiHeight= sNewData->uiHeight;
+	alData[uiLine].stCfg.uiId= sNewData->uiId;
+	
 	return ERROR_SUCCESS;
 }
 
@@ -145,26 +158,37 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 *****************************************************************************/
 ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 {
-    BOOL_T findFLAG = BOOL_FALSE;
-	UINT infoLine = INFO_FIRST;
-	INFO_CFG_S delData;
-	delData = INFO_parse_InputStr(pcInputStr);
+    BOOL_T bFindFLAG = BOOL_FALSE;
+    UINT uiLine = INFO_FIRST;
+	UINT uiCalLine = INFO_FIRST;
+	INFO_CFG_S *sDelData;
 
-	for( infoLine = INFO_FIRST; infoLine < INFO_DATA_LINE; infoLine ++)
+	INFO_parse_InputStr(pcInputStr,sDelData);
+    if(!INFO_ID_ISVALID(sDelData->uiId))
     {
-        if(delData.uiId == alData[infoLine].stCfg.uiId)
+        return ERROR_ALREADY_EXIST;
+	}
+	
+	while(uiLine < INFO_DATA_MAX)
+    {
+        if(sDelData->uiId == alData[uiLine++].stCfg.uiId)
         {
-            findFLAG = BOOL_TRUE;
-            alData[infoLine].stCfg = NULL;
+            bFindFLAG = BOOL_TRUE;
+            alData[uiLine].stCfg.uiId = INFO_ID_INVALID;
 		}
+		if(alData[uiLine].stCfg.uiId == INFO_ID_INVALID)
+		{
+            continue;
+		}
+		uiCalLine ++;
 	}
 
-    if( findFLAG == BOOL_FALSE)
+    if( bFindFLAG == BOOL_FALSE)
     {
         return ERROR_INVALID_PARAMETER;
 	}
-	
-    return ERROR_SUCCESS;
+
+	    return ERROR_SUCCESS;
 }
 
 /*****************************************************************************
@@ -187,41 +211,41 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 *****************************************************************************/
 ULONG INFO_proc_Modify(IN const CHAR *pcInputStr)
 {
-    BOOL_T findFLAG = BOOL_FALSE;
-	UINT infoLine = INFO_FIRST;
-	INFO_CFG_S modData;
+    BOOL_T bFindFLAG = BOOL_FALSE;
+	UINT uiLine = INFO_FIRST;
+	INFO_CFG_S *sModData;
 
-	modData = INFO_parse_InputStr(pcInputStr);
-	if(!INFO_ID_ISVALID(modData.uiId))
+	INFO_parse_InputStr(pcInputStr,sModData);
+	if(!INFO_ID_ISVALID(sModData->uiId))
 	{
          return ERROR_INVALID_PARAMETER;
 	}
 
-	for(infoLine = INFO_FIRST; infoLine < INFO_DATA_LINE; infoLine ++)
+	for(uiLine = INFO_FIRST; uiLine < INFO_DATA_MAX; uiLine ++)
 	{
-        if(alData[infoLine].stCfg.uiId == modData.uiId)
+        if(alData[uiLine].stCfg.uiId == sModData->uiId)
 		{
-             if(INFO_AGE_ISVALID(modData.uiAge))
+             if(INFO_AGE_ISVALID(sModData->uiAge))
              {
-                 alData[infoLine].stCfg.uiAge = modData.uiAge;
+                 alData[uiLine].stCfg.uiAge = sModData->uiAge;
 			 }
-			 if(INFO_HEIGHT_ISVALID(modData.uiHeight))
+			 if(INFO_HEIGHT_ISVALID(sModData->uiHeight))
 			 {
-                 alData[infoLine].stCfg.uiHeight = modData.uiHeight;
+                 alData[uiLine].stCfg.uiHeight = sModData->uiHeight;
 			 }
-			 if(INFO_NAME_ISVALID(modData.szName))
+			 if(INFO_NAME_ISVALID(sModData->szName))
 			 {
-                 alData[infoLine].stCfg.szName = modData.szName;
-			 }
-			 if(INFO_SEX_ISVALID(modData.enSex))
+			     strncpy(alData[uiLine].stCfg.szName, sModData->szName, sizeof(alData[uiLine].stCfg.szName) - 1);
+    		 }
+			 if(INFO_SEX_ISVALID(sModData->enSex))
 			 {
-                 alData[infoLine].stCfg.enSex = modData.enSex;
+                 alData[uiLine].stCfg.enSex = sModData->enSex;
 			 }
-			 findFLAG = BOOL_TRUE;
+			 bFindFLAG = BOOL_TRUE;
 		}
 	}
 
-	if(findFLAG == BOOL_FALSE)
+	if(bFindFLAG == BOOL_FALSE)
     {
          return ERROR_NOT_FOUND;
 	}

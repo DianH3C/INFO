@@ -35,13 +35,10 @@ extern "C"{
 /* module   private */
 #include "info.h"
 #include "info_dbg.h"
+#include "info_data.h"
 
-/* 信息数据结构 */
-typedef struct tagInfo_Data
-{
-                            /* 数据组织相关[*] */
-    INFO_CFG_S stCfg;       /* 配置数据 */
-}INFO_DATA_S;
+/* 获取数据标志 */
+BOOL_T info_data_Init = BOOL_FALSE;
 
 /*****************************************************************************
     Func Name: INFO_data_IsExist[*]
@@ -62,10 +59,10 @@ typedef struct tagInfo_Data
 *****************************************************************************/
 BOOL_T INFO_data_IsExist(IN UINT uiId)
 {
-    UINT infoLine = INFO_FIRST;
-    for(infoLine = INFO_FIRST; infoLine < INFO_DATA_LINE; infoLine ++)
+    UINT uiLine = INFO_FIRST;
+    for(uiLine = INFO_FIRST; uiLine < INFO_DATA_MAX; uiLine ++)
     {
-        if(uiID == alData[infoLine].stCfg.uiId)
+        if(uiId == alData[uiLine].stCfg.uiId)
         {
             return BOOL_TRUE;
 		}
@@ -93,7 +90,10 @@ BOOL_T INFO_data_IsExist(IN UINT uiId)
 *****************************************************************************/
 BOOL_T INFO_data_IsEmpty(VOID)
 {
-    if(INFO_DATA_LINE == INFO_FIRST)
+    UINT uiEndLine = INFO_FIRST;
+    for(uiEndLine = INFO_DATA_MAX; alData[uiEndLine].stCfg.uiId == INFO_ID_INVALID; uiEndLine --);
+	
+    if(uiEndLine == INFO_FIRST)
     {
          return BOOL_FALSE;
     }
@@ -121,16 +121,25 @@ BOOL_T INFO_data_IsEmpty(VOID)
 *****************************************************************************/
 ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 {
-    UINT infoLine;
-	for(infoLine = INFO_FIRST; infoLine < INFO_DATA_MAX; infoLine++)
+    UINT uiLine;
+	
+	/* 出参初始化为非法值 */
+    memset(pstCfg, 0, sizeof(INFO_CFG_S));
+
+	for(uiLine = INFO_FIRST; uiLine < INFO_DATA_MAX; uiLine++)
 	{
-         if(alData[infoLine].uiId == uiId)
+         if(alData[uiLine].stCfg.uiId == uiId)
          {
-             return alData[infoLine];
+             pstCfg->enSex = alData[uiLine].stCfg.enSex;
+	         strncpy(pstCfg->szName, alData[uiLine].stCfg.szName, sizeof(pstCfg->szName) - 1);		
+	         pstCfg->uiAge= alData[uiLine].stCfg.uiAge;
+       	     pstCfg->uiHeight= alData[uiLine].stCfg.uiHeight;
+	         pstCfg->uiId= alData[uiLine].stCfg.uiId;
+			 	return;
 		 }
 	}
 
-	return ERROR_FAILED;
+	return;
 }
 
 /*****************************************************************************
@@ -152,9 +161,9 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 *****************************************************************************/
 UINT INFO_data_GetFirst(VOID)
 {
-    if(alData[info_FIRST].uiId != 0)
+    if(alData[INFO_FIRST].stCfg.uiId != 0)
     {
-	    return alData[info_FIRST].uiId;
+	    return alData[INFO_FIRST].stCfg.uiId;
     }
 	return INFO_ID_INVALID;
 }
@@ -178,12 +187,12 @@ UINT INFO_data_GetFirst(VOID)
 *****************************************************************************/
 UINT INFO_data_GetNext(IN UINT uiId)
 {
-    UINT infoLine;
-	for(infoLine = info_FIRST; infoLine < INFO_DATA_MAX; infoLine++)
+    UINT uiLine;
+	for(uiLine = INFO_FIRST; uiLine < INFO_DATA_MAX; uiLine++)
 	{
-	    if(alData[infoLine].uiId == uiId)
+	    if(alData[uiLine].stCfg.uiId == uiId)
 	    {
-	        return alData[infoLine+1].uiId;
+	        return alData[uiLine+1].stCfg.uiId;
 	    }
 	}
     return INFO_ID_INVALID;
@@ -206,27 +215,27 @@ UINT INFO_data_GetNext(IN UINT uiId)
   YYYY-MM-DD
 
 *****************************************************************************/
-ULONG INFO_data_Init(VOID)
+/**/ULONG INFO_data_Init(VOID)
 {
-	UINT infoLine = info_FIRST;
-	char *perLine;
+	UINT uiLine = INFO_FIRST;
+	CHAR *cLine;
 	FILE *fp;
 
-	if((fp=fopen("stdin","r")) == NULL)
+	if((fp=fopen("data.txt","rt")) == NULL)
     {
         printf("Can not open source file!");
-        return OTHER;    
+        return ERROR_FAILED;    
 	}
 
-	while(fscanf(fp,"%s",perLine) == 1)	
+	while(fscanf(fp,"%s",cLine) == 1)	
 	{
-		INFO_parse_InputStr(perLine,alData[infoLine});
-        infoLine++;
+		INFO_parse_InputStr(cLine,alData[uiLine]);
+        uiLine++;
     }
-    fclose(fp);
-    INFO_DATA_LINE = infoLine;
 
-	info_data_Init = BOOL_TRUE;
+    fclose(fp);
+    
+	info_data_Init= BOOL_TRUE;
 
     return ERROR_SUCCESS;
 }
@@ -249,7 +258,7 @@ ULONG INFO_data_Init(VOID)
 *****************************************************************************/
 VOID INFO_data_Fini(VOID)
 {
-    UINT infoLine = INFO_FIRST;
+    UINT uiLine = INFO_FIRST;
     FILE *fp;
 	if(info_data_Init == BOOL_FALSE)
     {
@@ -257,18 +266,22 @@ VOID INFO_data_Fini(VOID)
 		return;
     }
 
-	if((fp = fopen("stdin","w"))==NULL)
+	if((fp = fopen("data.txt","wt"))==NULL)
 	{
         printf("Can not open the file!");
 		return;
 	}
-	for(infoLine = INFO_FIRST; infoLine < INFO_DATA_LINE; infoLine ++)
+	for(uiLine = INFO_FIRST; uiLine < INFO_DATA_MAX; uiLine ++)
     {
-        fprintf(fp,"id=%u name=%s sex=%u age=%u height=%u\r\n",alData[infoLine].stCfg.uiId,
-			                                                    alData[infoLine].stCfg.szName,
-			                                                     alData[infoLine].stCfg.enSex,
-			                                                      alData[infoLine].stCfg.uiAge,
-			                                                       alData[infoLine].stCfg.uiHeight);
+        if(alData[uiLine].stCfg.uiId == INFO_ID_INVALID)
+		{
+            continue;
+		}
+        fprintf(fp,"id=%u name=%s sex=%u age=%u height=%u\r\n",alData[uiLine].stCfg.uiId,
+			                                                    alData[uiLine].stCfg.szName,
+			                                                     alData[uiLine].stCfg.enSex,
+			                                                      alData[uiLine].stCfg.uiAge,
+			                                                       alData[uiLine].stCfg.uiHeight);
 	}
 	fclose(fp);
     return;
