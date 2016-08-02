@@ -58,6 +58,31 @@ extern "C"{
 *****************************************************************************/
 ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 {
+    char *sex;
+	UINT infoLine;
+    if(INFO_DATA_LINE == INFO_FIRST)
+	{
+	    printf("No info!");
+		return ERROR_SUCCESS;
+	}
+
+	printf("ID:    Age:     Sex:    Height:     Name:");
+	for(infoLine = INFO_FIRST; infoLine < INFO_DATA_LINE; infoLine ++)
+    { 
+        if(alData[infoLine].stCfg.enSex == INFO_SEX_FEMALE)
+        {
+            sex = "FEMALE";
+		}
+		else
+		{
+            sex = "MALE";
+		}
+        printf("%u %u %u %s %s",alData[infoLine].stCfg.uiId,
+			                     alData[infoLine].stCfg.uiAge,
+			                      alData[infoLine].stCfg.uiHeight,
+			                       sex,
+			                        alData[infoLine].stCfg.szName); 
+	}
     return ERROR_SUCCESS;
 }
 
@@ -81,7 +106,23 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 *****************************************************************************/
 ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 {
-    return ERROR_SUCCESS;
+    UINT infoLine = INFO_FIRST; 
+	INFO_CFG_S newData;
+
+	newData = INFO_parse_InputStr(pcInputStr);
+	if(!INFO_ALL_ISVALID(newData))
+	{
+	    return ERROR_INVALID_PARAMETER;
+	}
+
+	for(infoLine = INFO_FIRST; infoLine < INFO_DATA_LINE; infoLine ++)
+	{
+        if(alData[infoLine].stCfg.uiId == newData.uiId)
+        {
+            return ERROR_ALREADY_EXIST;
+		}
+	}
+	return ERROR_SUCCESS;
 }
 
 /*****************************************************************************
@@ -104,6 +145,25 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 *****************************************************************************/
 ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 {
+    BOOL_T findFLAG = BOOL_FALSE;
+	UINT infoLine = INFO_FIRST;
+	INFO_CFG_S delData;
+	delData = INFO_parse_InputStr(pcInputStr);
+
+	for( infoLine = INFO_FIRST; infoLine < INFO_DATA_LINE; infoLine ++)
+    {
+        if(delData.uiId == alData[infoLine].stCfg.uiId)
+        {
+            findFLAG = BOOL_TRUE;
+            alData[infoLine].stCfg = NULL;
+		}
+	}
+
+    if( findFLAG == BOOL_FALSE)
+    {
+        return ERROR_INVALID_PARAMETER;
+	}
+	
     return ERROR_SUCCESS;
 }
 
@@ -127,6 +187,44 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 *****************************************************************************/
 ULONG INFO_proc_Modify(IN const CHAR *pcInputStr)
 {
+    BOOL_T findFLAG = BOOL_FALSE;
+	UINT infoLine = INFO_FIRST;
+	INFO_CFG_S modData;
+
+	modData = INFO_parse_InputStr(pcInputStr);
+	if(!INFO_ID_ISVALID(modData.uiId))
+	{
+         return ERROR_INVALID_PARAMETER;
+	}
+
+	for(infoLine = INFO_FIRST; infoLine < INFO_DATA_LINE; infoLine ++)
+	{
+        if(alData[infoLine].stCfg.uiId == modData.uiId)
+		{
+             if(INFO_AGE_ISVALID(modData.uiAge))
+             {
+                 alData[infoLine].stCfg.uiAge = modData.uiAge;
+			 }
+			 if(INFO_HEIGHT_ISVALID(modData.uiHeight))
+			 {
+                 alData[infoLine].stCfg.uiHeight = modData.uiHeight;
+			 }
+			 if(INFO_NAME_ISVALID(modData.szName))
+			 {
+                 alData[infoLine].stCfg.szName = modData.szName;
+			 }
+			 if(INFO_SEX_ISVALID(modData.enSex))
+			 {
+                 alData[infoLine].stCfg.enSex = modData.enSex;
+			 }
+			 findFLAG = BOOL_TRUE;
+		}
+	}
+
+	if(findFLAG == BOOL_FALSE)
+    {
+         return ERROR_NOT_FOUND;
+	}
     return ERROR_SUCCESS;
 }
 
@@ -150,6 +248,7 @@ ULONG INFO_proc_Modify(IN const CHAR *pcInputStr)
 ULONG INFO_proc_Exit(IN const CHAR *pcInputStr)
 {
     IGNORE_PARAM(pcInputStr);
+	
     return ERROR_SUCCESS;
 }
 

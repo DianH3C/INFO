@@ -62,12 +62,16 @@ typedef struct tagInfo_Data
 *****************************************************************************/
 BOOL_T INFO_data_IsExist(IN UINT uiId)
 {
-    if(INFO_data_GetData(uiId) == NULL)
+    UINT infoLine = INFO_FIRST;
+    for(infoLine = INFO_FIRST; infoLine < INFO_DATA_LINE; infoLine ++)
     {
-         return BOOL_FALSE;
-    }
-	else
-		return BOOL_TRUE;
+        if(uiID == alData[infoLine].stCfg.uiId)
+        {
+            return BOOL_TRUE;
+		}
+	}
+
+	return BOOL_FALSE;
 }
 
 /*****************************************************************************
@@ -89,20 +93,18 @@ BOOL_T INFO_data_IsExist(IN UINT uiId)
 *****************************************************************************/
 BOOL_T INFO_data_IsEmpty(VOID)
 {
-    char *firstInputStr = NULL;
-    
-    (VOID)fscanf("stdout","%s",firstInputStr);
-    if(firstInputStr != NULL)
+    if(INFO_DATA_LINE == INFO_FIRST)
     {
-        return BOOL_FAlSE;
+         return BOOL_FALSE;
     }
-    else
-        return BOOL_TRUE; 
+	else
+		return BOOL_TRUE;
+     
 }
 
 /*****************************************************************************
     Func Name: INFO_data_GetData[*]
- Date Created: 201x-xx-xx
+ Date Created: 2016-08-02
        Author: xxxx 00000
   Description: 获取配置数据
         Input: IN UINT uiId             工号
@@ -119,24 +121,21 @@ BOOL_T INFO_data_IsEmpty(VOID)
 *****************************************************************************/
 ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 {
-	UINT aId;
-
-    do
-    {
-        (VOID)fgets()
-    }
-    while(aId != uiId);
-    if(aId == uiId)
-    	{
-    	fscanf("stdout","%d"
-    	}
+    UINT infoLine;
+	for(infoLine = INFO_FIRST; infoLine < INFO_DATA_MAX; infoLine++)
+	{
+         if(alData[infoLine].uiId == uiId)
+         {
+             return alData[infoLine];
+		 }
+	}
 
 	return ERROR_FAILED;
 }
 
 /*****************************************************************************
     Func Name: INFO_data_GetFirst[*]
- Date Created: 201x-xx-xx
+ Date Created: 2016-08-02
        Author: xxxx 00000
   Description: 获取第一个有数据工号
         Input: VOID
@@ -153,12 +152,16 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 *****************************************************************************/
 UINT INFO_data_GetFirst(VOID)
 {
-    return INFO_ID_INVALID;
+    if(alData[info_FIRST].uiId != 0)
+    {
+	    return alData[info_FIRST].uiId;
+    }
+	return INFO_ID_INVALID;
 }
 
 /*****************************************************************************
     Func Name: INFO_data_GetNext[*]
- Date Created: 201x-xx-xx
+ Date Created: 2016-08-02
        Author: xxxx 00000
   Description: 获取下一个有数据工号
         Input: IN UINT uiId                 当前工号
@@ -175,19 +178,27 @@ UINT INFO_data_GetFirst(VOID)
 *****************************************************************************/
 UINT INFO_data_GetNext(IN UINT uiId)
 {
+    UINT infoLine;
+	for(infoLine = info_FIRST; infoLine < INFO_DATA_MAX; infoLine++)
+	{
+	    if(alData[infoLine].uiId == uiId)
+	    {
+	        return alData[infoLine+1].uiId;
+	    }
+	}
     return INFO_ID_INVALID;
 }
 
 /*****************************************************************************
     Func Name: INFO_data_Init[*]
- Date Created: 201x-xx-xx
+ Date Created: 2016-08-02
        Author: xxxx 00000
   Description: 模块初始化
         Input: 
        Output: 
        Return: ULONG, ERROR_SUCCESS     处理成功
                       OTHER             处理失败
-      Caution: 目前始终成功
+      Caution: 
 ------------------------------------------------------------------------------
   Modification History
   DATE        NAME             DESCRIPTION
@@ -197,12 +208,32 @@ UINT INFO_data_GetNext(IN UINT uiId)
 *****************************************************************************/
 ULONG INFO_data_Init(VOID)
 {
+	UINT infoLine = info_FIRST;
+	char *perLine;
+	FILE *fp;
+
+	if((fp=fopen("stdin","r")) == NULL)
+    {
+        printf("Can not open source file!");
+        return OTHER;    
+	}
+
+	while(fscanf(fp,"%s",perLine) == 1)	
+	{
+		INFO_parse_InputStr(perLine,alData[infoLine});
+        infoLine++;
+    }
+    fclose(fp);
+    INFO_DATA_LINE = infoLine;
+
+	info_data_Init = BOOL_TRUE;
+
     return ERROR_SUCCESS;
 }
 
 /*****************************************************************************
     Func Name: INFO_data_Fini[*]
- Date Created: 201x-xx-xx
+ Date Created: 2016-08-02
        Author: xxxx 00000
   Description: 模块退出
         Input: 
@@ -218,6 +249,28 @@ ULONG INFO_data_Init(VOID)
 *****************************************************************************/
 VOID INFO_data_Fini(VOID)
 {
+    UINT infoLine = INFO_FIRST;
+    FILE *fp;
+	if(info_data_Init == BOOL_FALSE)
+    {
+        printf("Forbidden!!!Did not use initial method!");
+		return;
+    }
+
+	if((fp = fopen("stdin","w"))==NULL)
+	{
+        printf("Can not open the file!");
+		return;
+	}
+	for(infoLine = INFO_FIRST; infoLine < INFO_DATA_LINE; infoLine ++)
+    {
+        fprintf(fp,"id=%u name=%s sex=%u age=%u height=%u\r\n",alData[infoLine].stCfg.uiId,
+			                                                    alData[infoLine].stCfg.szName,
+			                                                     alData[infoLine].stCfg.enSex,
+			                                                      alData[infoLine].stCfg.uiAge,
+			                                                       alData[infoLine].stCfg.uiHeight);
+	}
+	fclose(fp);
     return;
 }
 

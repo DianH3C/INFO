@@ -69,6 +69,9 @@ STATIC INFO_FUNC_S g_astInfoFunc[] =
     [INFO_MENU_CLOSE_DEBUG] = {"Close debug",   INFO_proc_CloseDebug}
 };
 
+/* 所有数据 */
+INFO_DATA_S alData[INFO_DATA_MAX]; 
+
 /*****************************************************************************
     Func Name: info_main_DisplayMenu
  Date Created: 2011-12-29

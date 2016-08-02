@@ -52,6 +52,14 @@ typedef enum tagInfo_Sex
 #define INFO_HEIGHT_MAX                 300U
 #define INFO_HEIGHT_ISVALID(uiHeight)   ((INFO_HEIGHT_MIN <= (uiHeight)) && ((uiHeight) <= INFO_HEIGHT_MAX))
 
+/* 数据量 */
+#define INFO_DATA_MAX  				1000U
+UINT INFO_DATA_LINE = 0;
+
+/* 第一个数据 */
+#define INFO_FIRST 0
+
+
 /* 配置数据 */
 typedef struct tagInfo_Cfg
 {
