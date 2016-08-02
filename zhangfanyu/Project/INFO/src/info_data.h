@@ -37,9 +37,9 @@ BOOL_T INFO_data_IsExist(IN UINT uiId);
 
 /*修改数据*/
 VOID INFO_data_SetName(IN UINT uiId,IN CHAR* szInName);
-VOID INFO_data_SetName(IN UINT uiId,IN INFO_SEX_E enInSex);
-VOID INFO_data_SetName(IN UINT uiId,IN UINT uiInAge);
-VOID INFO_data_SetName(IN UINT uiId,IN UINT uiInHeght);
+VOID INFO_data_SetSex(IN UINT uiId,IN INFO_SEX_E enInSex);
+VOID INFO_data_SetAge(IN UINT uiId,IN UINT uiInAge);
+VOID INFO_data_SetHeight(IN UINT uiId,IN UINT uiInHeght);
 
 /*节点创建和删除*/
 VOID INFO_date_Create(IN UINT uiId);

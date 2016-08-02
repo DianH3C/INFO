@@ -58,7 +58,25 @@ extern "C"{
 *****************************************************************************/
 ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 {
-    return ERROR_SUCCESS;
+    UINT uiId;
+    INFO_CFG_S * pstCfg;
+    if(BOOL_FALSE == INFO_data_IsEmpty())
+    {
+        printf("\n No info");
+        return ERROR_FAILED;
+    }
+    else
+    {
+         for ((uiId)  = INFO_data_GetFirst();
+         (uiId) != INFO_ID_INVALID;
+         (uiId) = INFO_data_GetNext(uiId))
+         {
+            INFO_data_GetData(uiId,pstCfg)
+            printf("ID:%d\tName:%s\tSex:%d\tAge:%d\tHeight:%d\n",
+            pstCfg.uiId,pstCfg.szName,pstCfg.enSex,pstCfg.uiAge,pstCfg.uiHeight);
+         }
+         return ERROR_SUCCESS;
+    }
 }
 
 /*****************************************************************************

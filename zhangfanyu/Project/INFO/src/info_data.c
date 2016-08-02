@@ -52,7 +52,7 @@ INFO_DATA_S* info_data_Alloc()
 {
     INFO_DATA_S* pstNode;
     pstNode=(INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
-    menset(pstNode,0,sizeof(INFO_DATA_S));
+    memset(pstNode,0,sizeof(INFO_DATA_S));
     return pstNode;
 }
 
@@ -129,19 +129,19 @@ VOID INFO_data_SetName(IN UINT uiId,IN CHAR* szInName)
 }
 
 /*将入参工号的性别改为入参性别*/
-VOID INFO_data_SetName(IN UINT uiId,IN INFO_SEX_E enInSex)
+VOID INFO_data_SetSex(IN UINT uiId,IN INFO_SEX_E enInSex)
 {
     INFO_DATA_S* pstCgNode=info_data_Get(uiId);
     pstCgNode->stCfg.enSex=enInSex;
 }
 /*将入参工号的年龄改为入参年龄*/
-VOID INFO_data_SetName(IN UINT uiId,IN UINT uiInAge)
+VOID INFO_data_SetAge(IN UINT uiId,IN UINT uiInAge)
 {
     INFO_DATA_S* pstCgNode=info_data_Get(uiId);
     pstCgNode->stCfg.uiAge=uiInAge;
 }
 /*将入参工号的身高改为入参身高*/
-VOID INFO_data_SetName(IN UINT uiId,IN UINT uiInHeght)
+VOID INFO_data_SetHeight(IN UINT uiId,IN UINT uiInHeght)
 {
     INFO_DATA_S* pstCgNode=info_data_Get(uiId);
     pstCgNode->stCfg.uiHeight=uiInHeght;
@@ -315,9 +315,11 @@ UINT INFO_data_GetFirst(VOID)
     if(pstFstNode == NULL)
     {
         return INFO_ID_INVALID;
-    }else
+    }
+    else
     {
     return pstFstNode->stCfg.uiId;
+    }
 }
 
 /*****************************************************************************
