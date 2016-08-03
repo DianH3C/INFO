@@ -105,6 +105,12 @@ VOID info_data_Delete(IN INFO_DATA_S* pstNode)
 {
     INFO_DATA_S *pstMvNode=pstHEAD;
 
+    /*如果摘除的是头结点*/
+    if(pstHEAD->stCfg.uiId == pstNode->stCfg.uiId)
+    {
+        pstHEAD=pstHEAD->Info_Data_next;
+
+    }
     while(pstMvNode->Info_Data_next != NULL)
     {
         if(pstMvNode->Info_Data_next->stCfg.uiId == pstNode->stCfg.uiId)

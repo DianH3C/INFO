@@ -98,7 +98,7 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
   YYYY-MM-DD
 
 *****************************************************************************/
-    /*判断参数是否有效*/
+/*判断参数是否有效*/
 BOOL_T info_procAdd_Isvalid(INFO_CFG_S *pstCfg)
 {
     UINT uiNamesize=strlen(pstCfg->szName);
@@ -107,9 +107,6 @@ BOOL_T info_procAdd_Isvalid(INFO_CFG_S *pstCfg)
     BOOL_T enSexValid=(pstCfg->enSex == 1 || pstCfg->enSex == 2);
     BOOL_T uiHeightValid=(pstCfg->uiHeight <= 300 && pstCfg->uiHeight >= 1);
     BOOL_T uiAgeValid=(pstCfg->uiAge <= 300 && pstCfg->uiAge>= 1);
-
-
-
 
     if(uiIdValid == 0 || szNameValid == 0 || enSexValid == 0
         || uiHeightValid == 0 || uiAgeValid == 0)
@@ -122,7 +119,7 @@ BOOL_T info_procAdd_Isvalid(INFO_CFG_S *pstCfg)
     }
 }
 
-    /*设置已知工号的各数据*/
+/*设置已知工号的各数据*/
 VOID info_proc_SetCfg(INFO_CFG_S *pstCfg)
 {
     UINT uiId=pstCfg->uiId;
@@ -175,6 +172,26 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 *****************************************************************************/
 ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 {
+    INFO_CFG_S  stCfg;
+    INFO_CFG_S *pstCfg=&stCfg;
+    BOOL_T uiIdValid;
+
+    /*字符串解析*/
+    INFO_parse_InputStr(pcInputStr,pstCfg);
+
+    uiIdValid=(pstCfg->uiId <= 100000 && pstCfg->uiId >=1);
+
+    if(uiIdValid == BOOL_FALSE)
+    {
+        return ERROR_INVALID_PARAMETER;
+    }
+    if(INFO_data_IsExist(pstCfg->uiId) == BOOL_FALSE)
+    {
+        return ERROR_INVALID_PARAMETER;
+    }
+
+    INFO_data_Destroy(pstCfg->uiId);
+    INFO_proc_Display(pcInputStr);
     return ERROR_SUCCESS;
 }
 
@@ -196,8 +213,54 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
   YYYY-MM-DD
 
 *****************************************************************************/
+/*修改数据时，忽略不符合的数据，修改有效数据*/
+VOID info_procModify_Set(INFO_CFG_S *pstCfg)
+{
+    UINT uiNamesize=strlen(pstCfg->szName);
+    UINT uiId=pstCfg->uiId;
+    BOOL_T szNameValid=(uiNamesize <= 15);
+    BOOL_T enSexValid=(pstCfg->enSex == 1 || pstCfg->enSex == 2);
+    BOOL_T uiHeightValid=(pstCfg->uiHeight <= 300 && pstCfg->uiHeight >= 1);
+    BOOL_T uiAgeValid=(pstCfg->uiAge <= 300 && pstCfg->uiAge>= 1);
+
+    if(szNameValid == BOOL_TRUE)
+    {
+        INFO_data_SetName(uiId,pstCfg->szName);
+    }
+    if(enSexValid == BOOL_TRUE)
+    {
+        INFO_data_SetSex(uiId,pstCfg->enSex);
+    }
+    if(uiAgeValid == BOOL_TRUE)
+    {
+        INFO_data_SetAge(uiId,pstCfg->uiAge);
+    }
+    if(uiHeightValid == BOOL_TRUE)
+    {
+        INFO_data_SetHeight(uiId,pstCfg->uiHeight);
+    }
+}
+
 ULONG INFO_proc_Modify(IN const CHAR *pcInputStr)
 {
+    INFO_CFG_S  stCfg;
+    INFO_CFG_S *pstCfg=&stCfg;
+    BOOL_T uiIdValid;
+
+    /*字符串解析*/
+    INFO_parse_InputStr(pcInputStr,pstCfg);
+    uiIdValid=(pstCfg->uiId <= 100000 && pstCfg->uiId >=1);
+
+    if(uiIdValid == BOOL_FALSE)
+    {
+        return ERROR_INVALID_PARAMETER;
+    }
+    if(INFO_data_IsExist(pstCfg->uiId) == BOOL_FALSE)
+    {
+        return ERROR_NOT_FOUND;
+    }
+    info_procModify_Set(pstCfg);
+    INFO_proc_Display(pcInputStr);
     return ERROR_SUCCESS;
 }
 
