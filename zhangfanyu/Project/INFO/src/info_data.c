@@ -74,22 +74,30 @@ VOID info_data_Add(IN INFO_DATA_S* pstNode)
 {
     INFO_DATA_S *pstMvNode=pstHEAD;
 
-    /*如过链表为空，则直接插入最后*/
+    /*如果为空，则直接插入最后*/
     if(NULL == pstHEAD)
     {
         pstHEAD=pstNode;
         pstNode->Info_Data_next=NULL;
+        return;
     }
-    else
+
+    /*查看是否要插入到头*/
+    if(pstHEAD->stCfg.uiId > pstNode->stCfg.uiId)
     {
-        while(pstMvNode->Info_Data_next->stCfg.uiId < pstNode->stCfg.uiId
-            &&pstMvNode->Info_Data_next != NULL)
-        {
-            pstMvNode=pstMvNode->Info_Data_next;
-        }
-        pstNode->Info_Data_next=pstMvNode->Info_Data_next;
-        pstMvNode->Info_Data_next=pstNode;
+        pstNode->Info_Data_next=pstHEAD;
+        pstHEAD=pstNode;
+        return;
     }
+
+    while(pstMvNode->Info_Data_next != NULL
+           && pstMvNode->Info_Data_next->stCfg.uiId < pstNode->stCfg.uiId)
+    {
+            pstMvNode=pstMvNode->Info_Data_next;
+    }
+    pstNode->Info_Data_next=pstMvNode->Info_Data_next;
+    pstMvNode->Info_Data_next=pstNode;
+
 }
 
 /*将入参指针指向的链表节点从链表结构中摘除*/
