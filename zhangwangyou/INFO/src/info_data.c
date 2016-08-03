@@ -442,6 +442,52 @@ ULONG INFO_data_DelData(IN UINT uiId)
 }
 
 /*****************************************************************************
+    Func Name: INFO_data_ModifyData[*]
+ Date Created: 2016-07-30
+       Author: xxxx 00000
+  Description: 修改一个节点的数据
+        Input: IN INFO_CFG_S *pstCfg         要修改的数据
+        Output:
+        Return: ULONG, ERROR_SUCCESS         处理成功
+                       OTHER                 处理失败
+      Caution: 此接口不检查工号是否已经存在，需外部函数进行检查
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+ULONG INFO_data_ModifyData(IN INFO_CFG_S *pstCfg)
+{
+    INFO_DATA_S *pstNode = INFO_data_FindNodeById(pstCfg->uiId);
+    if ((NULL != pstNode) && (BOOL_TRUE != pstNode->bIsEmpty))
+    {
+        if (BOOL_TRUE == INFO_NAME_ISVALID(pstCfg->szName))
+        {
+            (VOID) strlcpy(pstNode->stCfg.szName, pstCfg->szName, sizeof(pstNode->stCfg.szName));
+        }
+        if (BOOL_TRUE == INFO_SEX_ISVALID(pstCfg->enSex))
+        {
+            pstNode->stCfg.enSex = pstCfg->enSex;
+        }
+        if (BOOL_TRUE == INFO_AGE_ISVALID(pstCfg->uiAge))
+        {
+            pstNode->stCfg.uiAge = pstCfg->uiAge;
+        }
+        if (BOOL_TRUE == INFO_HEIGHT_ISVALID(pstCfg->uiHeight))
+        {
+            pstNode->stCfg.uiHeight = pstCfg->uiHeight;
+        }
+        return ERROR_SUCCESS;
+    }
+    else
+    {
+        return ERROR_NOT_FOUND;
+    }
+}
+
+/*****************************************************************************
     Func Name: INFO_data_Init[*]
  Date Created: 2016-07-28
        Author: xxxx 00000

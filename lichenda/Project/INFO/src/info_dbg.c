@@ -27,7 +27,6 @@ extern "C"{
 /* system   public  */
 #include <sys/basetype.h>
 #include <sys/assert.h>
-#include <sys/string_ex.h>
 
 /* module   private */
 #include "info.h"

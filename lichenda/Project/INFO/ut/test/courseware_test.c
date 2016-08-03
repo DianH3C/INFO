@@ -31,8 +31,8 @@ extern "C"{
 #输       入 : 一个成员的信息：id=10 name=jack sex=2 age=20 height=175
 #操 作 步 骤 : 执行测试用例
 #预 期 结 果 : 添加成员信息成功
-               查询成员已存在
-               查询成员信息与输入一致
+查询成员已存在
+查询成员信息与输入一致
 #完  成  人  : wkf2298
 #日      期  : 2011年12月31日
 #######################################################################*/
@@ -72,14 +72,14 @@ TEST(UT_INFO_proc_Add, 001)
 #重 要 级 别 : 高
 #预 置 条 件 : 初始化链表结构
 #输       入 : 成员信息1：id=10 name=jack10 sex=1 age=30 height=100
-               成员信息2：id=1  name=jack1  sex=2 age=40 height=250
-               成员信息3：id=50 name=jack50 sex=1 age=50 height=200
-               成员信息4：id=99 name=jack99 sex=2 age=33 height=111
-               成员信息5：id=44 name=jack44 sex=1 age=22 height=222
+成员信息2：id=1  name=jack1  sex=2 age=40 height=250
+成员信息3：id=50 name=jack50 sex=1 age=50 height=200
+成员信息4：id=99 name=jack99 sex=2 age=33 height=111
+成员信息5：id=44 name=jack44 sex=1 age=22 height=222
 #操 作 步 骤 : 执行测试用例
 #预 期 结 果 : 添加五个成员信息成功
-               可以按顺序获取五个成员信息
-               成员信息与输入一致
+可以按顺序获取五个成员信息
+成员信息与输入一致
 #完  成  人  : wkf2298
 #日      期  : 2011年12月31日
 #######################################################################*/
@@ -149,14 +149,14 @@ TEST(UT_INFO_proc_Add, 002)
 #重 要 级 别 : 高
 #预 置 条 件 : 初始化链表结构
 #输       入 : 成员信息1(最小边界值)：id=1      name=1               sex=1 age=18 height=1
-               成员信息2(最大边界值)：id=100000 name=123456789012345 sex=2 age=65 height=300
-               成员信息3(小边界值1 )：id=2      name=11              sex=1 age=19 height=2
-               成员信息4(小边界值2 )：id=3      name=111             sex=1 age=20 height=3
-               成员信息5(大边界值1 )：id=99999  name=12345678901234  sex=2 age=64 height=299
-               成员信息6(大边界值2 )：id=99998  name=1234567890123   sex=2 age=63 height=298
+成员信息2(最大边界值)：id=100000 name=123456789012345 sex=2 age=65 height=300
+成员信息3(小边界值1 )：id=2      name=11              sex=1 age=19 height=2
+成员信息4(小边界值2 )：id=3      name=111             sex=1 age=20 height=3
+成员信息5(大边界值1 )：id=99999  name=12345678901234  sex=2 age=64 height=299
+成员信息6(大边界值2 )：id=99998  name=1234567890123   sex=2 age=63 height=298
 #操 作 步 骤 : 执行测试用例
 #预 期 结 果 : 添加成员信息成功
-               成员信息与输入一致
+成员信息与输入一致
 #完  成  人  : wkf2298
 #日      期  : 2011年12月31日
 #######################################################################*/
@@ -236,7 +236,7 @@ TEST(UT_INFO_proc_Add, 003)
 #输       入 : 循环添加多个成员信息：id=x name=jack sex=2 age=20 height=175
 #操 作 步 骤 : 执行测试用例
 #预 期 结 果 : 添加成员信息成功
-               抽查一个员工信息，与输入一致
+抽查一个员工信息，与输入一致
 #完  成  人  : wkf2298
 #日      期  : 2011年12月31日
 #######################################################################*/
@@ -278,12 +278,12 @@ TEST(UT_INFO_proc_Add, 004)
 #测试用例标题: 重复添加
 #重 要 级 别 : 高
 #预 置 条 件 : 初始化链表结构
-               添加成员信息：id=10 name=jack sex=2 age=20 height=175
+添加成员信息：id=10 name=jack sex=2 age=20 height=175
 #输       入 : 成员信息：id=10 name=xxxx sex=1 age=55 height=222
 #操 作 步 骤 : 执行测试用例
 #预 期 结 果 : 添加成员信息失败，返回错误码ERROR_ALREADY_EXIST
-               查询成员已存在
-               查询成员信息与预置条件输入一致
+查询成员已存在
+查询成员信息与预置条件输入一致
 #完  成  人  : wkf2298
 #日      期  : 2011年12月31日
 #######################################################################*/
@@ -822,21 +822,21 @@ STATIC const CHAR *g_szCorrectMemberInfo[UT_CORRECTMEMBERNUM] = {
 
 /* 与g_szCorrectMemberInfo对应 */
 INFO_CFG_S g_stMemberData[UT_CORRECTMEMBERNUM] = {
- {11, 21, 170, INFO_SEX_FEMALE, "jack01"},
- {12, 22, 171, INFO_SEX_MALE,   "jack02"},
- {13, 23, 172, INFO_SEX_FEMALE, "jack03"},
- {14, 24, 173, INFO_SEX_MALE,   "jack04"},
- {15, 25, 174, INFO_SEX_FEMALE, "jack05"},
- {16, 26, 175, INFO_SEX_MALE,   "jack06"},
- {17, 27, 176, INFO_SEX_FEMALE, "jack07"},
- {18, 28, 177, INFO_SEX_MALE,   "jack08"},
- {19, 29, 178, INFO_SEX_FEMALE, "jack09"},
- {17, 30, 179, INFO_SEX_MALE,   "jack10"},
- {18, 31, 180, INFO_SEX_FEMALE, "jack11"},
- {19, 32, 181, INFO_SEX_MALE,   "jack12"},
- {20, 33, 182, INFO_SEX_FEMALE, "jack13"},
- {20, 34, 183, INFO_SEX_MALE,   "jack14"},
- {20, 35, 184, INFO_SEX_FEMALE, "jack15"}
+    {11, 21, 170, INFO_SEX_FEMALE, "jack01"},
+    {12, 22, 171, INFO_SEX_MALE,   "jack02"},
+    {13, 23, 172, INFO_SEX_FEMALE, "jack03"},
+    {14, 24, 173, INFO_SEX_MALE,   "jack04"},
+    {15, 25, 174, INFO_SEX_FEMALE, "jack05"},
+    {16, 26, 175, INFO_SEX_MALE,   "jack06"},
+    {17, 27, 176, INFO_SEX_FEMALE, "jack07"},
+    {18, 28, 177, INFO_SEX_MALE,   "jack08"},
+    {19, 29, 178, INFO_SEX_FEMALE, "jack09"},
+    {17, 30, 179, INFO_SEX_MALE,   "jack10"},
+    {18, 31, 180, INFO_SEX_FEMALE, "jack11"},
+    {19, 32, 181, INFO_SEX_MALE,   "jack12"},
+    {20, 33, 182, INFO_SEX_FEMALE, "jack13"},
+    {20, 34, 183, INFO_SEX_MALE,   "jack14"},
+    {20, 35, 184, INFO_SEX_FEMALE, "jack15"}
 };
 
 #define UTC_INFO_proc_Delete
@@ -1153,11 +1153,11 @@ TEST(UT_INFO_proc_Delete, 006)
 #测试用例标题: 部分修改，只修改姓名
 #重 要 级 别 : 高
 #预 置 条 件 : 初始化链表结构
-               添加成员信息：id=10 name=jack sex=2 age=20 height=175
+添加成员信息：id=10 name=jack sex=2 age=20 height=175
 #输       入 : 修改成员信息：id=10 name=jackabc
 #操 作 步 骤 : 执行测试用例
 #预 期 结 果 : 修改成员信息成功
-               查询成员信息与输入一致
+查询成员信息与输入一致
 #完  成  人  : wkf2298
 #日      期  : 2011年12月31日
 #######################################################################*/
@@ -1194,11 +1194,11 @@ TEST(UT_INFO_proc_Modify, 001)
 #测试用例标题: 部分修改，只修改性别
 #重 要 级 别 : 高
 #预 置 条 件 : 初始化链表结构
-               添加成员信息：id=10 name=jack sex=2 age=20 height=175
+添加成员信息：id=10 name=jack sex=2 age=20 height=175
 #输       入 : 修改成员信息：id=10 sex=1
 #操 作 步 骤 : 执行测试用例
 #预 期 结 果 : 修改成员信息成功
-               查询成员信息与输入一致
+查询成员信息与输入一致
 #完  成  人  : wkf2298
 #日      期  : 2011年12月31日
 #######################################################################*/
@@ -1235,11 +1235,11 @@ TEST(UT_INFO_proc_Modify, 002)
 #测试用例标题: 部分修改，只修改年龄
 #重 要 级 别 : 高
 #预 置 条 件 : 初始化链表结构
-               添加成员信息：id=10 name=jack sex=2 age=20 height=175
+添加成员信息：id=10 name=jack sex=2 age=20 height=175
 #输       入 : 修改成员信息：id=10 age=35
 #操 作 步 骤 : 执行测试用例
 #预 期 结 果 : 修改成员信息成功
-               查询成员信息与输入一致
+查询成员信息与输入一致
 #完  成  人  : wkf2298
 #日      期  : 2011年12月31日
 #######################################################################*/
@@ -1276,11 +1276,11 @@ TEST(UT_INFO_proc_Modify, 003)
 #测试用例标题: 部分修改，只修改身高
 #重 要 级 别 : 高
 #预 置 条 件 : 初始化链表结构
-               添加成员信息：id=10 name=jack sex=2 age=20 height=175
+添加成员信息：id=10 name=jack sex=2 age=20 height=175
 #输       入 : 修改成员信息：id=10 height=181
 #操 作 步 骤 : 执行测试用例
 #预 期 结 果 : 修改成员信息成功
-               查询成员信息与输入一致
+查询成员信息与输入一致
 #完  成  人  : wkf2298
 #日      期  : 2011年12月31日
 #######################################################################*/
@@ -1317,11 +1317,11 @@ TEST(UT_INFO_proc_Modify, 004)
 #测试用例标题: 部分修改，只修改姓名和年龄
 #重 要 级 别 : 高
 #预 置 条 件 : 初始化链表结构
-               添加成员信息：id=10 name=jack sex=2 age=20 height=175
+添加成员信息：id=10 name=jack sex=2 age=20 height=175
 #输       入 : 修改成员信息：id=10 name=jack123456 age=45
 #操 作 步 骤 : 执行测试用例
 #预 期 结 果 : 修改成员信息成功
-               查询成员信息与输入一致
+查询成员信息与输入一致
 #完  成  人  : wkf2298
 #日      期  : 2011年12月31日
 #######################################################################*/
@@ -1358,11 +1358,11 @@ TEST(UT_INFO_proc_Modify, 005)
 #测试用例标题: 部分修改，只修改性别+身高
 #重 要 级 别 : 高
 #预 置 条 件 : 初始化链表结构
-               添加成员信息：id=10 name=jack sex=2 age=20 height=175
+添加成员信息：id=10 name=jack sex=2 age=20 height=175
 #输       入 : 修改成员信息：id=10 sex=1 height=185
 #操 作 步 骤 : 执行测试用例
 #预 期 结 果 : 修改成员信息成功
-               查询成员信息与输入一致
+查询成员信息与输入一致
 #完  成  人  : wkf2298
 #日      期  : 2011年12月31日
 #######################################################################*/
@@ -1399,7 +1399,7 @@ TEST(UT_INFO_proc_Modify, 006)
 #测试用例标题: 工号不存在
 #重 要 级 别 : 高
 #预 置 条 件 : 初始化链表结构
-               添加成员信息：id=10 name=jack sex=2 age=20 height=175
+添加成员信息：id=10 name=jack sex=2 age=20 height=175
 #输       入 : 修改成员信息：id=100 sex=1 height=185
 #操 作 步 骤 : 执行测试用例
 #预 期 结 果 : 修改成员信息失败，返回ERROR_NOT_FOUND
@@ -1430,7 +1430,7 @@ TEST(UT_INFO_proc_Modify, 007)
 #测试用例标题: 工号为非法值
 #重 要 级 别 : 高
 #预 置 条 件 : 初始化链表结构
-               添加成员信息：id=10 name=jack sex=2 age=20 height=175
+添加成员信息：id=10 name=jack sex=2 age=20 height=175
 #输       入 : 修改成员信息：id=100005 sex=1 height=185
 #操 作 步 骤 : 执行测试用例
 #预 期 结 果 : 修改成员信息失败，返回ERROR_INVALID_PARAMETER
@@ -1461,11 +1461,11 @@ TEST(UT_INFO_proc_Modify, 008)
 #测试用例标题: 修改大批量的用户信息
 #重 要 级 别 : 高
 #预 置 条 件 : 初始化链表结构
-               循环输入多个用户信息：id=x name=jack sex=2 age=20 height=175
+循环输入多个用户信息：id=x name=jack sex=2 age=20 height=175
 #输       入 : 循环修改成员信息：id=x name=jackabc sex=1 age=35 height=195
 #操 作 步 骤 : 执行测试用例
 #预 期 结 果 : 修改成员信息成功
-               查询用户信息修改正确
+查询用户信息修改正确
 #完  成  人  : wkf2298
 #日      期  : 2011年12月31日
 #######################################################################*/
@@ -1607,3 +1607,209 @@ TEST(UT_INFO_proc_Modify, 012)
     INFO_data_Fini();
 }
 
+/*#######################################################################
+#测试用例编号: UT_INFO_proc_Mine_002
+#测  试  项  : 功能测试
+#测试用例标题: 测试遍历接口
+#重 要 级 别 : 高
+#预 置 条 件 : 添加3个确定uiId的员工
+#输       入 : pcInputStr=员工信息
+#操 作 步 骤 : 调用遍历借口，测试uiId是否一致
+#预 期 结 果 : 所有成员的uiId与预期的一致
+#              INFO_proc_Modify返回成功
+#完  成  人  : lichenda
+#日      期  : 2016-08-01
+#######################################################################*/
+TEST(UT_INFO_proc_Mine, 001)
+{
+    ULONG ulErrCode;
+    UINT uiLoop;
+    CHAR szInputStr[512];
+    INFO_CFG_S stCfg;
+
+    /* 初始化 */
+    ulErrCode = INFO_data_Init();
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+    /* 调用添加函数 */
+    for (uiLoop = 1; uiLoop < 4; uiLoop = uiLoop + 1)
+    {
+        scnprintf(szInputStr, sizeof(szInputStr), "id=%u name=jack sex=2 age=20 height=175", uiLoop);
+        ulErrCode |= INFO_proc_Add(szInputStr);
+    }
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+    /* 检查预期结果 */
+    UINT uiId;
+    uiLoop = 1;
+    INFO_FOREACH(uiId)
+    {
+        EXPECT_EQ(uiId, uiLoop);
+        uiLoop ++;
+    }
+
+    /* 去初始化 */
+    INFO_data_Fini();
+}
+
+/*#######################################################################
+#测试用例编号: UT_INFO_proc_Mine_002
+#测  试  项  : 功能测试
+#测试用例标题: 测试遍历接口
+#重 要 级 别 : 高
+#预 置 条 件 : 添加10个确定uiId的员工
+#输       入 : pcInputStr=员工信息
+#操 作 步 骤 : 调用遍历借口，测试uiId是否一致
+#预 期 结 果 : 所有成员的uiId与预期的一致
+#              INFO_proc_Modify返回成功
+#完  成  人  : lichenda
+#日      期  : 2016-08-01
+#######################################################################*/
+TEST(UT_INFO_proc_Mine, 002)
+{
+    ULONG ulErrCode;
+    UINT uiLoop;
+    CHAR szInputStr[512];
+    INFO_CFG_S stCfg;
+
+    /* 初始化 */
+    ulErrCode = INFO_data_Init();
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+    /* 调用添加函数 */
+    for (uiLoop = 1; uiLoop < 11; uiLoop = uiLoop + 1)
+    {
+        scnprintf(szInputStr, sizeof(szInputStr), "id=%u name=jack sex=2 age=20 height=175", uiLoop);
+        ulErrCode |= INFO_proc_Add(szInputStr);
+    }
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+    /* 检查预期结果 */
+    UINT uiId;
+    uiLoop = 1;
+    INFO_FOREACH(uiId)
+    {
+        EXPECT_EQ(uiId, uiLoop);
+        uiLoop ++;
+    }
+
+    /* 去初始化 */
+    INFO_data_Fini();
+}
+/*#######################################################################
+#测试用例编号: UT_INFO_proc_Mine_003
+#测  试  项  : 压力测试
+#测试用例标题: 测试遍历接口
+#重 要 级 别 : 高
+#预 置 条 件 : 添加10000个确定uiId的员工
+#输       入 : pcInputStr=员工信息
+#操 作 步 骤 : 调用遍历借口，测试uiId是否一致
+#预 期 结 果 : 所有成员的uiId与预期的一致
+#              INFO_proc_Modify返回成功
+#完  成  人  : lichenda
+#日      期  : 2016-08-01
+#######################################################################*/
+TEST(UT_INFO_proc_Mine, 003)
+{
+    ULONG ulErrCode;
+    UINT uiLoop;
+    CHAR szInputStr[512];
+    INFO_CFG_S stCfg;
+
+    /* 初始化 */
+    ulErrCode = INFO_data_Init();
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+    /* 调用添加函数 */
+    for (uiLoop = 1; uiLoop < 10000; uiLoop = uiLoop + 1)
+    {
+        scnprintf(szInputStr, sizeof(szInputStr), "id=%u name=jack sex=2 age=20 height=175", uiLoop);
+        ulErrCode |= INFO_proc_Add(szInputStr);
+    }
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+    /* 检查预期结果 */
+    UINT uiId;
+    uiLoop = 1;
+    INFO_FOREACH(uiId)
+    {
+        EXPECT_EQ(uiId, uiLoop);
+        uiLoop ++;
+    }
+
+    /* 去初始化 */
+    INFO_data_Fini();
+}
+/*#######################################################################
+#测试用例编号: UT_INFO_proc_Mine_004
+#测  试  项  : 异常测试
+#测试用例标题: 测试遍历接口
+#重 要 级 别 : 高
+#预 置 条 件 : 清空所有员工信息
+#输       入 : 
+#操 作 步 骤 : 测试FOREACH接口迭代次数
+#预 期 结 果 : 迭代0次
+#完  成  人  : lichenda
+#日      期  : 2016-08-01
+#######################################################################*/
+TEST(UT_INFO_proc_Mine, 004)
+{
+    ULONG ulErrCode;
+
+    /* 初始化 */
+    ulErrCode = INFO_data_Init();
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+
+    /* 检查预期结果 */
+    UINT uiT = 0;
+    UINT uiId;
+    INFO_FOREACH(uiId)
+    {
+        uiT ++;
+    }
+    EXPECT_EQ(uiT, 0);
+
+    /* 去初始化 */
+    INFO_data_Fini();
+}
+/*#######################################################################
+#测试用例编号: UT_INFO_proc_Mine_005
+#测  试  项  : 特殊输入测试
+#测试用例标题: 测试输入name的值为‘name’时的情况
+#重 要 级 别 : 高
+#预 置 条 件 : 已经初始化 
+#输       入 : 一个成员的信息 id=10 name=name sex=2 age=20 height=175
+#操 作 步 骤 : 执行测试用例
+#预 期 结 果 : 添加成员成功
+#完  成  人  : lichenda
+#日      期  : 2016-08-01
+#######################################################################*/
+TEST(UT_INFO_proc_Mine, 005)
+{
+    ULONG ulErrCode;
+    BOOL_T bIsExist;
+    INFO_CFG_S stCfg;
+
+    /* 初始化 */
+    ulErrCode = INFO_data_Init();
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+    /* 调用添加函数 */
+    ulErrCode = INFO_proc_Add("id=10 name=name sex=2 age=20 height=175");
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+    /* 检查预期结果 */
+    bIsExist = INFO_data_IsExist(10);
+    EXPECT_EQ(BOOL_TRUE, bIsExist);
+    ulErrCode = INFO_data_GetData(10, &stCfg);
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+    EXPECT_EQ(10, stCfg.uiId);
+    EXPECT_EQ(2, stCfg.enSex);
+    EXPECT_EQ(20, stCfg.uiAge);
+    EXPECT_EQ(175, stCfg.uiHeight);
+    EXPECT_EQ(0, strcmp(stCfg.szName, "name"));
+
+    /* 去初始化 */
+    INFO_data_Fini();
+}

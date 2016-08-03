@@ -85,7 +85,7 @@ STATIC INFO_FUNC_S g_astInfoFunc[] =
   YYYY-MM-DD
 
 *****************************************************************************/
-STATIC VOID info_main_DisplayMenu(VOID)
+/**/STATIC VOID info_main_DisplayMenu(VOID)
 {
     INFO_MENU_E enEach;
 
@@ -179,7 +179,7 @@ STATIC VOID info_main_DisplayErrInfo(IN ULONG ulErrCode)
   YYYY-MM-DD
 
 *****************************************************************************/
-STATIC ULONG info_main_GetMenuChoice(OUT INFO_MENU_E *penMenu)
+/**/STATIC ULONG info_main_GetMenuChoice(OUT INFO_MENU_E *penMenu)
 {
     CHAR szBuf[INFO_IOBUF_MAXLEN];
     INFO_MENU_E enMenu;
@@ -354,7 +354,7 @@ VOID INFO_Run(VOID)
   YYYY-MM-DD
 
 *****************************************************************************/
-ULONG INFO_Init(VOID)
+/**/ULONG INFO_Init(VOID)
 {
     ULONG ulErrCode;
 

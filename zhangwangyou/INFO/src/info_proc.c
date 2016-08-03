@@ -57,8 +57,8 @@ extern "C"{
 *****************************************************************************/
 VOID INFO_proc_DisStruct(IN INFO_CFG_S *pstInputStruct)
 {
-    printf("%u\t%s\t", (*pstInputStruct).uiId, (*pstInputStruct).szName);
-    if (INFO_SEX_FEMALE == (*pstInputStruct).enSex)
+    printf("%u\t%s\t", pstInputStruct->uiId, pstInputStruct->szName);
+    if (INFO_SEX_FEMALE == pstInputStruct->enSex)
     {
         printf("FEMALE\t");
     }
@@ -66,7 +66,7 @@ VOID INFO_proc_DisStruct(IN INFO_CFG_S *pstInputStruct)
     {
         printf("MALE\t");
     }
-    printf("%u\t%u\r\n", (*pstInputStruct).uiAge, (*pstInputStruct).uiHeight);
+    printf("%u\t%u\r\n", pstInputStruct->uiAge, pstInputStruct->uiHeight);
 }
 
 
@@ -155,7 +155,7 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 
     /* 解析输入字符串得到配置数据并存入stCfg中 */
     INFO_parse_InputStr(pcInputStr, &stCfg);
-    if (INFO_ALL_ISVALID(&stCfg))
+    if (BOOL_FALSE == INFO_ALL_ISVALID(&stCfg))
     {
         /* 数据输入不全或数据取值非法 */
         pcErrInfo = "The parameter is incorrect.\r\n";
@@ -189,7 +189,7 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 
 /*****************************************************************************
     Func Name: INFO_proc_Delete[*]
- Date Created: 2016-07-27
+ Date Created: 2016-07-29
        Author: xxxx 00000
   Description: 删除
         Input: IN const CHAR *pcInputStr    输入字符串
@@ -261,7 +261,7 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 
 /*****************************************************************************
     Func Name: INFO_proc_Modify[*]
- Date Created: 2016-07-27
+ Date Created: 2016-07-30
        Author: xxxx 00000
   Description: 修改
         Input: IN const CHAR *pcInputStr    输入字符串
@@ -279,7 +279,38 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 *****************************************************************************/
 ULONG INFO_proc_Modify(IN const CHAR *pcInputStr)
 {
-    return ERROR_SUCCESS;
+    ULONG ulErrCode = ERROR_FAILED;
+    const CHAR *pcErrInfo = NULL;
+    INFO_CFG_S stCfg = { 0 };
+
+    /* 解析输入字符串得到配置数据并存入stCfg中 */
+    INFO_parse_InputStr(pcInputStr, &stCfg);
+    if (BOOL_FALSE == INFO_ID_ISVALID(stCfg.uiId))
+    {
+        /* 工号非法 */
+        pcErrInfo = "The parameter is incorrect.\r\n";
+        ulErrCode = ERROR_INVALID_PARAMETER;
+    }
+    else
+    {
+        /* 若工号合法，检查工号是否存在 */
+        if (BOOL_FALSE == INFO_data_IsExist(stCfg.uiId))
+        {
+            /* 工号不存在 */
+            pcErrInfo = "The specified item was not found.\r\n";
+            ulErrCode = ERROR_NOT_FOUND;
+        }
+        else
+        {
+            (VOID) INFO_data_ModifyData(&stCfg);
+            pcErrInfo = "Modification complete.\r\n";
+            ulErrCode = ERROR_SUCCESS;
+        }
+    }
+
+    printf("%s", pcErrInfo);
+
+    return ulErrCode;
 }
 
 /*****************************************************************************

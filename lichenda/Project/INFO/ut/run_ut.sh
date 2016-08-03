@@ -1,3 +1,4 @@
+#!/bin/bash
 
 UT_PATH=$(cd $(dirname $0) && pwd)
 HEADER_PATH=$UT_PATH/../../PUBLIC/include/comware

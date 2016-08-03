@@ -35,13 +35,10 @@ extern "C"{
 /* module   private */
 #include "info.h"
 #include "info_dbg.h"
+#include "info_data.h"
 
-/* 信息数据结构 */
-typedef struct tagInfo_Data
-{
-                            /* 数据组织相关[*] */
-    INFO_CFG_S stCfg;       /* 配置数据 */
-}INFO_DATA_S;
+/* 获取数据标志 */
+BOOL_T info_data_Init = BOOL_FALSE;
 
 /*****************************************************************************
     Func Name: INFO_data_IsExist[*]
@@ -62,12 +59,16 @@ typedef struct tagInfo_Data
 *****************************************************************************/
 BOOL_T INFO_data_IsExist(IN UINT uiId)
 {
-    if(INFO_data_GetData(uiId) == NULL)
+    UINT uiLine = INFO_FIRST;
+    for(uiLine = INFO_FIRST; uiLine < INFO_DATA_MAX; uiLine ++)
     {
-         return BOOL_FALSE;
-    }
-	else
-		return BOOL_TRUE;
+        if(uiId == alData[uiLine].stCfg.uiId)
+        {
+            return BOOL_TRUE;
+		}
+	}
+
+	return BOOL_FALSE;
 }
 
 /*****************************************************************************
@@ -89,20 +90,21 @@ BOOL_T INFO_data_IsExist(IN UINT uiId)
 *****************************************************************************/
 BOOL_T INFO_data_IsEmpty(VOID)
 {
-    char *firstInputStr = NULL;
-    
-    (VOID)fscanf("stdout","%s",firstInputStr);
-    if(firstInputStr != NULL)
+    UINT uiEndLine = INFO_FIRST;
+    for(uiEndLine = INFO_DATA_MAX; alData[uiEndLine].stCfg.uiId == INFO_ID_INVALID; uiEndLine --);
+	
+    if(uiEndLine == INFO_FIRST)
     {
-        return BOOL_FAlSE;
+         return BOOL_FALSE;
     }
-    else
-        return BOOL_TRUE; 
+	else
+		return BOOL_TRUE;
+     
 }
 
 /*****************************************************************************
     Func Name: INFO_data_GetData[*]
- Date Created: 201x-xx-xx
+ Date Created: 2016-08-02
        Author: xxxx 00000
   Description: 获取配置数据
         Input: IN UINT uiId             工号
@@ -119,24 +121,30 @@ BOOL_T INFO_data_IsEmpty(VOID)
 *****************************************************************************/
 ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 {
-	UINT aId;
+    UINT uiLine;
+	
+	/* 出参初始化为非法值 */
+    memset(pstCfg, 0, sizeof(INFO_CFG_S));
 
-    do
-    {
-        (VOID)fgets()
-    }
-    while(aId != uiId);
-    if(aId == uiId)
-    	{
-    	fscanf("stdout","%d"
-    	}
+	for(uiLine = INFO_FIRST; uiLine < INFO_DATA_MAX; uiLine++)
+	{
+         if(alData[uiLine].stCfg.uiId == uiId)
+         {
+             pstCfg->enSex = alData[uiLine].stCfg.enSex;
+	         strncpy(pstCfg->szName, alData[uiLine].stCfg.szName, sizeof(pstCfg->szName) - 1);		
+	         pstCfg->uiAge= alData[uiLine].stCfg.uiAge;
+       	     pstCfg->uiHeight= alData[uiLine].stCfg.uiHeight;
+	         pstCfg->uiId= alData[uiLine].stCfg.uiId;
+			 	return;
+		 }
+	}
 
-	return ERROR_FAILED;
+	return;
 }
 
 /*****************************************************************************
     Func Name: INFO_data_GetFirst[*]
- Date Created: 201x-xx-xx
+ Date Created: 2016-08-02
        Author: xxxx 00000
   Description: 获取第一个有数据工号
         Input: VOID
@@ -153,12 +161,16 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 *****************************************************************************/
 UINT INFO_data_GetFirst(VOID)
 {
-    return INFO_ID_INVALID;
+    if(alData[INFO_FIRST].stCfg.uiId != 0)
+    {
+	    return alData[INFO_FIRST].stCfg.uiId;
+    }
+	return INFO_ID_INVALID;
 }
 
 /*****************************************************************************
     Func Name: INFO_data_GetNext[*]
- Date Created: 201x-xx-xx
+ Date Created: 2016-08-02
        Author: xxxx 00000
   Description: 获取下一个有数据工号
         Input: IN UINT uiId                 当前工号
@@ -175,19 +187,27 @@ UINT INFO_data_GetFirst(VOID)
 *****************************************************************************/
 UINT INFO_data_GetNext(IN UINT uiId)
 {
+    UINT uiLine;
+	for(uiLine = INFO_FIRST; uiLine < INFO_DATA_MAX; uiLine++)
+	{
+	    if(alData[uiLine].stCfg.uiId == uiId)
+	    {
+	        return alData[uiLine+1].stCfg.uiId;
+	    }
+	}
     return INFO_ID_INVALID;
 }
 
 /*****************************************************************************
     Func Name: INFO_data_Init[*]
- Date Created: 201x-xx-xx
+ Date Created: 2016-08-02
        Author: xxxx 00000
   Description: 模块初始化
         Input: 
        Output: 
        Return: ULONG, ERROR_SUCCESS     处理成功
                       OTHER             处理失败
-      Caution: 目前始终成功
+      Caution: 
 ------------------------------------------------------------------------------
   Modification History
   DATE        NAME             DESCRIPTION
@@ -195,14 +215,34 @@ UINT INFO_data_GetNext(IN UINT uiId)
   YYYY-MM-DD
 
 *****************************************************************************/
-ULONG INFO_data_Init(VOID)
+/**/ULONG INFO_data_Init(VOID)
 {
+	UINT uiLine = INFO_FIRST;
+	CHAR *cLine;
+	FILE *fp;
+
+	if((fp=fopen("data.txt","rt")) == NULL)
+    {
+        printf("Can not open source file!");
+        return ERROR_FAILED;    
+	}
+
+	while(fscanf(fp,"%s",cLine) == 1)	
+	{
+		INFO_parse_InputStr(cLine,alData[uiLine]);
+        uiLine++;
+    }
+
+    fclose(fp);
+    
+	info_data_Init= BOOL_TRUE;
+
     return ERROR_SUCCESS;
 }
 
 /*****************************************************************************
     Func Name: INFO_data_Fini[*]
- Date Created: 201x-xx-xx
+ Date Created: 2016-08-02
        Author: xxxx 00000
   Description: 模块退出
         Input: 
@@ -218,6 +258,32 @@ ULONG INFO_data_Init(VOID)
 *****************************************************************************/
 VOID INFO_data_Fini(VOID)
 {
+    UINT uiLine = INFO_FIRST;
+    FILE *fp;
+	if(info_data_Init == BOOL_FALSE)
+    {
+        printf("Forbidden!!!Did not use initial method!");
+		return;
+    }
+
+	if((fp = fopen("data.txt","wt"))==NULL)
+	{
+        printf("Can not open the file!");
+		return;
+	}
+	for(uiLine = INFO_FIRST; uiLine < INFO_DATA_MAX; uiLine ++)
+    {
+        if(alData[uiLine].stCfg.uiId == INFO_ID_INVALID)
+		{
+            continue;
+		}
+        fprintf(fp,"id=%u name=%s sex=%u age=%u height=%u\r\n",alData[uiLine].stCfg.uiId,
+			                                                    alData[uiLine].stCfg.szName,
+			                                                     alData[uiLine].stCfg.enSex,
+			                                                      alData[uiLine].stCfg.uiAge,
+			                                                       alData[uiLine].stCfg.uiHeight);
+	}
+	fclose(fp);
     return;
 }
 
