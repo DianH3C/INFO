@@ -53,6 +53,10 @@ INFO_DATA_S* info_data_Alloc()
     INFO_DATA_S* pstNode;
     pstNode=(INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
     memset(pstNode,0,sizeof(INFO_DATA_S));
+    if(pstNode == NULL)
+    {
+        return NULL;
+    }
     return pstNode;
 }
 
@@ -164,10 +168,15 @@ VOID INFO_data_SetHeight(IN UINT uiId,IN UINT uiInHeght)
   YYYY-MM-DD
 
 *****************************************************************************/
-VOID INFO_date_Create(IN UINT uiId)
+UINT INFO_date_Create(IN UINT uiId)
 {
     INFO_DATA_S* pstNode=info_data_Alloc();
+    if(pstNode == NULL)
+    {
+        return ERROR_NO_ENOUGH_RESOURCE;
+    }
     info_data_Add(pstNode);
+    return ERROR_SUCCESS;
 }
 
 /*****************************************************************************
