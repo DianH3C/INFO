@@ -119,7 +119,6 @@ VOID INFO_parse_InputStr(IN const CHAR *pcInputStr, OUT INFO_CFG_S *pstCfg)
 
     /* 出参初始化为非法值 */
     memset(pstCfg, 0, sizeof(INFO_CFG_S));
-
     /* 解析用户输入字符串 */
     strlcpy(szString, pcInputStr, sizeof(szString));
     pcString = szString;

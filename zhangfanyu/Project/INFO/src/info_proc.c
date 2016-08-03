@@ -59,7 +59,8 @@ extern "C"{
 ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 {
     UINT uiId;
-    INFO_CFG_S * pstCfg;
+    INFO_CFG_S  stCfg;
+    INFO_CFG_S *pstCfg=&stCfg;
     if(BOOL_TRUE == INFO_data_IsEmpty())
     {
         printf("\n No info\n");
@@ -97,9 +98,45 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
   YYYY-MM-DD
 
 *****************************************************************************/
+    /*判断参数是否有效*/
+BOOL_T info_procAdd_Isvalid(INFO_CFG_S *pstCfg)
+{
+    UINT uiNamesize=strlen(pstCfg->szName);
+    BOOL_T uiIdValid=(pstCfg->uiId <= 100000 && pstCfg->uiId >=1);
+    BOOL_T szNameValid=(uiNamesize <= 15);
+    BOOL_T enSexValid=(pstCfg->enSex == 1 || pstCfg->enSex == 2);
+    BOOL_T uiHeightValid=(pstCfg->uiHeight <= 300 && pstCfg->uiHeight >= 1);
+    BOOL_T uiAgeValid=(pstCfg->uiAge <= 300 && pstCfg->uiAge>= 1);
+
+
+
+
+    if(uiIdValid == 0 || szNameValid == 0 || enSexValid == 0
+        || uiHeightValid == 0 || uiAgeValid == 0)
+    {
+        return BOOL_FALSE;
+    }
+    else
+    {
+       return BOOL_TRUE;
+    }
+}
+
+    /*设置已知工号的各数据*/
+VOID info_proc_SetCfg(INFO_CFG_S *pstCfg)
+{
+    UINT uiId=pstCfg->uiId;
+    INFO_data_SetName(uiId,pstCfg->szName);
+    INFO_data_SetSex(uiId,pstCfg->enSex);
+    INFO_data_SetAge(uiId,pstCfg->uiAge);
+    INFO_data_SetHeight(uiId,pstCfg->uiHeight);
+
+}
+
 ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 {
-    INFO_CFG_S *pstCfg;
+    INFO_CFG_S  stCfg;
+    INFO_CFG_S *pstCfg=&stCfg;
     /*字符串解析*/
     INFO_parse_InputStr(pcInputStr,pstCfg);
     /*判断参数是否有效*/
@@ -117,37 +154,7 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
     return ERROR_SUCCESS;
 }
 
-/*判断参数是否有效*/
-BOOL_T info_procAdd_Isvalid(INFO_CFG_S *pstCfg)
-{
-    BOOL_T uiIdValid=(pstCfg->uiId <= 100000 && pstCfg->uiId >=1);
-    UINT uiNamesize=sizeof(pstCfg->szName);
-    BOOL_T szNameValid=(uiNamesize <= 15);
-    BOOL_T enSexValid=(pstCfg->enSex == 1 || pstCfg->enSex == 2);
-    BOOL_T uiHeightValid=(pstCfg->uiHeight <= 300 && pstCfg->uiHeight >= 1);
-    BOOL_T uiAgeValid=(pstCfg->uiAge <= 300 && pstCfg->uiAge>= 1);
 
-    if(uiIdValid == 0 || szNameValid == 0 || enSexValid == 0
-        || uiHeightValid == 0 || uiAgeValid == 0)
-    {
-        return BOOL_FALSE;
-    }
-    else
-    {
-       return BOOL_FALSE;
-    }
-}
-
-/*设置已知工号的各数据*/
-VOID info_proc_SetCfg(INFO_CFG_S *pstCfg)
-{
-    UINT uiId=pstCfg->uiId;
-    INFO_data_SetName(uiId,pstCfg->szName);
-    INFO_data_SetSex(uiId,pstCfg->enSex);
-    INFO_data_SetAge(uiId,pstCfg->uiAge);
-    INFO_data_SetHeight(uiId,pstCfg->uiHeight);
-
-}
 /*****************************************************************************
     Func Name: INFO_proc_Delete[*]
  Date Created: 201x-xx-xx

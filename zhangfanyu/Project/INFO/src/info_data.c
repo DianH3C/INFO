@@ -75,9 +75,9 @@ VOID info_data_Add(IN INFO_DATA_S* pstNode)
     INFO_DATA_S *pstMvNode=pstHEAD;
 
     /*如过链表为空，则直接插入最后*/
-    if(NULL == pstHEAD->Info_Data_next)
+    if(NULL == pstHEAD)
     {
-        pstHEAD->Info_Data_next=pstNode;
+        pstHEAD=pstNode;
         pstNode->Info_Data_next=NULL;
     }
     else
@@ -113,7 +113,8 @@ VOID info_data_Delete(IN INFO_DATA_S* pstNode)
 INFO_DATA_S* info_data_Get(IN UINT uiId)
 {
     INFO_DATA_S *pstMvNode=pstHEAD;
-    while(pstMvNode->Info_Data_next != NULL)
+
+    while(pstMvNode != NULL)
     {
         if(pstMvNode->stCfg.uiId == uiId)
         {
@@ -171,6 +172,8 @@ VOID INFO_data_SetHeight(IN UINT uiId,IN UINT uiInHeght)
 UINT INFO_date_Create(IN UINT uiId)
 {
     INFO_DATA_S* pstNode=info_data_Alloc();
+
+    pstNode->stCfg.uiId=uiId;
     if(pstNode == NULL)
     {
         return ERROR_NO_ENOUGH_RESOURCE;
@@ -320,7 +323,7 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 *****************************************************************************/
 UINT INFO_data_GetFirst(VOID)
 {
-    INFO_DATA_S *pstFstNode=pstHEAD->Info_Data_next;
+    INFO_DATA_S *pstFstNode=pstHEAD;
     if(pstFstNode == NULL)
     {
         return INFO_ID_INVALID;
@@ -352,11 +355,11 @@ UINT INFO_data_GetNext(IN UINT uiId)
 {
     INFO_DATA_S *pstMvNode=pstHEAD;
 
-    while(pstMvNode->Info_Data_next != NULL)
+    while(pstMvNode != NULL)
      {
-         if(pstMvNode->Info_Data_next->stCfg.uiId > uiId)
+         if(pstMvNode->stCfg.uiId > uiId)
          {
-             return pstMvNode->Info_Data_next->stCfg.uiId;
+             return pstMvNode->stCfg.uiId;
          }
          /*链表后移*/
          pstMvNode=pstMvNode->Info_Data_next;
