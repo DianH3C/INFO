@@ -49,11 +49,12 @@ INFO_DATA_S * info_data_Get(IN UINT uiId);
 INFO_DATA_S * info_data_Alloc();
 VOID info_data_Add(IN INFO_DATA_S * pstUser, IN UINT uiId);
 VOID info_data_Delete(INFO_DATA_S * pstUser);
-VOID info_data_Free(INFO_DATA_S * pstUser);
+VOID info_data_Free(VOID * pstMem);
 
 
 static DTQ_HEAD_S * pstDataHead; 
 static INFO_DATA_S * pstDataNode;
+
 
 /*****************************************************************************
     Func Name: INFO_data_IsExist[*]
@@ -86,108 +87,76 @@ BOOL_T INFO_data_IsExist(IN UINT uiId)
 }
 
 
-VOID INFO_data_Create(IN UINT uiId)
-{
-    //ÉêÇëÐÂ½ÚµãµÄÄÚ´æ¿Õ¼ä
-    INFO_DATA_S * pstUser = info_data_Alloc();
-    //³õÊ¼»¯¸Ã½Úµã
-    (*pstUser).stNode.pstPrev = &((*pstUser).stNode);
-    (*pstUser).stNode.pstNext = &((*pstUser).stNode);
-     
-    (*pstUser).stCfg.uiId = (UINT)0;
-    (*pstUser).stCfg.uiAge = (UINT)0;
-    (*pstUser).stCfg.uiHeight = (UINT)0;
-    (*pstUser).stCfg.enSex = INFO_SEX_FEMALE;
-    (*pstUser).stCfg.szName[0] = 0;
-    //½«¸Ã½Úµã¼ÓÈëÁ´±íÖÐ    
-    info_data_Add(pstUser,uiId);
-    ;
-}
+
 
 VOID INFO_data_SetName(IN UINT uiId, IN CHAR * szName)
 {
 
-    
-    //»ñÈ¡Èë²Î¹¤ºÅ¶ÔÓ¦½ÚµãÖ¸Õë
-    INFO_DATA_S * pstUser = (INFO_DATA_S*)info_data_Get(uiId);
-    //¸ü¸ÄÐÕÃû
-    
+    strlcpy(info_data_Get(uiId)->stCfg.szName,szName,INFO_NAME_MAXLEN);
+/*
+    INFO_DATA_S ** pstUser = (INFO_DATA_S**)malloc(sizeof(INFO_DATA_S*));
+    *pstUser = (info_data_Get(uiId));
+
+    strlcpy((*pstUser)->stCfg.szName,szName,sizeof((*pstUser)->stCfg.szName));
+    info_data_Free(pstUser);
+*/
+    /*
     int i;
-    for(i=0;i<strlen(szName);i++)
+    if(pstUser)
     {
-        pstUser->stCfg.szName[i] = szName[i];
+        for(i=0;i<strlen(szName);i++)
+        {
+            pstUser->stCfg.szName[i] = szName[i];
+        }
+        pstUser->stCfg.szName[i] = '\0';
+        info_data_Free(pstUser);
     }
-    pstUser->stCfg.szName[i] = '\0';
-    //strlcpy(pstUser->stCfg.szName,szName,sizeof(pstUser->stCfg.szName));
-    
+    else
+    {
+        info_data_Free(pstUser);
+            printf("Failed to set name, something goes wrong...");
+    }
+    */
 }
 
 VOID INFO_data_SetAge(IN UINT uiId, IN UINT uiAge)
 {   
-    //»ñÈ¡Èë²Î¹¤ºÅ¶ÔÓ¦½ÚµãÖ¸Õë
-    INFO_DATA_S * pstUser = info_data_Get(uiId);
-    //¸ü¸ÄÄêÁä
-    (*pstUser).stCfg.uiAge = uiAge;
+    info_data_Get(uiId)->stCfg.uiHeight = uiAge;
+/*
+    INFO_DATA_S ** pstUser = (INFO_DATA_S**)malloc(sizeof(INFO_DATA_S*));
+    *pstUser = (info_data_Get(uiId));
 
+    (*pstUser)->stCfg.uiAge = uiAge;
+    info_data_Free(pstUser);*/
 }
+
 VOID INFO_data_SetSex(IN UINT uiId, IN INFO_SEX_E enSex)
 {
+    info_data_Get(uiId)->stCfg.enSex = enSex;
+/*
+    INFO_DATA_S ** pstUser = (INFO_DATA_S**)malloc(sizeof(INFO_DATA_S*));
+    *pstUser = (info_data_Get(uiId));
 
-    //»ñÈ¡Èë²Î¹¤ºÅ¶ÔÓ¦½ÚµãÖ¸Õë
-    INFO_DATA_S * pstUser = info_data_Get(uiId);
-    //¸ü¸ÄÐÔ±ð
-    (*pstUser).stCfg.enSex = enSex;
+    (*pstUser)->stCfg.enSex = enSex;
+    info_data_Free(pstUser);
+    */
 }
 VOID INFO_data_SetHeight(IN UINT uiId,IN UINT uiHeight)
 {
-    //»ñÈ¡Èë²Î¹¤ºÅ¶ÔÓ¦½ÚµãÖ¸Õë
-    INFO_DATA_S * pstUser = info_data_Get(uiId);
-    //¸ü¸ÄÉí¸ß
-    (*pstUser).stCfg.uiHeight = uiHeight;
+
+    info_data_Get(uiId)->stCfg.uiHeight = uiHeight;
+    /*
+    INFO_DATA_S ** pstUser = (INFO_DATA_S**)malloc(sizeof(INFO_DATA_S*));
+    *pstUser = (info_data_Get(uiId));
+
+    (*pstUser)->stCfg.uiHeight = uiHeight;
+    info_data_Free(pstUser);
+    */
 }
 
-//删除入参工号对应的链表节点
-VOID INFO_data_Destroy(UINT uiId)
+BOOL_T INFO_data_IsEmpty()
 {
-    //»ñÈ¡´ýÉ¾³ý½ÚµãµØÖ·
-    INFO_DATA_S * pstUser;
-    if(pstUser = info_data_Get(uiId))
-    {
-        //´ÓÁ´±íÖÐÕª³ý¸Ã½Úµã
-    info_data_Delete(pstUser);
-    //ÊÍ·ÅÄÚ´æ¿Õ¼ä
-        info_data_Free(pstUser);
-    }
-    //Èô¸Ã¹¤ºÅÎÞÐÅÏ¢Ôò·µ»Ø
-    else
-    {
-        return;
-    }
-}//end INFO_data_Destroy()
 
-/*****************************************************************************
-    Func Name: INFO_data_IsEmpty[*]
- Date Created: 201x-xx-xx
-       Author: xxxx 00000
-  Description: ÅÐ¶ÏÕû¸öÊý¾Ý×éÖ¯ÊÇ·ñÎª¿Õ
-        Input: 
-       Output: 
-       Return: BOOL_T, BOOL_TRUE    Êý¾Ý×éÖ¯Îª¿Õ
-                       BOOL_FALSE   Êý¾Ý×éÖ¯·Ç¿Õ
-      Caution: 
-------------------------------------------------------------------------------
-  Modification History
-  DATE        NAME             DESCRIPTION
-  --------------------------------------------------------------------------
-  YYYY-MM-DD
-
-*****************************************************************************/
-BOOL_T INFO_data_IsEmpty(VOID)
-{
-    DTQ_NODE_S  * pstHead = &((*pstDataHead).stHead);
-    
-    //both null when not initialized or point to itself when initialized 
-    //if (((*pstHead).pstNext==NULL && (*pstHead).pstPrev==NULL)||((*pstHead).pstNext==pstHead && (*pstHead).pstPrev==pstHead)))
     if(DTQ_IsEmpty(pstDataHead))
     {
         return BOOL_TRUE;
@@ -199,73 +168,99 @@ BOOL_T INFO_data_IsEmpty(VOID)
 }//end INFO_data_IsEmpty()
 
 
-/*****************************************************************************
-    Func Name: INFO_data_GetFirst[*]
- Date Created: 201x-xx-xx
-       Author: xxxx 00000
-  Description: »ñÈ¡µÚÒ»¸öÓÐÊý¾Ý¹¤ºÅ
-        Input: VOID
-       Output: 
-       Return: UINT, != INFO_ID_INVALID     µÚÒ»¸öÓÐÊý¾ÝµÄ¹¤ºÅ
-                     == INFO_ID_INVALID     Î´ÕÒµ½
-      Caution: 
-------------------------------------------------------------------------------
-  Modification History
-  DATE        NAME             DESCRIPTION
-  --------------------------------------------------------------------------
-  YYYY-MM-DD
-
-*****************************************************************************/
-UINT INFO_data_GetFirst(VOID)
+ULONG INFO_data_Create(IN UINT uiId)
 {
+
+    INFO_DATA_S * pstNewUser = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
+//    memcpy(pstNewUser,info_data_Alloc(),sizeof(INFO_DATA_S));
+    pstNewUser = info_data_Alloc();
+
+    //initialize the pstNewUser
+    (*pstNewUser).stNode.pstPrev = &((*pstNewUser).stNode);
+    (*pstNewUser).stNode.pstNext = &((*pstNewUser).stNode);
+     
+    (*pstNewUser).stCfg.uiId = (UINT)0;
+    (*pstNewUser).stCfg.uiAge = (UINT)0;
+    (*pstNewUser).stCfg.uiHeight = (UINT)0;
+    (*pstNewUser).stCfg.enSex = 0;
+    (*pstNewUser).stCfg.szName[0] = 0;
     
-    INFO_DATA_S * pstFirstUser = DTQ_ENTRY_FIRST(pstDataHead,INFO_DATA_S,stNode);
-    UINT uiId = (*pstFirstUser).stCfg.uiId;
-    if(INFO_data_IsExist(uiId))
+    info_data_Add(pstNewUser,uiId);
+    
+    /*
+    if(INFO_data_IsEmpty())
     {
-        return uiId;
+        printf("Failed to reate user node, something goes wrong.\r\n"); 
+        return ERROR_FAILED;
     }
     else
     {
-        return INFO_ID_INVALID;
+        printf("Succeded to create user node.\r\n");
+        return ERROR_SUCCESS;
     }
+    */
+}
+
+VOID INFO_data_Destroy(UINT uiId)
+{
+
+    INFO_DATA_S * pstUser = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
+    pstUser= info_data_Get(uiId);
+    if(NULL != pstUser)
+    {
+        info_data_Delete(pstUser);
+
+        info_data_Free(pstUser);
+    }
+
+    else
+    {   
+        return;
+    }
+}//end INFO_data_Destroy()
+
+
+
+
+
+UINT INFO_data_GetFirst()
+{
+    
+    INFO_DATA_S * pstUser = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
+    pstUser = DTQ_ENTRY_FIRST(pstDataHead,INFO_DATA_S,stNode);
+    UINT uiId = pstUser->stCfg.uiId;
+    if(!INFO_data_IsExist(uiId))
+    {
+        uiId = INFO_ID_INVALID;
+    }
+    info_data_Free(pstUser);
+    return uiId;
 }//end INFO_data_GetFirst()
 
 
-/*****************************************************************************
-    Func Name: INFO_data_GetNext[*]
- Date Created: 201x-xx-xx
-       Author: xxxx 00000
-  Description: »ñÈ¡ÏÂÒ»¸öÓÐÊý¾Ý¹¤ºÅ
-        Input: IN UINT uiId                 µ±Ç°¹¤ºÅ
-       Output: 
-       Return: UINT, != INFO_ID_INVALID     ÏÂÒ»¸ö¹¤ºÅ
-                     == INFO_ID_INVALID     Î´ÕÒµ½
-      Caution: ´Ë½Ó¿Ú»ñÈ¡ÏÂÒ»¸ö¹¤ºÅ²»ÒÀÀµÓÚÈë²ÎuiId±¾ÉíÊÇ·ñÓÐÊý¾Ý
-------------------------------------------------------------------------------
-  Modification History
-  DATE        NAME             DESCRIPTION
-  --------------------------------------------------------------------------
-  YYYY-MM-DD
-
-*****************************************************************************/
 UINT INFO_data_GetNext(IN UINT uiId)
 {
     if(INFO_data_IsExist(uiId))
     {
-        INFO_DATA_S * pstUser = info_data_Get(uiId);
-        INFO_DATA_S * pstNextUser;
+        INFO_DATA_S * pstUser = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
+        pstUser = info_data_Get(uiId);
+        INFO_DATA_S * pstNextUser = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
 
-        //if pstUser is not the last node, then return the next id
-        if(pstNextUser = DTQ_ENTRY_NEXT(pstDataHead,pstUser,stNode))
+    
+        //if pstUser is not the last node, say not equal to NULL,  then return the next id
+        pstNextUser = DTQ_ENTRY_NEXT(pstDataHead,pstUser,stNode);
+        if(NULL != pstNextUser)
         {
-            return (*pstNextUser).stCfg.uiId;
+            uiId = (*pstNextUser).stCfg.uiId;
         }
         //else pstUser is the last node, then no next id
         else
         {
-            return INFO_ID_INVALID;
+            uiId = INFO_ID_INVALID;
         }
+        info_data_Free(pstUser);
+        info_data_Free(pstNextUser);
+        return uiId;
     }
     else
     {
@@ -277,29 +272,14 @@ UINT INFO_data_GetNext(IN UINT uiId)
 
 
 
-/*****************************************************************************
-    Func Name: INFO_data_GetData[*]
- Date Created: 201x-xx-xx
-       Author: xxxx 00000
-  Description: »ñÈ¡ÅäÖÃÊý¾Ý
-        Input: IN UINT uiId             ¹¤ºÅ
-       Output: OUT INFO_CFG_S *pstCfg   ÅäÖÃÊý¾Ý
-       Return: ULONG, ERROR_SUCCESS     ´¦Àí³É¹¦
-                      OTHER             ´¦ÀíÊ§°Ü
-      Caution: ³ö²Î½öÔÚ·µ»Ø³É¹¦Ê±ÓÐÐ§
-------------------------------------------------------------------------------
-  Modification History
-  DATE        NAME             DESCRIPTION
-  --------------------------------------------------------------------------
-  YYYY-MM-DD
-
-*****************************************************************************/
 ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 {
-    INFO_DATA_S * pstUser;
-    if(pstUser = info_data_Get(uiId))
+    INFO_DATA_S * pstUser = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
+    pstUser = info_data_Get(uiId);
+    
+    if(NULL != pstUser)
     {
-        pstCfg = &((*pstUser).stCfg);
+        memcpy(pstCfg,&(pstUser->stCfg),sizeof(INFO_CFG_S));
         return ERROR_SUCCESS;
     }
     else
@@ -315,61 +295,34 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 
 
 
-/*****************************************************************************
-    Func Name: INFO_data_Init[*]
- Date Created: 201x-xx-xx
-       Author: xxxx 00000
-  Description: Ä£¿é³õÊ¼»¯
-        Input: 
-       Output: 
-       Return: ULONG, ERROR_SUCCESS     ´¦Àí³É¹¦
-                      OTHER             ´¦ÀíÊ§°Ü
-      Caution: Ä¿Ç°Ê¼ÖÕ³É¹¦
-------------------------------------------------------------------------------
-  Modification History
-  DATE        NAME             DESCRIPTION
-  --------------------------------------------------------------------------
-  YYYY-MM-DD
-
-*****************************************************************************/
 ULONG INFO_data_Init(VOID)
 {
-    pstDataHead = (DTQ_HEAD_S*)malloc(sizeof(DTQ_NODE_S));
-    pstDataNode = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
+    pstDataHead = (DTQ_HEAD_S*)malloc(sizeof(DTQ_HEAD_S));
+    pstDataNode = (DTQ_NODE_S*)malloc(sizeof(DTQ_HEAD_S));
     DTQ_Init(pstDataHead);
-    /*(*pstDataHead).stHead.pstPrev = &((*pstDataHead).stHead);
-    (*pstDataHead).stHead.pstNext = &((*pstDataHead).stHead);
-*/
-     return ERROR_SUCCESS;
+    
+    return ERROR_SUCCESS;
   
 
 }//end INFO_data_Init()
 
 
-/*****************************************************************************
-    Func Name: INFO_data_Fini[*]
- Date Created: 201x-xx-xx
-       Author: xxxx 00000
-  Description: Ä£¿éÍË³ö
-        Input: 
-       Output: 
-       Return: VOID
-      Caution: µ÷ÓÃ´Ë½Ó¿ÚÇ°£¬±ØÐëÒÑ¾­³õÊ¼»¯¹ý
-------------------------------------------------------------------------------
-  Modification History
-  DATE        NAME             DESCRIPTION
-  --------------------------------------------------------------------------
-  YYYY-MM-DD
-
-*****************************************************************************/
 VOID INFO_data_Fini(VOID)
 {
     if(INFO_data_Init())
     {
-        free(pstDataHead);
-        pstDataHead = NULL;
-        free(pstDataNode);
-        pstDataNode = NULL;
+       //DTQ_FreeAll(pstDataHead,(* info_data_Free)());
+        DTQ_NODE_S* pstCurNode;
+        DTQ_NODE_S* pstNextNode;
+        DTQ_FOREACH_SAFE(pstDataHead,pstCurNode,pstNextNode);
+        {
+            info_data_Free(pstCurNode);
+        }
+        info_data_Free(pstNextNode);
+        DTQ_Init(pstDataHead);
+        
+        info_data_Free(pstDataHead);
+        info_data_Free(pstDataNode);
     }
     else
     {
@@ -382,125 +335,96 @@ VOID INFO_data_Fini(VOID)
 
 
 
-
-
-
-/*****************************************************************************
-    Func Name: info_data_Allcoc[*]
- Date Created: 201x-xx-xx
-       Author: Huangzhen
-  Description: ÉêÇëÄÚ´æ²¢½«ÉêÇëµ½µÄÄÚ´æ¿Õ¼äÇåÁã£¬²¢·µ»Ø¿Õ¼äÊ×µØÖ·
-        Input: VOID
-       Output: 
-       Return: INFO_DATA_S *,     
-      Caution: 
-------------------------------------------------------------------------------
-  Modification History
-  DATE        NAME             DESCRIPTION
-  --------------------------------------------------------------------------
-  YYYY-MM-DD
-
-*****************************************************************************/
-INFO_DATA_S * info_data_Alloc()
-{
-    INFO_DATA_S * pstUser = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
-    memset(pstUser,0,sizeof(INFO_DATA_S));
-    return pstUser;
-}//end info_data_Alloc()
-
-
-
 VOID info_data_Add(IN INFO_DATA_S * pstUser, IN UINT uiId)
 {
-    INFO_DATA_S * pstEntry, *pstNextEntry;
-    DTQ_NODE_S * pstNode;
-    INFO_DATA_S * pstLoopUser, * pstLoopNextUser;
-    
+
     //if empty, then the pstUser will added as the fisrt node.
     //and return 
     if(INFO_data_IsEmpty())
     {
-        DTQ_AddHead(pstDataHead,(&(*pstUser).stNode));
+        printf("Add the first data....\r\n");
+        DTQ_AddHead(pstDataHead,&(pstUser->stNode));
+        
         return;
     }
-    
+
+    /*
+    INFO_DATA_S * pstEntry = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
+    INFO_DATA_S * pstNextEntry = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
+    */
+
+    INFO_DATA_S * pstEntry ;
+    INFO_DATA_S * pstNextEntry;
     DTQ_FOREACH_ENTRY_SAFE(pstDataHead,pstEntry,pstNextEntry,stNode)
     {
-        UINT uiId = (*pstUser).stCfg.uiId;
-        if(pstNextEntry!=NULL)
+        
+        if(NULL != pstNextEntry)
         {
-            if(uiId >= (*pstEntry).stCfg.uiId && uiId < (*pstNextEntry).stCfg.uiId)
+            if(uiId >= pstEntry->stCfg.uiId && uiId < pstNextEntry->stCfg.uiId)
             {
-            DTQ_AddAfter((&(*pstEntry).stNode),&((*pstUser).stNode));
+                 ;
+                DTQ_AddAfter(&(pstEntry->stNode),&(pstUser->stNode));
+                break;
+            }
+            else
+            {
+                continue;
             }
         }
         else
         {
-            DTQ_AddAfter((&(*pstEntry).stNode),&((*pstUser).stNode));
+            DTQ_AddTail(pstDataHead,&(pstUser->stNode));
          
         }
     }
+
+
+    
 }
 
 //end info_data_Add()
 
+VOID info_data_Delete(INFO_DATA_S * pstUser)
+{
+    DTQ_Del(&(pstUser->stNode));
+}
+
+
+
 INFO_DATA_S * info_data_Get(IN UINT uiId)
 {
-    INFO_DATA_S * pstEntry = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
-
-    DTQ_FOREACH_ENTRY(pstDataHead,pstEntry,stNode)
+    INFO_DATA_S * pstUser = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
+    DTQ_FOREACH_ENTRY(pstDataHead,pstUser,stNode)
     {
-        if(pstEntry->stCfg.uiId == uiId)
+        if(pstUser->stCfg.uiId == uiId)
         {
-             return pstEntry;
+            pstDataNode = pstUser;
+            info_data_Free(pstUser);
+            return pstDataNode;
         }
     }
-    //end of the loop, no match, then return NULL
-    return pstEntry;
+    return NULL;
+
     
+
 }//end info_data_Get()
 
 
-VOID info_data_Delete(INFO_DATA_S * pstUser)
+
+INFO_DATA_S * info_data_Alloc()
 {
+    INFO_DATA_S * pstNewNode = (INFO_DATA_S)malloc(sizeof(INFO_DATA_S));    
+    memset(pstNewNode,0,sizeof(INFO_DATA_S));
+    return pstNewNode;
+}//end info_data_Alloc()
 
-    DTQ_Del(&((*pstUser).stNode));
-
-
-    /*
-    //INFO_DATA_S stNode = (*pstDataNode).stNode;
-    //the inner function don't delete illegal argument, DTQ_HEAD_S* included.
-    
-    //if pstUser is the headdd of the list, then the pstPrevUser will be NULL
-    INFO_DATA_S * pstPrevUser = DTQ_ENTRY_NEXT(pstDataHead,INFO_DATA_S,stNode);
-
-    //if pstUser is the end of the list, then the pstNextUser will be NULL
-    INFO_DATA_S * pstNextUser = DTQ_ENTRY_NEXT(pstDataHead,INFO_DATA_S,stNode);
-
-    if(pstPrevUser == NULL && pstNextUser != NULL)
-    {   
-        (*pstDataHead).stHead.pstPrev= &((*pstNextUser).stNode);
-        (*pstNextUser).stNode.pstPrev = &((*pstDataHead).stHead);
-    }
-    else if(pstPrevUser != NULL && pstNextUser == NULL)
-    {
-        (*pstPrevUser).stNode.pstNext = &((*pstDataHead).stHead);
-        (*pstDataHead).stHead.pstPrev = &((*pstPrevUser).stNode);
-    }
-    //general condition
-    else
-    {
-        (*pstPrevUser).stNode.pstNext = &((*pstNextUser).stNode);
-        (*pstNextUser).stNode.pstPrev = &((*pstPrevUser).stNode);
-    }
-    */
+VOID info_data_Free(VOID * pstMem)
+{
+    free(pstMem);
+    pstMem = NULL;
 }
 
-VOID info_data_Free(INFO_DATA_S * pstUser)
-{
-    free(pstUser);
-    pstUser = NULL;
-}
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

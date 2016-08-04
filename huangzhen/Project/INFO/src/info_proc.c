@@ -60,7 +60,7 @@ extern "C"{
 *****************************************************************************/
 ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 {
-    if(INFO_data_IsEmpty)
+    if(INFO_data_IsEmpty())
     {
         printf("No info\r\n");
         return ERROR_FAILED;
@@ -79,8 +79,7 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
         printf("%u\t%s\t%d\t%u\t%u\r\n",pstUserCfg->uiId,pstUserCfg->szName,pstUserCfg->enSex,pstUserCfg->uiHeight);         
         
         uiId = INFO_data_GetNext(uiId);
-
-        
+     
     }
     return ERROR_SUCCESS;
 }
@@ -116,13 +115,20 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
             printf("Sorry, id %u exists already, you can not add it.\r\n",uiId);
             return ERROR_FAILED;
         }
-        INFO_data_Create(uiId);
-        
-        INFO_data_SetName(uiId,pstCfg->szName);
-        INFO_data_SetSex(uiId,pstCfg->enSex);
-        INFO_data_SetAge(uiId,pstCfg->uiAge);
-        INFO_data_SetHeight(uiId,pstCfg->uiHeight);
-        return ERROR_SUCCESS;
+        if((BOOL_T)INFO_data_Create(uiId))
+        {        
+            INFO_data_SetName(uiId,pstCfg->szName);
+            INFO_data_SetAge(uiId,pstCfg->uiAge);
+            INFO_data_SetHeight(uiId,pstCfg->uiHeight);
+            INFO_data_SetSex(uiId,pstCfg->enSex);
+            return ERROR_SUCCESS;
+        }
+        /*
+        else
+        {
+            printf("Sorry, failed to add data, something goes wrong.\r\n");
+            return ERROR_FAILED;
+        }*/
      } 
      else
      {
@@ -170,7 +176,7 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
     }
     else
     {
-        printf("The id %u you want to delete is invalid!\r\n",uiId);
+        printf("The id %u you want to delete is invalid!\r\n",pstCfg->uiId);
         return ERROR_FAILED;
     }
 }
@@ -231,7 +237,7 @@ ULONG INFO_proc_Modify(IN const CHAR *pcInputStr)
      }
      else
      {
-        printf("The id %u you want to modify is invalid!\r\n",uiId);
+        printf("The id you want to modify is invalid!\r\n");
         return ERROR_FAILED;
      }
 }
