@@ -37,6 +37,8 @@ extern "C"{
 #include "info_dbg.h"
 #include "info_data.h"
 
+/* struct len*/
+#define INFO_CFG_S_LEN 32
 /* 获取数据标志 */
 BOOL_T info_data_Init = BOOL_FALSE;
 
@@ -123,10 +125,9 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 {
     UINT uiLine;
 	
-	/* 出参初始化为非法值 */
-    memset(pstCfg, 0, sizeof(INFO_CFG_S));
+	/* 出参初始化为非法值 */    
 
-	for(uiLine = INFO_FIRST; uiLine < INFO_DATA_MAX; uiLine++)
+	 for(uiLine = INFO_FIRST; uiLine < INFO_DATA_MAX; uiLine++)
 	{
          if(alData[uiLine].stCfg.uiId == uiId)
          {
@@ -138,7 +139,8 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 			 	return;
 		 }
 	}
-
+	
+	pstCfg->uiId = INFO_ID_INVALID;
 	return;
 }
 
@@ -217,24 +219,13 @@ UINT INFO_data_GetNext(IN UINT uiId)
 *****************************************************************************/
 /**/ULONG INFO_data_Init(VOID)
 {
-	UINT uiLine = INFO_FIRST;
-	CHAR *cLine;
-	FILE *fp;
+	UINT uiDataLine = INFO_FIRST;	  
 
-	if((fp=fopen("data.txt","rt")) == NULL)
+    for(uiDataLine = INFO_FIRST; uiDataLine < INFO_DATA_MAX; uiDataLine ++)
     {
-        printf("Can not open source file!");
-        return ERROR_FAILED;    
-	}
-
-	while(fscanf(fp,"%s",cLine) == 1)	
-	{
-		INFO_parse_InputStr(cLine,alData[uiLine]);
-        uiLine++;
+        alData[uiDataLine].stCfg.uiId = INFO_ID_INVALID;
     }
 
-    fclose(fp);
-    
 	info_data_Init= BOOL_TRUE;
 
     return ERROR_SUCCESS;
@@ -259,31 +250,18 @@ UINT INFO_data_GetNext(IN UINT uiId)
 VOID INFO_data_Fini(VOID)
 {
     UINT uiLine = INFO_FIRST;
-    FILE *fp;
+
 	if(info_data_Init == BOOL_FALSE)
     {
         printf("Forbidden!!!Did not use initial method!");
 		return;
     }
 
-	if((fp = fopen("data.txt","wt"))==NULL)
-	{
-        printf("Can not open the file!");
-		return;
-	}
 	for(uiLine = INFO_FIRST; uiLine < INFO_DATA_MAX; uiLine ++)
     {
-        if(alData[uiLine].stCfg.uiId == INFO_ID_INVALID)
-		{
-            continue;
-		}
-        fprintf(fp,"id=%u name=%s sex=%u age=%u height=%u\r\n",alData[uiLine].stCfg.uiId,
-			                                                    alData[uiLine].stCfg.szName,
-			                                                     alData[uiLine].stCfg.enSex,
-			                                                      alData[uiLine].stCfg.uiAge,
-			                                                       alData[uiLine].stCfg.uiHeight);
-	}
-	fclose(fp);
+        alData[uiLine].stCfg.uiId = INFO_ID_INVALID;
+    }
+
     return;
 }
 

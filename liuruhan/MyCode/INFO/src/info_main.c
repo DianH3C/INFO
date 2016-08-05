@@ -22,6 +22,7 @@ extern "C"{
 
 /* standard library */
 #include <stdio.h>
+#include <stdlib.h>
 
 /* system   public  */
 #include <sys/basetype.h>
@@ -54,7 +55,7 @@ typedef enum tagInfo_Menu
 typedef struct tagInfo_Func
 {
     const CHAR      *pcMenu;    /* 菜单名称 */
-    INFO_PROC_PF    pfProc;     /* 处理函数 */
+    INFO_PROC_PF     pfProc;     /* 处理函数 */
 }INFO_FUNC_S;
 
 /* 功能数据 */
@@ -410,7 +411,7 @@ INT main(IN INT iArgc, IN CHAR *apcArgv[])
 
     IGNORE_PARAM(iArgc);
     IGNORE_PARAM(apcArgv);
-
+   
     /* 初始化 */
     ulErrCode = INFO_Init();
     if (ERROR_SUCCESS == ulErrCode)
