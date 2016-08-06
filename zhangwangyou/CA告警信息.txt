@@ -1,11 +1,41 @@
---- 17:26:28.13 ALL CAnalyzer 
-ProductMode must be "all" or "simware",but INPUT is "D:\Source\B46D001"!
-LintMode must be "basic" or "advance",but INPUT is "D:\Source\B46D001"!
-Open "D:\Source\B46D001" Failed (3), not exist
---- BEG 17:26:28.13  CAnalyzer:ALL  SrcVer: B47000
---- END 17:26:28.17  2016-07-23
+--- 21:18:51.34 ALL CAnalyzer C:\Users\Emrys\Documents\Dian\Project\\INFO\src
+    C:\Users\Emrys\Documents\Dian\Project\INFO\src\info_data.c L0 Info 766 [] [E988868E73C6ED8CD9A113B11DE242A0] 
+        Header file 'C:\Users\Emrys\Documents\Dian\Project\\public\include\comware\sys\string_ex.h' not used in module 'C:\Users\Emrys\Documents\Dian\Project\INFO\src\info_data.c' 
+
+    C:\Users\Emrys\Documents\Dian\Project\INFO\src\info_data.c L0 Info 766 [] [63D938E0DF55D7700D6FD4D7CEA1485F] 
+        Header file 'C:\Users\Emrys\Documents\Dian\Project\INFO\src\info_dbg.h' not used in module 'C:\Users\Emrys\Documents\Dian\Project\INFO\src\info_data.c' 
+
+    C:\Users\Emrys\Documents\Dian\Project\INFO\src\info_dbg.c L0 Info 766 [] [4F438D486E80F62CED87B51CA7BCFB70] 
+        Header file 'C:\Users\Emrys\Documents\Dian\Project\\public\include\comware\sys\string_ex.h' not used in module 'C:\Users\Emrys\Documents\Dian\Project\INFO\src\info_dbg.c' 
+
+    C:\Users\Emrys\Documents\Dian\Project\INFO\src\info_main.c L0 Info 766 [] [13AD59188038AEFD6FC7FC542853B4C0] 
+        Header file 'C:\Users\Emrys\Documents\Dian\Project\\public\include\comware\sys\string_ex.h' not used in module 'C:\Users\Emrys\Documents\Dian\Project\INFO\src\info_main.c' 
+
+    C:\Users\Emrys\Documents\Dian\Project\INFO\src\info_parse.c L0 Info 766 [] [A0B133452BC4F07686100B1486FCB861] 
+        Header file 'C:\Users\Emrys\Documents\Dian\Project\\public\include\comware\sys\string_ex.h' not used in module 'C:\Users\Emrys\Documents\Dian\Project\INFO\src\info_parse.c' 
+
+    C:\Users\Emrys\Documents\Dian\Project\INFO\src\info_proc.c L0 Info 766 [] [6C2CDE2C388E81E2D911D871F4D80052] 
+        Header file 'C:\Users\Emrys\Documents\Dian\Project\\public\include\comware\sys\string_ex.h' not used in module 'C:\Users\Emrys\Documents\Dian\Project\INFO\src\info_proc.c' 
+
+Note 900 
+        Total 6 messages ( 1 Files), 0 Error, 0 Warning, 6 Info, 0 Note. [0/56] 
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Note 900 
+        Total 0 messages ( 0 Files), 0 Error, 0 Warning, 0 Info, 0 Note.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+Note 900 
+        Total 0 messages produced, 0 Error, 0 Warning, 0 Info, 0 Note.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+--- BEG 21:18:51.34  CAnalyzer:ALL  SrcVer: B47000
+--- END 21:19:00.28  2016-08-06
 --- Lintware    Rev  2014-09-25 11:10:04
 --- Codeware    Rev  2014-09-24 11:36:23
 --- Checkware   Rev  2014-09-18 15:12:23
-
 

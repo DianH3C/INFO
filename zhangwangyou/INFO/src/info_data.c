@@ -322,37 +322,39 @@ UINT INFO_data_GetLast(IN UINT uiId)
   YYYY-MM-DD
 
 *****************************************************************************/
-ULONG INFO_data_AddData(IN INFO_CFG_S *pstCfg)
+ULONG INFO_data_AddData(IN INFO_CFG_S const *pstCfg)
 {
     ULONG ulRet = ERROR_FAILED;
     BOOL_T bAddable = BOOL_FALSE;
     BOOL_T bAddable_next = BOOL_FALSE;
+    BOOL_T bFree_node = BOOL_FALSE;
     INFO_DATA_S *pstNode = g_pstINFO_DATA_HEAD;
-    INFO_DATA_S *pstNewNode = NULL;
+    INFO_DATA_S *pstNewNode = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
 
-    if (BOOL_TRUE == pstNode->bIsEmpty)
+    /* 判断系统能否再分配内存 */
+    if (NULL == pstNewNode)
     {
-        /* 头节点为空，则直接在头节点写入数据 */
-        ulRet = ERROR_SUCCESS;
-        pstNode->stCfg = *pstCfg;
-        pstNode->bIsEmpty = BOOL_FALSE;
+        ulRet = ERROR_NO_ENOUGH_RESOURCE;
 
         /* 不再遍历链表 */
         pstNode = NULL;
     }
-    else if (INFO_data_GetFirst() > pstCfg->uiId)
+    else
     {
-        /* 头节点的工号比要增加的节点工号大 */
-        pstNewNode = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
-        if (NULL == pstNewNode)
+        if (BOOL_TRUE == pstNode->bIsEmpty)
         {
-            ulRet = ERROR_NO_ENOUGH_RESOURCE;
+            /* 头节点为空，则直接在头节点写入数据 */
+            bFree_node = BOOL_TRUE;
+            ulRet = ERROR_SUCCESS;
+            pstNode->stCfg = *pstCfg;
+            pstNode->bIsEmpty = BOOL_FALSE;
 
             /* 不再遍历链表 */
             pstNode = NULL;
         }
-        else
+        else if (INFO_data_GetFirst() > pstCfg->uiId)
         {
+            /* 头节点的工号比要增加的节点工号大，直接在头节点处插入一个节点 */
             ulRet = ERROR_SUCCESS;
             g_pstINFO_DATA_HEAD = pstNewNode;
             g_pstINFO_DATA_HEAD->pstNext = pstNode;
@@ -369,27 +371,24 @@ ULONG INFO_data_AddData(IN INFO_CFG_S *pstCfg)
     {
         bAddable_next = (NULL == pstNode->pstNext) || (pstCfg->uiId < pstNode->pstNext->stCfg.uiId);
         bAddable = (pstCfg->uiId > pstNode->stCfg.uiId) && bAddable_next;
-        if (bAddable)
+        if (bAddable && (NULL != pstNewNode))
         {
-            pstNewNode = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
-            if (NULL == pstNewNode)
-            {
-                ulRet = ERROR_NO_ENOUGH_RESOURCE;
-            }
-            else
-            {
-                ulRet = ERROR_SUCCESS;
-                pstNewNode->pstNext = pstNode->pstNext;
-                pstNewNode->bIsEmpty = BOOL_FALSE;
-                pstNewNode->stCfg = *pstCfg;
-                pstNode->pstNext = pstNewNode;
-            }
+            ulRet = ERROR_SUCCESS;
+            pstNewNode->pstNext = pstNode->pstNext;
+            pstNewNode->bIsEmpty = BOOL_FALSE;
+            pstNewNode->stCfg = *pstCfg;
+            pstNode->pstNext = pstNewNode;
             break;
         }
         else
         {
             pstNode = pstNode->pstNext;
         }
+    }
+
+    if (bFree_node)
+    {
+        free(pstNewNode);
     }
 
     return ulRet;
@@ -415,7 +414,7 @@ ULONG INFO_data_AddData(IN INFO_CFG_S *pstCfg)
 ULONG INFO_data_DelData(IN UINT uiId)
 {
     UINT uiId_last = INFO_ID_INVALID;
-    ULONG ulRet = ERROR_FAILED;
+    ULONG ulRet = ERROR_SUCCESS;
     INFO_DATA_S *pstNode = g_pstINFO_DATA_HEAD;
     INFO_DATA_S *pstNode_last = NULL;
 
@@ -472,24 +471,24 @@ ULONG INFO_data_DelData(IN UINT uiId)
   YYYY-MM-DD
 
 *****************************************************************************/
-ULONG INFO_data_ModifyData(IN INFO_CFG_S *pstCfg)
+ULONG INFO_data_ModifyData(IN INFO_CFG_S const *pstCfg)
 {
     INFO_DATA_S *pstNode = INFO_data_FindNodeById(pstCfg->uiId);
     if ((NULL != pstNode) && (BOOL_TRUE != pstNode->bIsEmpty))
     {
-        if (BOOL_TRUE == INFO_NAME_ISVALID(pstCfg->szName))
+        if (INFO_NAME_ISVALID(pstCfg->szName))
         {
             (VOID) strlcpy(pstNode->stCfg.szName, pstCfg->szName, sizeof(pstNode->stCfg.szName));
         }
-        if (BOOL_TRUE == INFO_SEX_ISVALID(pstCfg->enSex))
+        if (INFO_SEX_ISVALID(pstCfg->enSex))
         {
             pstNode->stCfg.enSex = pstCfg->enSex;
         }
-        if (BOOL_TRUE == INFO_AGE_ISVALID(pstCfg->uiAge))
+        if (INFO_AGE_ISVALID(pstCfg->uiAge))
         {
             pstNode->stCfg.uiAge = pstCfg->uiAge;
         }
-        if (BOOL_TRUE == INFO_HEIGHT_ISVALID(pstCfg->uiHeight))
+        if (INFO_HEIGHT_ISVALID(pstCfg->uiHeight))
         {
             pstNode->stCfg.uiHeight = pstCfg->uiHeight;
         }
@@ -527,7 +526,7 @@ ULONG INFO_data_Init(VOID)
 
     if (NULL == g_pstINFO_DATA_HEAD)
     {
-        ulRet = ERROR_FAILED;
+        ulRet = ERROR_NO_ENOUGH_RESOURCE;
     }
     else
     {
@@ -536,14 +535,7 @@ ULONG INFO_data_Init(VOID)
         g_pstINFO_DATA_HEAD->bIsEmpty = BOOL_TRUE;
     }
 
-    if (ERROR_SUCCESS != ulRet)
-    {
-        return ERROR_FAILED;
-    }
-    else
-    {
-        return ERROR_SUCCESS;
-    }
+    return ulRet;
 }
 
 /*****************************************************************************

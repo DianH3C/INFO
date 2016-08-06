@@ -154,7 +154,7 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 
     /* 解析输入字符串得到配置数据并存入stCfg中 */
     INFO_parse_InputStr(pcInputStr, &stCfg);
-    if (BOOL_FALSE == INFO_ALL_ISVALID(&stCfg))
+    if (!INFO_ALL_ISVALID(&stCfg))
     {
         /* 数据输入不全或数据取值非法 */
         ulErrCode = ERROR_INVALID_PARAMETER;
@@ -198,7 +198,7 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 *****************************************************************************/
 ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 {
-    ULONG ulErrCode = ERROR_FAILED;
+    ULONG ulErrCode = ERROR_SUCCESS;
     UINT uiId = INFO_ID_INVALID;
 
 
@@ -215,7 +215,7 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
             /* 工号数值异常 */
             ulErrCode = ERROR_INVALID_PARAMETER;
         }
-        else if (BOOL_FALSE == INFO_ID_ISVALID(uiId))
+        else if (!INFO_ID_ISVALID(uiId))
         {
             /* 工号数值异常 */
             ulErrCode = ERROR_INVALID_PARAMETER;
@@ -223,21 +223,12 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
         else if (BOOL_FALSE == INFO_data_IsExist(uiId))
         {
             /* 工号不存在 */
-            ulErrCode = ERROR_NOT_FOUND;
+            ulErrCode = ERROR_SUCCESS;
         }
         else
         {
             /* 工号存在 */
             ulErrCode = INFO_data_DelData(uiId);
-
-            if (ERROR_SUCCESS == ulErrCode)
-            {
-                printf("The info has been successfully deleted.\r\n");
-            }
-            else
-            {
-                ulErrCode = ERROR_FAILED;
-            }
         }
     }
 
@@ -269,7 +260,7 @@ ULONG INFO_proc_Modify(IN const CHAR *pcInputStr)
 
     /* 解析输入字符串得到配置数据并存入stCfg中 */
     INFO_parse_InputStr(pcInputStr, &stCfg);
-    if (BOOL_FALSE == INFO_ID_ISVALID(stCfg.uiId))
+    if (!INFO_ID_ISVALID(stCfg.uiId))
     {
         /* 工号非法 */
         ulErrCode = ERROR_INVALID_PARAMETER;
