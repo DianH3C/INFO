@@ -330,13 +330,26 @@ ULONG INFO_data_AddData(IN INFO_CFG_S *pstCfg)
     INFO_DATA_S *pstNode = g_pstINFO_DATA_HEAD;
     INFO_DATA_S *pstNewNode = NULL;
 
-    if (INFO_data_GetFirst() > pstCfg->uiId)
+    if (BOOL_TRUE == pstNode->bIsEmpty)
+    {
+        /* 头节点为空，则直接在头节点写入数据 */
+        ulRet = ERROR_SUCCESS;
+        pstNode->stCfg = *pstCfg;
+        pstNode->bIsEmpty = BOOL_FALSE;
+
+        /* 不再遍历链表 */
+        pstNode = NULL;
+    }
+    else if (INFO_data_GetFirst() > pstCfg->uiId)
     {
         /* 头节点的工号比要增加的节点工号大 */
         pstNewNode = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
         if (NULL == pstNewNode)
         {
             ulRet = ERROR_NO_ENOUGH_RESOURCE;
+
+            /* 不再遍历链表 */
+            pstNode = NULL;
         }
         else
         {
@@ -345,36 +358,37 @@ ULONG INFO_data_AddData(IN INFO_CFG_S *pstCfg)
             g_pstINFO_DATA_HEAD->pstNext = pstNode;
             g_pstINFO_DATA_HEAD->bIsEmpty = BOOL_FALSE;
             g_pstINFO_DATA_HEAD->stCfg = *pstCfg;
+
+            /* 不再遍历链表 */
+            pstNode = NULL;
         }
     }
-    else
+
+    /* 遍历数据链表，定位插入工号的位置 */
+    while ((NULL != pstNode) && (BOOL_TRUE != pstNode->bIsEmpty))
     {
-        /* 遍历数据链表，定位插入工号的位置 */
-        while ((NULL != pstNode) && (BOOL_TRUE != pstNode->bIsEmpty))
+        bAddable_next = (NULL == pstNode->pstNext) || (pstCfg->uiId < pstNode->pstNext->stCfg.uiId);
+        bAddable = (pstCfg->uiId > pstNode->stCfg.uiId) && bAddable_next;
+        if (bAddable)
         {
-            bAddable_next = (NULL == pstNode->pstNext) || (pstCfg->uiId < pstNode->pstNext->stCfg.uiId);
-            bAddable = (pstCfg->uiId > pstNode->stCfg.uiId) && bAddable_next;
-            if (bAddable)
+            pstNewNode = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
+            if (NULL == pstNewNode)
             {
-                pstNewNode = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
-                if (NULL == pstNewNode)
-                {
-                    ulRet = ERROR_NO_ENOUGH_RESOURCE;
-                }
-                else
-                {
-                    ulRet = ERROR_SUCCESS;
-                    pstNewNode->pstNext = pstNode->pstNext;
-                    pstNewNode->bIsEmpty = BOOL_FALSE;
-                    pstNewNode->stCfg = *pstCfg;
-                    pstNode->pstNext = pstNewNode;
-                }
-                break;
+                ulRet = ERROR_NO_ENOUGH_RESOURCE;
             }
             else
             {
-                pstNode = pstNode->pstNext;
+                ulRet = ERROR_SUCCESS;
+                pstNewNode->pstNext = pstNode->pstNext;
+                pstNewNode->bIsEmpty = BOOL_FALSE;
+                pstNewNode->stCfg = *pstCfg;
+                pstNode->pstNext = pstNewNode;
             }
+            break;
+        }
+        else
+        {
+            pstNode = pstNode->pstNext;
         }
     }
 
