@@ -60,6 +60,7 @@ typedef struct tagInfo_Cfg
     UINT uiHeight;                      /* 身高 */
     INFO_SEX_E enSex;                   /* 性别 */
     CHAR szName[INFO_NAME_MAXLEN + 1];  /* 姓名 */
+    struct tagInfo_Cfg* pstCfgnext;        /* next */
 }INFO_CFG_S;
 
 /* 全部数据合法 */

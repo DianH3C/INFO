@@ -1607,3 +1607,176 @@ TEST(UT_INFO_proc_Modify, 012)
     INFO_data_Fini();
 }
 
+/*#######################################################################
+#测试用例编号: UT_INFO_proc_Modify_013
+#测  试  项  : 功能测试
+#测试用例标题: 部分修改，只修改性别+身高+年龄
+#重 要 级 别 : 高
+#预 置 条 件 : 初始化链表结构
+               添加成员信息：id=10 name=jack sex=2 age=20 height=175
+#输       入 : 修改成员信息：id=10 sex=1 height=185 age=21
+#操 作 步 骤 : 执行测试用例
+#预 期 结 果 : 修改成员信息成功
+               查询成员信息与输入一致
+#完  成  人  : lifan
+#日      期  : 2016年8月7日
+#######################################################################*/
+TEST(UT_INFO_proc_Modify, 013)
+{
+    ULONG ulErrCode;
+    INFO_CFG_S stCfg;
+
+    /* 初始化 */
+    ulErrCode  = INFO_data_Init();
+    ulErrCode |= INFO_proc_Add("id=10 name=jack sex=2 age=20 height=175");
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+    /* 调用添加函数 */
+    ulErrCode = INFO_proc_Modify("id=10 sex=1 height=185 age=21");
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+    /* 检查预期结果 */
+    ulErrCode = INFO_data_GetData(10, &stCfg);
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+    EXPECT_EQ(10, stCfg.uiId);
+    EXPECT_EQ(1, stCfg.enSex);
+    EXPECT_EQ(21, stCfg.uiAge);
+    EXPECT_EQ(185, stCfg.uiHeight);
+    EXPECT_EQ(0, strcmp(stCfg.szName, "jack"));
+
+    /* 去初始化 */
+    INFO_data_Fini();
+}
+
+/*#######################################################################
+#测试用例编号: UT_INFO_proc_Modify_014
+#测  试  项  : 功能测试
+#测试用例标题: 部分修改，只修改姓名+性别+年龄
+#重 要 级 别 : 高
+#预 置 条 件 : 初始化链表结构
+               添加成员信息：id=10 name=jack sex=2 age=20 height=175
+#输       入 : 修改成员信息：id=10 sex=1 height=185 age=21
+#操 作 步 骤 : 执行测试用例
+#预 期 结 果 : 修改成员信息成功
+               查询成员信息与输入一致
+#完  成  人  : lifan
+#日      期  : 2016年8月7日
+#######################################################################*/
+TEST(UT_INFO_proc_Modify, 014)
+{
+    ULONG ulErrCode;
+    INFO_CFG_S stCfg;
+
+    /* 初始化 */
+    ulErrCode  = INFO_data_Init();
+    ulErrCode |= INFO_proc_Add("id=10 name=jack sex=2 age=20 height=175");
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+    /* 调用添加函数 */
+    ulErrCode = INFO_proc_Modify("id=10 name=jackabc sex=1 age=21");
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+    /* 检查预期结果 */
+    ulErrCode = INFO_data_GetData(10, &stCfg);
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+    EXPECT_EQ(10, stCfg.uiId);
+    EXPECT_EQ(1, stCfg.enSex);
+    EXPECT_EQ(21, stCfg.uiAge);
+    EXPECT_EQ(175, stCfg.uiHeight);
+    EXPECT_EQ(0, strcmp(stCfg.szName, "jackabc"));
+
+    /* 去初始化 */
+    INFO_data_Fini();
+}
+
+/*#######################################################################
+#测试用例编号: UT_INFO_proc_Modify_015
+#测  试  项  : 异常测试
+#测试用例标题: 年龄非法
+#重 要 级 别 : 高
+#预 置 条 件 : 初始化链表结构
+               添加成员信息：id=10 name=jack sex=2 age=20 height=175
+#输       入 : 修改成员信息：id=100 age=0
+#操 作 步 骤 : 执行测试用例
+#预 期 结 果 : 修改成员信息失败，返回ERROR_NOT_FOUND
+#完  成  人  : lifan
+#日      期  : 2016年8月7日
+#######################################################################*/
+TEST(UT_INFO_proc_Modify, 015)
+{
+    ULONG ulErrCode;
+    INFO_CFG_S stCfg;
+
+    /* 初始化 */
+    ulErrCode  = INFO_data_Init();
+    ulErrCode |= INFO_proc_Add("id=10 name=jack sex=2 age=20 height=175");
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+    /* 调用添加函数 */
+    ulErrCode = INFO_proc_Modify("id=100 age=1");
+    EXPECT_EQ(ERROR_INVALID_PARAMETER, ulErrCode);
+
+    /* 去初始化 */
+    INFO_data_Fini();
+}
+
+/*#######################################################################
+#测试用例编号: UT_INFO_proc_Modify_016
+#测  试  项  : 异常测试
+#测试用例标题: 性别非法
+#重 要 级 别 : 高
+#预 置 条 件 : 初始化链表结构
+               添加成员信息：id=10 name=jack sex=2 age=20 height=175
+#输       入 : 修改成员信息：id=100 sex=0
+#操 作 步 骤 : 执行测试用例
+#预 期 结 果 : 修改成员信息失败，返回ERROR_NOT_FOUND
+#完  成  人  : lifan
+#日      期  : 2016年8月7日
+#######################################################################*/
+TEST(UT_INFO_proc_Modify, 016)
+{
+    ULONG ulErrCode;
+    INFO_CFG_S stCfg;
+
+    /* 初始化 */
+    ulErrCode  = INFO_data_Init();
+    ulErrCode |= INFO_proc_Add("id=10 name=jack sex=2 age=20 height=175");
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+    /* 调用添加函数 */
+    ulErrCode = INFO_proc_Modify("id=100 sex=3");
+    EXPECT_EQ(ERROR_INVALID_PARAMETER, ulErrCode);
+
+    /* 去初始化 */
+    INFO_data_Fini();
+}
+/*#######################################################################
+#测试用例编号: UT_INFO_proc_Modify_017
+#测  试  项  : 异常测试
+#测试用例标题: 身高非法
+#重 要 级 别 : 高
+#预 置 条 件 : 初始化链表结构
+               添加成员信息：id=10 name=jack sex=2 age=20 height=175
+#输       入 : 修改成员信息：id=100 height=0
+#操 作 步 骤 : 执行测试用例
+#预 期 结 果 : 修改成员信息失败，返回ERROR_NOT_FOUND
+#完  成  人  : lifan
+#日      期  : 2016年8月7日
+#######################################################################*/
+TEST(UT_INFO_proc_Modify, 017)
+{
+    ULONG ulErrCode;
+    INFO_CFG_S stCfg;
+
+    /* 初始化 */
+    ulErrCode  = INFO_data_Init();
+    ulErrCode |= INFO_proc_Add("id=10 name=jack sex=2 age=20 height=175");
+    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+    /* 调用添加函数 */
+    ulErrCode = INFO_proc_Modify("id=100 height=301");
+    EXPECT_EQ(ERROR_INVALID_PARAMETER, ulErrCode);
+
+    /* 去初始化 */
+    INFO_data_Fini();
+}

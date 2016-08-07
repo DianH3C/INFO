@@ -52,7 +52,7 @@ function ut_compile
     gcc -D_UT_ -D_STRING_EX_COMPILE -I $HEADER_PATH -g -c stub/stub.c         -o objs/stub.o 2> /dev/null || return
     g++ -D_UT_ -D_STRING_EX_COMPILE -g -c -I $HEADER_PATH -I include/ test/courseware_test.c -o objs/courseware_test.o 
 
-    g++ -D_UT_ -lpthread \
+    g++ -D_UT_ -pthread \
                objs/info_data.o \
                objs/info_dbg.o \
                objs/info_parse.o \

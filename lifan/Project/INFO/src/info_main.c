@@ -27,7 +27,6 @@ extern "C"{
 #include <sys/basetype.h>
 #include <sys/error.h>
 #include <sys/assert.h>
-#include <sys/string_ex.h>
 
 /* module   private */
 #include "info.h"
@@ -68,6 +67,7 @@ STATIC INFO_FUNC_S g_astInfoFunc[] =
     [INFO_MENU_OPEN_DEBUG]  = {"Open debug",    INFO_proc_OpenDebug},
     [INFO_MENU_CLOSE_DEBUG] = {"Close debug",   INFO_proc_CloseDebug}
 };
+
 
 /*****************************************************************************
     Func Name: info_main_DisplayMenu

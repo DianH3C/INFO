@@ -190,3 +190,14 @@ stub.c (INFO\ut\stub):143
     memset(g_acTmp[1], 0, 1024);
     return (VOID *)g_acTmp[1];
 
+---- pcInputStr Matches (7 in 0 files) ----
+info_main.c (INFO\src):       Output: OUT CHAR *pcInputStr     ÊäÈë×Ö·û´®
+info_main.c (INFO\src):STATIC VOID info_main_GetInputStr(IN INFO_MENU_E enMenu, IN ULONG ulInputLen, OUT CHAR *pcInputStr)
+info_main.c (INFO\src):    DBGASSERT(NULL != pcInputStr);
+info_main.c (INFO\src):    pcInputStr[0] = 0;
+info_main.c (INFO\src):            (VOID)fgets(pcInputStr, (INT)ulInputLen, stdin);
+info_main.c (INFO\src):            (VOID)fgets(pcInputStr, (INT)ulInputLen, stdin);
+info_main.c (INFO\src):            (VOID)fgets(pcInputStr, (INT)ulInputLen, stdin);
+---- info_main_GetInputStr Matches (2 in 1 files) ----
+info_main.c (INFO\src):STATIC VOID info_main_GetInputStr(IN INFO_MENU_E enMenu, IN ULONG ulInputLen, OUT CHAR *pcInputStr)
+info_main.c (INFO\src):            info_main_GetInputStr(enMenu, sizeof(szInputStr), szInputStr);
