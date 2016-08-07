@@ -24,7 +24,6 @@
 extern "C"{
 #endif
 
-
 /*************************************** 数据操作 ***************************************/
 /* 判断指定工号的数据是否存在 */
 BOOL_T INFO_data_IsExist(IN UINT uiId);
@@ -45,6 +44,11 @@ UINT INFO_data_GetNext(IN UINT uiId);
 for ((uiId)  = INFO_data_GetFirst(); \
      (uiId) != INFO_ID_INVALID; \
      (uiId)  = INFO_data_GetNext(uiId))
+/************************************* 添加/删除/修改 ***************************************/
+/* 在链表中添加/删除/修改一个数据 */
+ULONG INFO_data_Add(IN INFO_CFG_S *pstCfg);
+ULONG INFO_data_Delete(IN UINT uiId);
+ULONG INFO_data_Modify(IN INFO_CFG_S *pstCfg);
 
 /*************************************** 初始化 ***************************************/
 ULONG INFO_data_Init(VOID);

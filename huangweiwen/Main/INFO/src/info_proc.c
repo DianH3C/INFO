@@ -25,6 +25,7 @@ extern "C"{
 #include <string.h>
 #include <malloc.h>
 #include <stdlib.h>
+
 /* system   public  */
 #include <sys/basetype.h>
 #include <sys/error.h>
@@ -36,8 +37,6 @@ extern "C"{
 #include "info_dbg.h"
 #include "info_data.h"
 #include "info_parse.h"
-#include "info_data.h"
-
 
 /*****************************************************************************
     Func Name: INFO_proc_Display[*]
@@ -117,10 +116,6 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
     ULONG ulErrCode;
     INFO_CFG_S stCfg = {0};
 
-    INFO_DATA_S *pNode = INFO_DATA_HEAD;
-    INFO_DATA_S *pNewNode = NULL;
-
-
     /* 解析输入的字符串并将得到的配置数据存入stCfg中 */
     INFO_parse_InputStr(pcInputStr, &stCfg);
     if (BOOL_FALSE == INFO_ALL_ISVALID(&stCfg))
@@ -134,55 +129,7 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
     }
     else
     {
-        /* 将新数据插入的链表当中 */
-        if (stCfg.uiId < INFO_data_GetFirst())
-        {
-            /* 增加的结点工号比头结点小 */
-            pNewNode = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
-            if (NULL == pNewNode)
-            {
-                ulErrCode = ERROR_FAILED;
-            }
-            else
-            {
-                INFO_DATA_HEAD = pNewNode;
-                INFO_DATA_HEAD->pNext = pNode;
-                INFO_DATA_HEAD->isEmpty = BOOL_FALSE;
-                INFO_DATA_HEAD->stCfg = stCfg;
-                pNode->pPrior = pNewNode;
-                ulErrCode = ERROR_SUCCESS;
-            }
-        }
-        else
-        {
-            /* 遍历链表，找到新增结点插入的位置，否则直接从末尾添加 */
-            while ((BOOL_FALSE == pNode->isEmpty) && (NULL != pNode))
-            {
-                if ((stCfg.uiId > pNode->stCfg.uiId)
-                    && ((NULL == pNode->pNext) || (stCfg.uiId < pNode->pNext->stCfg.uiId)))
-                {
-                    pNewNode = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
-                    if (NULL == pNewNode)
-                    {
-                        ulErrCode = ERROR_FAILED;
-                    }
-                    else
-                    {
-                        pNewNode->pPrior = pNode->pPrior;
-                        pNewNode->pNext = pNode->pNext;
-                        pNewNode->isEmpty = BOOL_FALSE;
-                        pNewNode->stCfg = stCfg;
-                        pNode->pNext = pNewNode;
-                        pNode->pPrior = pNewNode;
-                        ulErrCode = ERROR_SUCCESS;
-                    }
-                }
-                else
-                {
-                    pNode = pNode->pNext;
-                }
-            }
-        }
+        ulErrCode = INFO_data_Add(&stCfg);
     }
     return ulErrCode;
 }
@@ -209,8 +156,6 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 {
     ULONG ulErrCode;
     UINT uiId;
-    INFO_DATA_S *pNode = INFO_DATA_HEAD;
-    INFO_DATA_S *pDelNode;
 
     if (0 != strncmp(pcInputStr, "id", strlen("id")))
     {
@@ -227,46 +172,7 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
         }
         else if (BOOL_TRUE == INFO_data_IsExist(uiId))
         {
-            /* 输入的id存在 */
-            /* 定位该id所在的结点 */
-            while ((BOOL_FALSE == pNode->isEmpty) && (NULL != pNode))
-            {
-                if (uiId == pNode->stCfg.uiId)
-                {
-                    /* 当前结点是头结点 */
-                    if (uiId == INFO_DATA_HEAD->stCfg.uiId)
-                    {
-                        /* 判断头结点后是否还有结点 */
-                        if (NULL == INFO_DATA_HEAD->pNext)
-                        {
-                            /* 清空头结点的内容 */
-                            memset(&(pNode->stCfg), 0, sizeof(INFO_CFG_S));
-                            pNode->isEmpty = BOOL_TRUE;
-                        }
-                        else
-                        {
-                            INFO_DATA_HEAD->pNext->pPrior = NULL;
-                            INFO_DATA_HEAD = INFO_DATA_HEAD->pNext;
-                            free(pNode);
-                        }
-                    }
-                    else
-                    {
-                        /* 当前结点不是头结点 */
-                        pDelNode = pNode;
-                        pNode->pPrior->pNext = pNode->pNext;
-                        if (NULL != pNode->pNext)
-                        {
-                            pNode->pNext->pPrior = pNode->pPrior;
-                        }
-                        free(pDelNode);
-                    }
-                }
-                else
-                {
-                    pNode = pNode->pNext;
-                }
-            }
+            ulErrCode = INFO_data_Delete(uiId);
         }
         else
         {
@@ -311,25 +217,7 @@ ULONG INFO_proc_Modify(IN const CHAR *pcInputStr)
     {
         if (BOOL_TRUE == INFO_data_IsExist(stCfg.uiId))
         {
-            /* 从链表中找到指定id对应的配置数据 */
-            ulErrCode = INFO_data_GetData(stCfg.uiId, &(pNode->stCfg));
-            if (BOOL_TRUE == INFO_NAME_ISVALID(stCfg.szName))
-            {
-                strlcpy(pNode->stCfg.szName, stCfg.szName, sizeof(pNode->stCfg.szName));
-            }
-            if (BOOL_TRUE == INFO_SEX_ISVALID(stCfg->enSex))
-            {
-                pNode->stCfg.enSex = stCfg->enSex;
-            }
-            if (BOOL_TRUE == INFO_AGE_ISVALID(stCfg->uiAge))
-            {
-                pNode->stCfg.uiAge = stCfg->uiAge;
-            }
-            if (BOOL_TRUE == INFO_HEIGHT_ISVALID(stCfg->uiHeight))
-            {
-                pNode->stCfg.uiHeight = stCfg->uiHeight;
-            }
-            ulErrCode = ERROR_SUCCESS;
+            ulErrCode = INFO_data_Modify(&stCfg);
         }
         else
         {
