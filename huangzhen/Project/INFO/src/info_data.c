@@ -189,7 +189,7 @@ UINT INFO_data_GetNext(IN UINT uiId)
             return pstEntry->stCfg.uiId;
         }
     }  
-    return ERROR_FAILED;
+    return INFO_ID_INVALID;
 }
 
 //end INFO_data_GetNext()

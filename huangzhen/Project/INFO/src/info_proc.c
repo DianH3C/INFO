@@ -65,7 +65,7 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
         printf("No info.\r\n");
         return ERROR_FAILED;
     }
-    INFO_CFG_S * pstUserCfg;
+    INFO_CFG_S * pstUserCfg = (INFO_CFG_S*)malloc(sizeof(INFO_CFG_S));
 
     UINT uiId = INFO_data_GetFirst();
 
@@ -84,7 +84,7 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
         }
         uiId = INFO_data_GetNext(uiId);
     }
-    
+
     return ERROR_SUCCESS;
 }
 
@@ -155,7 +155,8 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
     INFO_data_SetHeight(uiId,pstCfg->uiHeight);
     INFO_data_SetSex(uiId,pstCfg->enSex);
     
-
+    free(pstCfg);
+    pstCfg = NULL;
     return ERROR_SUCCESS;
 
 
@@ -198,6 +199,8 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 
     INFO_data_Destroy(uiId);
 
+    free(pstCfg);
+    pstCfg = NULL;
     return ERROR_SUCCESS;
 
 }
@@ -258,7 +261,8 @@ ULONG INFO_proc_Modify(IN const CHAR *pcInputStr)
         INFO_data_SetHeight(uiId,pstCfg->uiHeight);
     }
 
-
+    free(pstCfg);
+    pstCfg = NULL;
     return ERROR_SUCCESS;
 
 }

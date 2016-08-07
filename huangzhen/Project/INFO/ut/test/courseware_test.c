@@ -1607,3 +1607,194 @@ TEST(UT_INFO_proc_Modify, 012)
     INFO_data_Fini();
 }
 
+/*#######################################################################
+#测试用例编号: UT_INFO_proc_Modify_013
+#测  试  项  : 功能测试
+#测试用例标题: 修改10000个成员所有信息成功
+#重 要 级 别 : 高
+#预 置 条 件 : 添加10000个成员
+#输       入 : pcInputStr=员工信息
+#操 作 步 骤 : 执行测试例
+#预 期 结 果 : 所有成员删除
+#              INFO_proc_Modify返回成功
+#完  成  人  : liaohui kf2309
+#日      期  : 2011-12-31
+#######################################################################*/
+TEST(UT_INFO_proc_Modify, 013)
+{
+    ULONG ulErrCode;
+    INFO_CFG_S * pstCfg;
+    INT iMemberNum = 10000;
+    INT iCurMember;
+    CHAR szInfo[INFO_IOBUF_MAXLEN];
+    CHAR *pcString;
+    UINT uiId;
+    UINT uiCount;
+    UINT uiModifyAge = 18;
+    UINT uiModifyHeight = 180;
+    INFO_SEX_E enModifySex = INFO_SEX_FEMALE;
+    CHAR * szModifyName = "onename";
+    
+    BOOL_T bIsEmpty;
+
+    /* 初始化环境 */
+    INFO_data_Init();
+
+    pcString = szInfo;
+    /* 添加成员 */
+    for (iCurMember = 1; iCurMember < iMemberNum; iCurMember++)
+    {
+        (VOID)scnprintf(pcString, sizeof(szInfo), "id=%d name=jack01 sex=1 age=21 height=170", iCurMember);
+        ulErrCode = INFO_proc_Add(pcString);
+        EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+    }
+    
+    uiCount = 0;
+    INFO_FOREACH(uiId)
+    {
+        uiCount++;
+    }
+    
+    for (iCurMember = iMemberNum; iCurMember > 0; iCurMember--)
+    {
+        pcString = szInfo;
+        (VOID)scnprintf(pcString, sizeof(szInfo), "id=%u name=%s height=%u sex=%d age=%u", iCurMember,szModifyName,uiModifyHeight,enModifySex,uiModifyAge);
+        /* 调用被测函数 */
+        ulErrCode = INFO_proc_Modify(pcString);
+        EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+    }
+
+
+    for (iCurMember = iMemberNum; iCurMember > 0; iCurMember--)
+    {
+        /* 调用被测函数 */
+        ulErrCode = INFO_proc_Modify(g_szCorrectMemberInfo[iCur]);
+        EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+        ulErrCode = INFO_data_GetData(g_stMemberData[iCur].uiId, &pstCfg);
+        EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+        EXPECT_EQ(INFO_SEX_FEMALE, pstCfg->enSex);
+        EXPECT_EQ(uiModifyAge, pstCfg->uiAge);
+        EXPECT_EQ(uiModifyHeight, pstCfg->uiHeight);
+        EXPECT_STREQ(szModifyName, pstCfg->szName);
+    }
+
+    bIsEmpty = INFO_data_IsEmpty();
+    EXPECT_EQ(BOOL_FALSE, bIsEmpty);
+
+    /* 去初始化环境 */
+    INFO_data_Fini();
+}
+
+
+#define UTC_INFO_data_IsExist
+/*#######################################################################
+#测试用例编号: UT_INFO_data_IsExist_001
+#测  试  项  : 功能测试
+#测试用例标题: 测试6个成员ID是否存在
+#重 要 级 别 : 高
+#预 置 条 件 : 添加6个成员
+#输       入 : pcInputStr=员工信息
+#操 作 步 骤 : 执行测试例
+#预 期 结 果 : 前三个存在，后三个不存在
+#              INFO_dataa_IsExist依次返回BOOL_TRUE和BOOL_FALSE
+#完  成  人  : 黄振
+#日      期  : 2016-08-07
+#######################################################################*/
+TEST(UT_INFO_data_IsExist, 001)
+{
+    ULONG ulErrCode;
+    
+    INFO_CFG_S * pstCfg;
+    INT iStart = 0;
+    INT iStop = 6;
+    UINT uiTestId[6] = {11,12,14,-11,5,0};
+    INT iCur;
+    BOOL_T bIsEmpty;
+    BOOL_T bIsExist;
+
+    /* 初始化环境 */
+    INFO_data_Init();
+
+    /* 添加成员 */
+    for (iCur = iStart; iCur < iEnd; iCur++)
+    {
+        ulErrCode = INFO_proc_Add(g_szCorrectMemberInfo[iCur]);
+        EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+        ulErrCode = INFO_data_GetData(g_stMemberData[iCur].uiId, &pstCfg);
+        EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+    }
+
+    for (iCur = 0; iCur < 3; iCur++)
+    {
+        /* 调用被测函数 */
+        bIsExist = INFO_data_IsExist(uiTestId[iCur]);
+        EXPECT_EQ(BOOL_TRUE,bIsExist);
+    }    
+    for (iCur = 3; iCur < 6; iCur++)
+    {
+        /* 调用被测函数 */
+        bIsExist = INFO_data_IsExist(uiTestId[iCur]);
+        EXPECT_EQ(BOOL_FALSE,bIsExist);
+    } 
+
+    /* 去初始化环境 */
+    INFO_data_Fini();
+}
+
+
+
+/*#######################################################################
+#测试用例编号: UT_INFO_data_IsExist_001
+#测  试  项  : 功能测试
+#测试用例标题: 测试6个成员ID是否存在
+#重 要 级 别 : 高
+#预 置 条 件 : 添加6个成员
+#输       入 : pcInputStr=员工信息
+#操 作 步 骤 : 执行测试例
+#预 期 结 果 : 前三个存在，后三个不存在
+#              INFO_dataa_IsExist依次返回BOOL_TRUE和BOOL_FALSE
+#完  成  人  : 黄振
+#日      期  : 2016-08-07
+#######################################################################*/
+TEST(UT_INFO_data_IsExist, 001)
+{
+    ULONG ulErrCode;
+    
+    INFO_CFG_S * pstCfg;
+    INT iStart = 0;
+    INT iStop = 6;
+    UINT uiTestId[6] = {11,12,14,-11,5,0};
+    INT iCur;
+    BOOL_T bIsEmpty;
+    BOOL_T bIsExist;
+
+    /* 初始化环境 */
+    INFO_data_Init();
+
+    /* 添加成员 */
+    for (iCur = iStart; iCur < iEnd; iCur++)
+    {
+        ulErrCode = INFO_proc_Add(g_szCorrectMemberInfo[iCur]);
+        EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+        ulErrCode = INFO_data_GetData(g_stMemberData[iCur].uiId, &pstCfg);
+        EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+    }
+
+    for (iCur = 0; iCur < 3; iCur++)
+    {
+        /* 调用被测函数 */
+        bIsExist = INFO_data_IsExist(uiTestId[iCur]);
+        EXPECT_EQ(BOOL_TRUE,bIsExist);
+    }    
+    for (iCur = 3; iCur < 6; iCur++)
+    {
+        /* 调用被测函数 */
+        bIsExist = INFO_data_IsExist(uiTestId[iCur]);
+        EXPECT_EQ(BOOL_FALSE,bIsExist);
+    } 
+
+    /* 去初始化环境 */
+    INFO_data_Fini();
+}
