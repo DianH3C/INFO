@@ -1,0 +1,53 @@
+--- 15:36:37.09 ALL CAnalyzer D:\Source\Project\\INFO\src
+    D:\Source\Project\INFO\src\info_data.c L0 Info 766 [] [AEC3971C7099135271E0DBB61ABF1390] 
+        Header file 'D:\CATool\lintware\linux\mips\string.h' not used in module 'D:\Source\Project\INFO\src\info_data.c' 
+
+    D:\Source\Project\INFO\src\info_data.c L0 Info 766 [] [2ABF2E079B7598F84E730F8024BACF1F] 
+        Header file 'D:\Source\Project\\public\include\comware\sys\string_ex.h' not used in module 'D:\Source\Project\INFO\src\info_data.c' 
+
+    D:\Source\Project\INFO\src\info_data.c L0 Info 766 [] [17A0EA1D4DEC4184A1113B018FC16C89] 
+        Header file 'D:\Source\Project\INFO\src\info_dbg.h' not used in module 'D:\Source\Project\INFO\src\info_data.c' 
+
+    D:\Source\Project\INFO\src\info_dbg.c L0 Info 766 [] [0F6336879E96C1F3A3047D214E7AB5AA] 
+        Header file 'D:\Source\Project\\public\include\comware\sys\string_ex.h' not used in module 'D:\Source\Project\INFO\src\info_dbg.c' 
+
+    D:\Source\Project\INFO\src\info_main.c L0 Info 766 [] [01BD76C1E85DEB00BE89CBC2D5CC908C] 
+        Header file 'D:\Source\Project\\public\include\comware\sys\string_ex.h' not used in module 'D:\Source\Project\INFO\src\info_main.c' 
+
+    D:\Source\Project\INFO\src\info_parse.c L0 Info 766 [] [FEF85428BD35898A45E8FEBBC481A7DF] 
+        Header file 'D:\Source\Project\\public\include\comware\sys\string_ex.h' not used in module 'D:\Source\Project\INFO\src\info_parse.c' 
+
+    D:\Source\Project\INFO\src\info_proc.c L0 Info 766 [] [F796A16A01D1B0E6C3AC950DA09193DC] 
+        Header file 'D:\CATool\lintware\linux\mips\string.h' not used in module 'D:\Source\Project\INFO\src\info_proc.c' 
+
+    D:\Source\Project\INFO\src\info_proc.c L0 Info 766 [] [3CCE437DE07B03695C8D622236FE955B] 
+        Header file 'D:\Source\Project\\public\include\comware\sys\string_ex.h' not used in module 'D:\Source\Project\INFO\src\info_proc.c' 
+
+    D:\Source\Project\INFO\src\info_proc.c L0 Info 766 [] [92622B36410133DF54ABDEF041BC7123] 
+        Header file 'D:\Source\Project\INFO\src\info_parse.h' not used in module 'D:\Source\Project\INFO\src\info_proc.c' 
+
+    D:\Source\Project\INFO\src\info_proc.c L0 Info 766 [] [698E9F014153471E6263C11A601DCB9C] 
+        Header file 'D:\Source\Project\INFO\src\info_data.h' not used in module 'D:\Source\Project\INFO\src\info_proc.c' 
+
+Note 900 
+        Total 10 messages ( 1 Files), 0 Error, 0 Warning, 10 Info, 0 Note. [0/56] 
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Note 900 
+        Total 0 messages ( 0 Files), 0 Error, 0 Warning, 0 Info, 0 Note.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+Note 900 
+        Total 0 messages produced, 0 Error, 0 Warning, 0 Info, 0 Note.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+--- BEG 15:36:37.09  CAnalyzer:ALL  SrcVer: B47000
+--- END 15:36:54.06  2016-08-02
+--- Lintware    Rev  2014-09-25 11:10:04
+--- Codeware    Rev  2014-09-24 11:36:23
+--- Checkware   Rev  2014-09-18 15:12:23
+
