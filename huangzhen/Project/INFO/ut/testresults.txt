@@ -1,0 +1,151 @@
+############################ Compile UT ############################
+############################ Compile UT Success ############################
+############################ Run UT ############################
+
+
+
+
+
+
+
+Running main() from gtest_main.cc
+[==========] Running 44 tests from 7 test cases.
+[----------] Global test environment set-up.
+[----------] 22 tests from UT_INFO_proc_Add
+[ RUN      ] UT_INFO_proc_Add.001
+[       OK ] UT_INFO_proc_Add.001 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.002
+[       OK ] UT_INFO_proc_Add.002 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.003
+[       OK ] UT_INFO_proc_Add.003 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.004
+[       OK ] UT_INFO_proc_Add.004 (1388 ms)
+[ RUN      ] UT_INFO_proc_Add.005
+Sorry, id 10 exists already, you can not add it.
+[       OK ] UT_INFO_proc_Add.005 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.006
+Sorry, the id you input are invalid.
+Sorry, the age you input are invalid.
+Sorry, the sex you input are invalid.
+Sorry, the height you input are invalid.
+Sorry, the name you input are invalid.
+[       OK ] UT_INFO_proc_Add.006 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.007
+Sorry, the id you input are invalid.
+[       OK ] UT_INFO_proc_Add.007 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.008
+Sorry, the id you input are invalid.
+[       OK ] UT_INFO_proc_Add.008 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.009
+Sorry, the sex you input are invalid.
+[       OK ] UT_INFO_proc_Add.009 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.010
+Sorry, the sex you input are invalid.
+[       OK ] UT_INFO_proc_Add.010 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.011
+Sorry, the name you input are invalid.
+[       OK ] UT_INFO_proc_Add.011 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.012
+Sorry, the name you input are invalid.
+[       OK ] UT_INFO_proc_Add.012 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.013
+Sorry, the age you input are invalid.
+[       OK ] UT_INFO_proc_Add.013 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.014
+Sorry, the age you input are invalid.
+[       OK ] UT_INFO_proc_Add.014 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.015
+Sorry, the height you input are invalid.
+[       OK ] UT_INFO_proc_Add.015 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.016
+Sorry, the height you input are invalid.
+[       OK ] UT_INFO_proc_Add.016 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.017
+Sorry, the id you input are invalid.
+[       OK ] UT_INFO_proc_Add.017 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.018
+Sorry, the name you input are invalid.
+[       OK ] UT_INFO_proc_Add.018 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.019
+Sorry, the sex you input are invalid.
+[       OK ] UT_INFO_proc_Add.019 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.020
+Sorry, the age you input are invalid.
+[       OK ] UT_INFO_proc_Add.020 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.021
+Sorry, the height you input are invalid.
+[       OK ] UT_INFO_proc_Add.021 (0 ms)
+[ RUN      ] UT_INFO_proc_Add.022
+[       OK ] UT_INFO_proc_Add.022 (0 ms)
+[----------] 22 tests from UT_INFO_proc_Add (1388 ms total)
+
+[----------] 6 tests from UT_INFO_proc_Delete
+[ RUN      ] UT_INFO_proc_Delete.001
+[       OK ] UT_INFO_proc_Delete.001 (0 ms)
+[ RUN      ] UT_INFO_proc_Delete.002
+[       OK ] UT_INFO_proc_Delete.002 (0 ms)
+[ RUN      ] UT_INFO_proc_Delete.003
+[       OK ] UT_INFO_proc_Delete.003 (0 ms)
+[ RUN      ] UT_INFO_proc_Delete.004
+The id 1000 you want to delete does not exist!
+[       OK ] UT_INFO_proc_Delete.004 (0 ms)
+[ RUN      ] UT_INFO_proc_Delete.005
+The id 0 you want to delete is invalid!
+The id 100001 you want to delete is invalid!
+[       OK ] UT_INFO_proc_Delete.005 (0 ms)
+[ RUN      ] UT_INFO_proc_Delete.006
+[       OK ] UT_INFO_proc_Delete.006 (8316 ms)
+[----------] 6 tests from UT_INFO_proc_Delete (8316 ms total)
+
+[----------] 12 tests from UT_INFO_proc_Modify
+[ RUN      ] UT_INFO_proc_Modify.001
+[       OK ] UT_INFO_proc_Modify.001 (0 ms)
+[ RUN      ] UT_INFO_proc_Modify.002
+[       OK ] UT_INFO_proc_Modify.002 (0 ms)
+[ RUN      ] UT_INFO_proc_Modify.003
+[       OK ] UT_INFO_proc_Modify.003 (0 ms)
+[ RUN      ] UT_INFO_proc_Modify.004
+[       OK ] UT_INFO_proc_Modify.004 (0 ms)
+[ RUN      ] UT_INFO_proc_Modify.005
+[       OK ] UT_INFO_proc_Modify.005 (0 ms)
+[ RUN      ] UT_INFO_proc_Modify.006
+[       OK ] UT_INFO_proc_Modify.006 (0 ms)
+[ RUN      ] UT_INFO_proc_Modify.007
+The id 100 you want to modify does not exist!
+[       OK ] UT_INFO_proc_Modify.007 (0 ms)
+[ RUN      ] UT_INFO_proc_Modify.008
+The id you want to modify is invalid!
+[       OK ] UT_INFO_proc_Modify.008 (0 ms)
+[ RUN      ] UT_INFO_proc_Modify.009
+[       OK ] UT_INFO_proc_Modify.009 (1144 ms)
+[ RUN      ] UT_INFO_proc_Modify.011
+[       OK ] UT_INFO_proc_Modify.011 (0 ms)
+[ RUN      ] UT_INFO_proc_Modify.012
+[       OK ] UT_INFO_proc_Modify.012 (0 ms)
+[ RUN      ] UT_INFO_proc_Modify.013
+[       OK ] UT_INFO_proc_Modify.013 (10972 ms)
+[----------] 12 tests from UT_INFO_proc_Modify (12117 ms total)
+
+[----------] 1 test from UT_INFO_data_IsExist
+[ RUN      ] UT_INFO_data_IsExist.001
+[       OK ] UT_INFO_data_IsExist.001 (0 ms)
+[----------] 1 test from UT_INFO_data_IsExist (0 ms total)
+
+[----------] 1 test from UT_INFO_data_GetFirst
+[ RUN      ] UT_INFO_data_GetFirst.001
+[       OK ] UT_INFO_data_GetFirst.001 (0 ms)
+[----------] 1 test from UT_INFO_data_GetFirst (0 ms total)
+
+[----------] 1 test from UT_INFO_data_GetNext
+[ RUN      ] UT_INFO_data_GetNext.001
+[       OK ] UT_INFO_data_GetNext.001 (0 ms)
+[----------] 1 test from UT_INFO_data_GetNext (0 ms total)
+
+[----------] 1 test from UT_INFO_data_IsEmpty
+[ RUN      ] UT_INFO_data_IsEmpty.001
+[       OK ] UT_INFO_data_IsEmpty.001 (0 ms)
+[----------] 1 test from UT_INFO_data_IsEmpty (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 44 tests from 7 test cases ran. (21821 ms total)
+[  PASSED  ] 44 tests.

@@ -310,7 +310,7 @@ VOID info_data_Delete(INFO_DATA_S * pstUser)
 }
 
 
-//???IMPORTANT
+
 INFO_DATA_S * info_data_Get(IN UINT uiId)
 {
     INFO_DATA_S * pstEntry;
