@@ -49,6 +49,23 @@ typedef struct tagInfo_Data
 
 INFO_DATA_S *g_pstRoot,*g_pstTmp;
 
+/*****************************************************************************
+    Func Name: IsRed
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 判断结点是否为红色
+        Input: INFO_DATA_S
+       Output:
+       Return: VOID
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+
 STATIC BOOL_T IsRed(INFO_DATA_S *pNode)
 {
 	if (!pNode)
@@ -56,6 +73,24 @@ STATIC BOOL_T IsRed(INFO_DATA_S *pNode)
 	return pNode->bColor == RED;
 }
 
+/*****************************************************************************
+    Func Name: RotateLeft
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 若结点的右子结点为红，则进行右旋
+        Input: INFO_DATA_S *
+       Output:
+       Return: INFO_DADA_S *
+      Caution: 调用此接口前，必须已经初始化过
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+
+    
 STATIC INFO_DATA_S *RotateLeft(INFO_DATA_S *pNode)
 {
 	INFO_DATA_S *x = pNode->pstRight;
@@ -66,6 +101,23 @@ STATIC INFO_DATA_S *RotateLeft(INFO_DATA_S *pNode)
 	return x;
 }
 
+/*****************************************************************************
+    Func Name: RotateRight
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 若结点的左结点和左结点的左结点为红，则进行右旋
+        Input: INFO_DATA_S *
+       Output:
+       Return: INFO_DADA_S *
+      Caution: 调用此接口前，必须已经初始化过
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+    
 STATIC INFO_DATA_S *RotateRight(INFO_DATA_S *pNode)
 {
 	INFO_DATA_S *x = pNode->pstLeft;
@@ -76,6 +128,23 @@ STATIC INFO_DATA_S *RotateRight(INFO_DATA_S *pNode)
 	return x;
 }
 
+/*****************************************************************************
+    Func Name: FlipColors
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 若结点的左结点和右结点为红，则变换颜色
+        Input: INFO_DATA_S *
+       Output:
+       Return: VOID
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+    
 STATIC VOID FlipColors(INFO_DATA_S *pNode)
 {
 	pNode->bColor = !(pNode->bColor);
@@ -83,10 +152,26 @@ STATIC VOID FlipColors(INFO_DATA_S *pNode)
 	pNode->pstRight->bColor = !(pNode->pstRight->bColor);
 }
 
+/*****************************************************************************
+    Func Name: MoveRedLeft
+ Date Created: 2016-08-07
+       Author: zay
+  Description: make p->pstLeft or one of its children red
+        Input: INFO_DATA_S *
+       Output:
+       Return: INFO_DATA_S *
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+    
 STATIC INFO_DATA_S *MoveRedLeft(INFO_DATA_S *pNode)
 {
-	// Assuming that p is red and both p->pstLeft and p->pstLeft->pstLeft
-	// are black, make p->pstLeft or one of its children red
 	FlipColors(pNode);
 	if (IsRed(pNode->pstRight->pstLeft)) {
 		pNode->pstRight = RotateRight(pNode->pstRight);
@@ -95,7 +180,25 @@ STATIC INFO_DATA_S *MoveRedLeft(INFO_DATA_S *pNode)
 	}
 	return pNode;
 }
+    
+/*****************************************************************************
+    Func Name: MoveRedRight
+ Date Created: 2016-08-07
+       Author: zay
+  Description: make pNode->pstRight or one of its children red
+        Input: INFO_DATA_S *
+       Output:
+       Return: INFO_DATA_S *
 
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+    
 STATIC INFO_DATA_S *MoveRedRight(INFO_DATA_S *pNode)
 {
 	// Assuming that p is red and both p->pstRight and p->pstRight->pstLeft
@@ -107,7 +210,23 @@ STATIC INFO_DATA_S *MoveRedRight(INFO_DATA_S *pNode)
 	}
 	return pNode;
 }
+/*****************************************************************************
+    Func Name: M
+ Date Created: 2016-08-07
+       Author: zay
+  Description: make p->pstLeft or one of its children red
+        Input: INFO_DATA_S *
+       Output:
+       Return: INFO_DATA_S *
 
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
 STATIC INFO_DATA_S *FixUp(INFO_DATA_S *pNode)
 {
 	if (IsRed(pNode->pstRight))
@@ -564,8 +683,8 @@ ULONG INFO_data_Init(VOID)
 
 /*****************************************************************************
     Func Name: INFO_data_Fini[*]
- Date Created: 201x-xx-xx
-       Author: xxxx 00000
+ Date Created: 2016-08-07
+       Author: zay
   Description: 模块退出
         Input:
        Output:
