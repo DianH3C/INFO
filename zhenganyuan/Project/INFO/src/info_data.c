@@ -6,8 +6,8 @@
    Module Name: INFO
   Date Created: 201x-xx-xx
         Author: xxxx 00000
-   Description: �ڲ����ݲ���
-                ����������ɾ�������á���ȡ������
+   Description: ÄÚ²¿ÊýŸÝ²Ù×÷
+                °üÀšŽŽœš¡¢ÉŸ³ý¡¢ÉèÖÃ¡¢»ñÈ¡¡¢±éÀú
 
 --------------------------------------------------------------------------------
   Modification History
@@ -38,7 +38,7 @@ extern "C"{
 #define RED BOOL_TRUE
 #define BLACK BOOL_FALSE
 #define VOLUME 100000
-/* ��Ϣ���ݽṹ */
+/* ÐÅÏ¢ÊýŸÝœá¹¹ */
 typedef struct tagInfo_Data
 {
 	BOOL_T bColor;
@@ -53,8 +53,8 @@ INFO_DATA_S *g_pstRoot,*g_pstTmp;
     Func Name: IsRed
  Date Created: 2016-08-07
        Author: zay
-  Description: �жϽ���Ƿ�Ϊ��ɫ
-        Input: INFO_DATA_S
+  Description: ÅÐ¶ÏœáµãÊÇ·ñÎªºìÉ«
+        Input: IN INFO_DATA_S
        Output:
        Return: VOID
       Caution: 
@@ -65,8 +65,7 @@ INFO_DATA_S *g_pstRoot,*g_pstTmp;
   YYYY-MM-DD
 
 *****************************************************************************/
-
-STATIC BOOL_T IsRed(INFO_DATA_S *pNode)
+STATIC BOOL_T IsRed(IN INFO_DATA_S *pNode)
 {
 	if (!pNode)
 		return BOOL_FALSE;
@@ -77,11 +76,11 @@ STATIC BOOL_T IsRed(INFO_DATA_S *pNode)
     Func Name: RotateLeft
  Date Created: 2016-08-07
        Author: zay
-  Description: ���������ӽ��Ϊ�죬���������
-        Input: INFO_DATA_S *
+  Description: ÈôœáµãµÄÓÒ×ÓœáµãÎªºì£¬ÔòœøÐÐÓÒÐý
+        Input: IN INFO_DATA_S *
        Output:
        Return: INFO_DADA_S *
-      Caution: ���ô˽ӿ�ǰ�������Ѿ���ʼ����
+      Caution: µ÷ÓÃŽËœÓ¿ÚÇ°£¬±ØÐëÒÑŸ­³õÊŒ»¯¹ý
 ------------------------------------------------------------------------------
   Modification History
   DATE        NAME             DESCRIPTION
@@ -91,7 +90,7 @@ STATIC BOOL_T IsRed(INFO_DATA_S *pNode)
 *****************************************************************************/
 
     
-STATIC INFO_DATA_S *RotateLeft(INFO_DATA_S *pNode)
+STATIC INFO_DATA_S *RotateLeft(IN INFO_DATA_S *pNode)
 {
 	INFO_DATA_S *x = pNode->pstRight;
 	pNode->pstRight = x->pstLeft;
@@ -105,11 +104,11 @@ STATIC INFO_DATA_S *RotateLeft(INFO_DATA_S *pNode)
     Func Name: RotateRight
  Date Created: 2016-08-07
        Author: zay
-  Description: ��������������������Ϊ�죬���������
-        Input: INFO_DATA_S *
+  Description: ÈôœáµãµÄ×óœáµãºÍ×óœáµãµÄ×óœáµãÎªºì£¬ÔòœøÐÐÓÒÐý
+        Input: IN INFO_DATA_S *
        Output:
        Return: INFO_DADA_S *
-      Caution: ���ô˽ӿ�ǰ�������Ѿ���ʼ����
+      Caution: µ÷ÓÃŽËœÓ¿ÚÇ°£¬±ØÐëÒÑŸ­³õÊŒ»¯¹ý
 ------------------------------------------------------------------------------
   Modification History
   DATE        NAME             DESCRIPTION
@@ -118,7 +117,7 @@ STATIC INFO_DATA_S *RotateLeft(INFO_DATA_S *pNode)
 
 *****************************************************************************/
     
-STATIC INFO_DATA_S *RotateRight(INFO_DATA_S *pNode)
+STATIC INFO_DATA_S *RotateRight(IN INFO_DATA_S *pNode)
 {
 	INFO_DATA_S *x = pNode->pstLeft;
 	pNode->pstLeft = x->pstRight;
@@ -132,8 +131,8 @@ STATIC INFO_DATA_S *RotateRight(INFO_DATA_S *pNode)
     Func Name: FlipColors
  Date Created: 2016-08-07
        Author: zay
-  Description: ������������ҽ��Ϊ�죬��任��ɫ
-        Input: INFO_DATA_S *
+  Description: ÈôœáµãµÄ×óœáµãºÍÓÒœáµãÎªºì£¬Ôò±ä»»ÑÕÉ«
+        Input: IN INFO_DATA_S *
        Output:
        Return: VOID
       Caution: 
@@ -145,7 +144,7 @@ STATIC INFO_DATA_S *RotateRight(INFO_DATA_S *pNode)
 
 *****************************************************************************/
     
-STATIC VOID FlipColors(INFO_DATA_S *pNode)
+STATIC VOID FlipColors(IN INFO_DATA_S *pNode)
 {
 	pNode->bColor = !(pNode->bColor);
 	pNode->pstLeft->bColor = !(pNode->pstLeft->bColor);
@@ -157,7 +156,7 @@ STATIC VOID FlipColors(INFO_DATA_S *pNode)
  Date Created: 2016-08-07
        Author: zay
   Description: make p->pstLeft or one of its children red
-        Input: INFO_DATA_S *
+        Input: IN INFO_DATA_S *
        Output:
        Return: INFO_DATA_S *
 
@@ -170,7 +169,7 @@ STATIC VOID FlipColors(INFO_DATA_S *pNode)
 
 *****************************************************************************/
     
-STATIC INFO_DATA_S *MoveRedLeft(INFO_DATA_S *pNode)
+STATIC INFO_DATA_S *MoveRedLeft(IN INFO_DATA_S *pNode)
 {
 	FlipColors(pNode);
 	if (IsRed(pNode->pstRight->pstLeft)) {
@@ -186,7 +185,7 @@ STATIC INFO_DATA_S *MoveRedLeft(INFO_DATA_S *pNode)
  Date Created: 2016-08-07
        Author: zay
   Description: make pNode->pstRight or one of its children red
-        Input: INFO_DATA_S *
+        Input: IN INFO_DATA_S *
        Output:
        Return: INFO_DATA_S *
 
@@ -199,10 +198,8 @@ STATIC INFO_DATA_S *MoveRedLeft(INFO_DATA_S *pNode)
 
 *****************************************************************************/
     
-STATIC INFO_DATA_S *MoveRedRight(INFO_DATA_S *pNode)
+STATIC INFO_DATA_S *MoveRedRight(IN INFO_DATA_S *pNode)
 {
-	// Assuming that p is red and both p->pstRight and p->pstRight->pstLeft
-	// are black, make p->pstRight or one of its children red
 	FlipColors(pNode);
 	if (IsRed(pNode->pstLeft->pstLeft)) {
 		pNode = RotateRight(pNode);
@@ -211,11 +208,11 @@ STATIC INFO_DATA_S *MoveRedRight(INFO_DATA_S *pNode)
 	return pNode;
 }
 /*****************************************************************************
-    Func Name: M
+    Func Name: FixUp
  Date Created: 2016-08-07
        Author: zay
-  Description: make p->pstLeft or one of its children red
-        Input: INFO_DATA_S *
+  Description: 保持红黑树的平衡
+        Input: IN INFO_DATA_S *
        Output:
        Return: INFO_DATA_S *
 
@@ -227,7 +224,7 @@ STATIC INFO_DATA_S *MoveRedRight(INFO_DATA_S *pNode)
   YYYY-MM-DD
 
 *****************************************************************************/
-STATIC INFO_DATA_S *FixUp(INFO_DATA_S *pNode)
+STATIC INFO_DATA_S *FixUp(IN INFO_DATA_S *pNode)
 {
 	if (IsRed(pNode->pstRight))
 		pNode = RotateLeft(pNode);
@@ -241,7 +238,24 @@ STATIC INFO_DATA_S *FixUp(INFO_DATA_S *pNode)
 	return pNode;
 }
 
-STATIC INFO_DATA_S *getInOrderSuccessorINFO_DATA_S(INFO_DATA_S *pNode)
+/*****************************************************************************
+    Func Name: getInOrderSuccessorINFO_DATA_S(
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 获得当前节点的前一个节点
+        Input: IN INFO_DATA_S *
+       Output:
+       Return: INFO_DATA_S *
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+STATIC INFO_DATA_S *getInOrderSuccessorINFO_DATA_S(IN INFO_DATA_S *pNode)
 {
 	pNode = pNode->pstRight;
 
@@ -253,19 +267,70 @@ STATIC INFO_DATA_S *getInOrderSuccessorINFO_DATA_S(INFO_DATA_S *pNode)
 	return pNode;
 }
 
-STATIC VOID FlipColors2(INFO_DATA_S *pNode)
+/*****************************************************************************
+    Func Name: FlipColors2
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 保持红黑树平衡的一种操作
+        Input: IN INFO_DATA_S *
+       Output:
+       Return: VOID
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+STATIC VOID FlipColors2(IN INFO_DATA_S *pNode)
 {
 	pNode->bColor = BLACK;
 	pNode->pstLeft->bColor = RED;
 	pNode->pstRight->bColor = RED;
 }
 
-STATIC VOID Init(INFO_DATA_S **ppRoot)
+/*****************************************************************************
+    Func Name: Init
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 初始化根节点
+        Input: IN INFO_DATA_S *
+       Output:
+       Return: VOID
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+STATIC VOID Init(IN INFO_DATA_S **ppRoot)
 {
 	*ppRoot = NULL;
 }
 
-STATIC INFO_DATA_S *CreateNode(INFO_CFG_S stValue , BOOL_T bColor)
+/*****************************************************************************
+    Func Name: CreateNode
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 为结点分配空间，并返回指针
+        Input: IN INFO_CFG_S, IN BOOL_T
+       Output:
+       Return: INFO_DATA_S *
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+STATIC INFO_DATA_S *CreateNode(IN INFO_CFG_S stValue , IN BOOL_T bColor)
 {
 	INFO_DATA_S *tmp = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
     tmp->stCfg=stValue;
@@ -274,7 +339,24 @@ STATIC INFO_DATA_S *CreateNode(INFO_CFG_S stValue , BOOL_T bColor)
 	return tmp;
 }
 
-STATIC INFO_DATA_S *insert(INFO_DATA_S *r,INFO_CFG_S stValue)
+/*****************************************************************************
+    Func Name: insert
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 插入一个结点到红黑树中
+        Input: IN INFO_DATA_S *, IN INFO_CFG_S
+       Output:
+       Return: INFO_DATA_S *
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+STATIC INFO_DATA_S *insert(IN INFO_DATA_S *r,IN INFO_CFG_S stValue)
 {
 	if (!r)
 	{
@@ -296,13 +378,47 @@ STATIC INFO_DATA_S *insert(INFO_DATA_S *r,INFO_CFG_S stValue)
 	return r;
 }
 
-STATIC VOID Insert(INFO_DATA_S **ppRoot, INFO_CFG_S stValue)
+/*****************************************************************************
+    Func Name: FixUp
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 插入一个结点到红黑树中
+        Input: IN INFO_DATA_S **, IN INFO_CFG_S
+       Output:
+       Return: VOID
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+STATIC VOID Insert(IN INFO_DATA_S **ppRoot, IN INFO_CFG_S stValue)
 {
 	*ppRoot = insert(*ppRoot, stValue);
 	(*ppRoot)->bColor = BLACK;
 }
 
-STATIC INFO_DATA_S *AtTheRootRotate(INFO_DATA_S *h)
+/*****************************************************************************
+    Func Name: AtTheRootRotate
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 插入算法需用到的一种操作
+        Input: IN INFO_DATA_S *
+       Output:
+       Return: INFO_DATA_S *
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+STATIC INFO_DATA_S *AtTheRootRotate(IN INFO_DATA_S *h)
 {
 	INFO_DATA_S *x = h->pstRight->pstLeft;
 	INFO_DATA_S *y = h->pstRight;
@@ -316,7 +432,24 @@ STATIC INFO_DATA_S *AtTheRootRotate(INFO_DATA_S *h)
 	return x;
 }
 
-STATIC INFO_DATA_S *OnTheWayRotate1(INFO_DATA_S *h)
+/*****************************************************************************
+    Func Name: OnTheWayRotate1
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 插入算法需用到的一种操作
+        Input: IN INFO_DATA_S *
+       Output:
+       Return: INFO_DATA_S *
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+STATIC INFO_DATA_S *OnTheWayRotate1(IN INFO_DATA_S *h)
 {
 	INFO_DATA_S *x = h->pstRight->pstLeft;
 	INFO_DATA_S *y = h->pstRight;
@@ -330,7 +463,24 @@ STATIC INFO_DATA_S *OnTheWayRotate1(INFO_DATA_S *h)
 	return x;
 }
 
-STATIC INFO_DATA_S *OnTheWayRotate2(INFO_DATA_S *h)
+/*****************************************************************************
+    Func Name: OnTheWayRotate2
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 插入算法需用到的一种操作
+        Input: IN INFO_DATA_S *
+       Output:
+       Return: INFO_DATA_S *
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+STATIC INFO_DATA_S *OnTheWayRotate2(IN INFO_DATA_S *h)
 {
 	h->bColor = BLACK;
 	h->pstLeft->bColor = RED;
@@ -338,7 +488,24 @@ STATIC INFO_DATA_S *OnTheWayRotate2(INFO_DATA_S *h)
 	return h;
 }
 
-STATIC INFO_DATA_S *delete_min(INFO_DATA_S *r)
+/*****************************************************************************
+    Func Name: delete_min
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 删除红黑树的最小结点
+        Input: IN INFO_DATA_S *
+       Output:
+       Return: INFO_DATA_S *
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+STATIC INFO_DATA_S *delete_min(IN INFO_DATA_S *r)
 {
 	if (r->pstLeft->pstLeft == NULL)
 	{
@@ -349,18 +516,18 @@ STATIC INFO_DATA_S *delete_min(INFO_DATA_S *r)
 	{
 		INFO_DATA_S *next_pstLeft = r->pstLeft->pstLeft;
 		INFO_DATA_S *next_pstRight = r->pstLeft->pstRight;
-		// on the way down ���һ��ʲôҲ������
+		// on the way down Çé¿öÒ»£ºÊ²ÃŽÒ²²»ÓÃ×ö
 		if (IsRed(next_pstLeft->pstLeft))
 		{
 			r->pstLeft->pstLeft = delete_min(r->pstLeft->pstLeft);
 		}
-		//pstLeft��һ��2-node && pstRight��һ��3-node,��һ����ȥ
+		//pstLeftÊÇÒ»žö2-node && pstRightÊÇÒ»žö3-node,ÒÆÒ»žö¹ýÈ¥
 		else if (IsRed(next_pstRight->pstLeft))
 		{
 			r->pstLeft = OnTheWayRotate1(r->pstLeft);
 			r->pstLeft->pstLeft = delete_min(r->pstLeft->pstLeft);
 		}
-		//pstLeft��pstRight����2-node,��������һ�������ϲ���4-node
+		//pstLeftºÍpstRight¶ŒÊÇ2-node,ŽÓÉÏÃæÒÆÒ»žöÏÂÀŽºÏ²¢³É4-node
 		else
 		{
 			r->pstLeft = OnTheWayRotate2(r->pstLeft);
@@ -376,7 +543,24 @@ STATIC INFO_DATA_S *delete_min(INFO_DATA_S *r)
 		return r;
 }
 
-STATIC INFO_DATA_S *Find_Min(INFO_DATA_S *pRoot)
+/*****************************************************************************
+    Func Name: Find_Min
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 返回最小结点
+        Input: IN INFO_DATA_S *
+       Output:
+       Return: INFO_DATA_S *
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+STATIC INFO_DATA_S *Find_Min(IN INFO_DATA_S *pRoot)
 {
 	if (!pRoot)
 		return NULL;
@@ -385,30 +569,47 @@ STATIC INFO_DATA_S *Find_Min(INFO_DATA_S *pRoot)
 	return Find_Min(pRoot->pstLeft);
 }
 
-STATIC VOID Delete_Min(INFO_DATA_S **root)
+/*****************************************************************************
+    Func Name: Delete_Min
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 删除红黑树的最小结点
+        Input: IN INFO_DATA_S **
+       Output:
+       Return: INFO_DATA_S *
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+STATIC VOID Delete_Min(IN INFO_DATA_S **root)
 {
 	if (!(*root))
 		return;
-	//ֻ��һ��Ԫ�أ�ֱ��ɾ��
+	//Ö»ÓÐÒ»žöÔªËØ£¬Ö±œÓÉŸ³ý
 	if (!((*root)->pstLeft))
 	{
 		free(*root);
 		*root = NULL;
 		return;
 	}
-	//ֻ������Ԫ��
+	//Ö»ÓÐÁœžöÔªËØ
 	if (IsRed((*root)->pstLeft))
 		*root = delete_min(*root);
-	//����������Ԫ��
+	//ÖÁÉÙÓÐÈýžöÔªËØ
 	else if (IsRed((*root)->pstLeft->pstLeft))
 		(*root)->pstLeft = delete_min((*root)->pstLeft);
-	//at the root ���һ
+	//at the root Çé¿öÒ»
 	else if (!IsRed((*root)->pstRight->pstLeft))
 	{
 		FlipColors2(*root);
 		*root = delete_min(*root);
 	}
-	//at the root �����
+	//at the root Çé¿ö¶þ
 	else
 	{
 		*root = AtTheRootRotate(*root);
@@ -416,7 +617,24 @@ STATIC VOID Delete_Min(INFO_DATA_S **root)
 	}
 }
 
-STATIC INFO_DATA_S *Remove(INFO_DATA_S *p, int uiId)
+/*****************************************************************************
+    Func Name: Remove
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 删除指定ID所在结点
+        Input: IN INFO_DATA_S *, IN UINT
+       Output:
+       Return: INFO_DATA_S *
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+STATIC INFO_DATA_S *Remove(IN INFO_DATA_S *p, IN UINT uiId)
 {
 	if (uiId < p->stCfg.uiId) {
 		if (!IsRed(p->pstLeft) && !IsRed(p->pstLeft->pstLeft)) {
@@ -447,7 +665,24 @@ STATIC INFO_DATA_S *Remove(INFO_DATA_S *p, int uiId)
 	return FixUp(p);
 }
 
-STATIC VOID Destroy(INFO_DATA_S *pstTree)
+/*****************************************************************************
+    Func Name: Destroy
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 销毁树
+        Input: INFO_DATA_S *
+       Output:
+       Return: VOID
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+STATIC VOID Destroy(IN INFO_DATA_S *pstTree)
 {
     if(pstTree)
     {
@@ -457,7 +692,24 @@ STATIC VOID Destroy(INFO_DATA_S *pstTree)
     }
 }
 
-STATIC VOID display(INFO_DATA_S *r)
+/*****************************************************************************
+    Func Name: display
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 显示树
+        Input: IN INFO_DATA_S *
+       Output:
+       Return: VOID
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+STATIC VOID display(IN INFO_DATA_S *r)
 {
 	if (r)
 	{
@@ -468,7 +720,24 @@ STATIC VOID display(INFO_DATA_S *r)
 	}
 }
 
-VOID Traverse(INFO_DATA_S *pstNode,UINT *puiIndex,UINT *puiArr)
+/*****************************************************************************
+    Func Name: Traverse
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 遍历树，讲结点按顺序保存在数组中
+        Input: IN INFO_DATA_S *pstNode,IN UINT *puiIndex,OUT UINT *puiArr
+       Output:
+       Return: VOID
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+VOID Traverse(IN INFO_DATA_S *pstNode,IN UINT *puiIndex,OUT UINT *puiArr)
 {
     if(pstNode)
     {
@@ -479,7 +748,24 @@ VOID Traverse(INFO_DATA_S *pstNode,UINT *puiIndex,UINT *puiArr)
     }
 }
 
-INFO_DATA_S *find(INFO_DATA_S *pNode, UINT uiId)
+/*****************************************************************************
+    Func Name: find
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 返回指定ID所在结点的指针
+        Input: IN INFO_DATA_S *,IN UINT
+       Output:
+       Return: INFO_DATA_S *
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+INFO_DATA_S *find(IN INFO_DATA_S *pNode,IN UINT uiId)
 {
     if (pNode)
     {
@@ -493,21 +779,89 @@ INFO_DATA_S *find(INFO_DATA_S *pNode, UINT uiId)
     return NULL;
 }
 
-INFO_DATA_S *Find(UINT uiId)
+/*****************************************************************************
+    Func Name: Find
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 返回指定ID所在结点的指针
+        Input: IN UINT
+       Output:
+       Return: INFO_DATA_S *
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+INFO_DATA_S *Find(IN UINT uiId)
 {
     return find(g_pstRoot,uiId);
 }
 
+/*****************************************************************************
+    Func Name: INFO_data_Display
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 显示所有数据
+        Input: VOID
+       Output:
+       Return: VOID
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
 VOID INFO_data_Display(VOID)
 {
     display(g_pstRoot);
 }
 
-VOID INFO_data_Insert(INFO_CFG_S *pstCfg)
+/*****************************************************************************
+    Func Name: INFO_data_Insert
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 插入数据到红黑树中
+        Input: IN INFO_CFG_S *
+       Output:
+       Return: VOID
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+VOID INFO_data_Insert(IN INFO_CFG_S *pstCfg)
 {
     Insert(&g_pstRoot,*pstCfg);
 }
 
+/*****************************************************************************
+    Func Name: INFO_data_Delete
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 删除指定ID的数据
+        Input: IN UINT
+       Output:
+       Return: BOOL_T, BOOL_FALSE 删除失败
+                       BOOL_TRUE  删除成功
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
 BOOL_T INFO_data_Delete(IN UINT uiId)
 {
     INFO_DATA_S *pstTmp=Find(uiId);
@@ -517,6 +871,23 @@ BOOL_T INFO_data_Delete(IN UINT uiId)
     return BOOL_TRUE;
 }
 
+/*****************************************************************************
+    Func Name: INFO_data_Modify
+ Date Created: 2016-08-07
+       Author: zay
+  Description: 修改指定id的数据
+        Input: IN INFO_CFG_S *
+       Output:
+       Return: VOID
+
+      Caution: 
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
 VOID INFO_data_Modify(IN INFO_CFG_S *pstCfg)
 {
     INFO_DATA_S *pstTmp=Find(pstCfg->uiId);
@@ -533,11 +904,11 @@ VOID INFO_data_Modify(IN INFO_CFG_S *pstCfg)
     Func Name: INFO_data_IsExist[*]
  Date Created: 201x-xx-xx
        Author: xxxx 00000
-  Description: �ж�ָ�����ŵ������Ƿ����
-        Input: IN UINT uiId         ����
+  Description: ÅÐ¶ÏÖž¶š¹€ºÅµÄÊýŸÝÊÇ·ñŽæÔÚ
+        Input: IN UINT uiId         ¹€ºÅ
        Output:
-       Return: BOOL_T, BOOL_TRUE    ����
-                       BOOL_T_FALSE   ������
+       Return: BOOL_T, BOOL_TRUE    ŽæÔÚ
+                       BOOL_T_FALSE   ²»ŽæÔÚ
       Caution:
 ------------------------------------------------------------------------------
   Modification History
@@ -557,11 +928,11 @@ BOOL_T INFO_data_IsExist(IN UINT uiId)
     Func Name: INFO_data_IsEmpty[*]
  Date Created: 201x-xx-xx
        Author: xxxx 00000
-  Description: �ж�����������֯�Ƿ�Ϊ��
+  Description: ÅÐ¶ÏÕûžöÊýŸÝ×éÖ¯ÊÇ·ñÎª¿Õ
         Input:
        Output:
-       Return: BOOL_T, BOOL_TRUE    ������֯Ϊ��
-                       BOOL_T_FALSE   ������֯�ǿ�
+       Return: BOOL_T, BOOL_TRUE    ÊýŸÝ×éÖ¯Îª¿Õ
+                       BOOL_T_FALSE   ÊýŸÝ×éÖ¯·Ç¿Õ
       Caution:
 ------------------------------------------------------------------------------
   Modification History
@@ -579,12 +950,12 @@ BOOL_T INFO_data_IsEmpty(VOID)
     Func Name: INFO_data_GetData[*]
  Date Created: 201x-xx-xx
        Author: xxxx 00000
-  Description: ��ȡ��������
-        Input: IN UINT uiId             ����
-       Output: OUT INFO_CFG_S *pstCfg   ��������
-       Return: ULONG, ERROR_SUCCESS     �����ɹ�
-                      OTHER             ����ʧ��
-      Caution: ���ν��ڷ��سɹ�ʱ��Ч
+  Description: »ñÈ¡ÅäÖÃÊýŸÝ
+        Input: IN UINT uiId             ¹€ºÅ
+       Output: OUT INFO_CFG_S *pstCfg   ÅäÖÃÊýŸÝ
+       Return: ULONG, ERROR_SUCCESS     ŽŠÀí³É¹Š
+                      OTHER             ŽŠÀíÊ§°Ü
+      Caution: ³ö²ÎœöÔÚ·µ»Ø³É¹ŠÊ±ÓÐÐ§
 ------------------------------------------------------------------------------
   Modification History
   DATE        NAME             DESCRIPTION
@@ -607,11 +978,11 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
     Func Name: INFO_data_GetFirst[*]
  Date Created: 201x-xx-xx
        Author: xxxx 00000
-  Description: ��ȡ��һ�������ݹ���
+  Description: »ñÈ¡µÚÒ»žöÓÐÊýŸÝ¹€ºÅ
         Input: VOID
        Output:
-       Return: UINT, != INFO_ID_INVALID     ��һ�������ݵĹ���
-                     == INFO_ID_INVALID     δ�ҵ�
+       Return: UINT, != INFO_ID_INVALID     µÚÒ»žöÓÐÊýŸÝµÄ¹€ºÅ
+                     == INFO_ID_INVALID     ÎŽÕÒµœ
       Caution:
 ------------------------------------------------------------------------------
   Modification History
@@ -632,12 +1003,12 @@ UINT INFO_data_GetFirst(VOID)
     Func Name: INFO_data_GetNext[*]
  Date Created: 201x-xx-xx
        Author: xxxx 00000
-  Description: ��ȡ��һ�������ݹ���
-        Input: IN UINT uiId                 ��ǰ����
+  Description: »ñÈ¡ÏÂÒ»žöÓÐÊýŸÝ¹€ºÅ
+        Input: IN UINT uiId                 µ±Ç°¹€ºÅ
        Output:
-       Return: UINT, != INFO_ID_INVALID     ��һ������
-                     == INFO_ID_INVALID     δ�ҵ�
-      Caution: �˽ӿڻ�ȡ��һ�����Ų����������uiId�����Ƿ�������
+       Return: UINT, != INFO_ID_INVALID     ÏÂÒ»žö¹€ºÅ
+                     == INFO_ID_INVALID     ÎŽÕÒµœ
+      Caution: ŽËœÓ¿Ú»ñÈ¡ÏÂÒ»žö¹€ºÅ²»ÒÀÀµÓÚÈë²ÎuiId±ŸÉíÊÇ·ñÓÐÊýŸÝ
 ------------------------------------------------------------------------------
   Modification History
   DATE        NAME             DESCRIPTION
@@ -662,12 +1033,12 @@ UINT INFO_data_GetNext(IN UINT uiId)
     Func Name: INFO_data_Init[*]
  Date Created: 201x-xx-xx
        Author: xxxx 00000
-  Description: ģ���ʼ��
+  Description: Ä£¿é³õÊŒ»¯
         Input:
        Output:
-       Return: ULONG, ERROR_SUCCESS     �����ɹ�
-                      OTHER             ����ʧ��
-      Caution: Ŀǰʼ�ճɹ�
+       Return: ULONG, ERROR_SUCCESS     ŽŠÀí³É¹Š
+                      OTHER             ŽŠÀíÊ§°Ü
+      Caution: Ä¿Ç°ÊŒÖÕ³É¹Š
 ------------------------------------------------------------------------------
   Modification History
   DATE        NAME             DESCRIPTION
@@ -685,11 +1056,11 @@ ULONG INFO_data_Init(VOID)
     Func Name: INFO_data_Fini[*]
  Date Created: 2016-08-07
        Author: zay
-  Description: ģ���˳�
+  Description: Ä£¿éÍË³ö
         Input:
        Output:
        Return: VOID
-      Caution: ���ô˽ӿ�ǰ�������Ѿ���ʼ����
+      Caution: µ÷ÓÃŽËœÓ¿ÚÇ°£¬±ØÐëÒÑŸ­³õÊŒ»¯¹ý
 ------------------------------------------------------------------------------
   Modification History
   DATE        NAME             DESCRIPTION
