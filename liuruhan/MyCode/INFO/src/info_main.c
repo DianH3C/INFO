@@ -22,6 +22,7 @@ extern "C"{
 
 /* standard library */
 #include <stdio.h>
+#include <stdlib.h>
 
 /* system   public  */
 #include <sys/basetype.h>
@@ -54,7 +55,7 @@ typedef enum tagInfo_Menu
 typedef struct tagInfo_Func
 {
     const CHAR      *pcMenu;    /* 菜单名称 */
-    INFO_PROC_PF    pfProc;     /* 处理函数 */
+    INFO_PROC_PF     pfProc;     /* 处理函数 */
 }INFO_FUNC_S;
 
 /* 功能数据 */
@@ -85,7 +86,7 @@ STATIC INFO_FUNC_S g_astInfoFunc[] =
   YYYY-MM-DD
 
 *****************************************************************************/
-STATIC VOID info_main_DisplayMenu(VOID)
+/**/STATIC VOID info_main_DisplayMenu(VOID)
 {
     INFO_MENU_E enEach;
 
@@ -179,7 +180,7 @@ STATIC VOID info_main_DisplayErrInfo(IN ULONG ulErrCode)
   YYYY-MM-DD
 
 *****************************************************************************/
-STATIC ULONG info_main_GetMenuChoice(OUT INFO_MENU_E *penMenu)
+/**/STATIC ULONG info_main_GetMenuChoice(OUT INFO_MENU_E *penMenu)
 {
     CHAR szBuf[INFO_IOBUF_MAXLEN];
     INFO_MENU_E enMenu;
@@ -354,7 +355,7 @@ VOID INFO_Run(VOID)
   YYYY-MM-DD
 
 *****************************************************************************/
-ULONG INFO_Init(VOID)
+/**/ULONG INFO_Init(VOID)
 {
     ULONG ulErrCode;
 
@@ -410,7 +411,7 @@ INT main(IN INT iArgc, IN CHAR *apcArgv[])
 
     IGNORE_PARAM(iArgc);
     IGNORE_PARAM(apcArgv);
-
+   
     /* 初始化 */
     ulErrCode = INFO_Init();
     if (ERROR_SUCCESS == ulErrCode)

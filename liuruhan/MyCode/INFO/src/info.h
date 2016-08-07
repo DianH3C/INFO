@@ -24,6 +24,7 @@ extern "C"{
 #endif
 
 /*************************************** 公共定义 ***************************************/
+
 /* 工号 */
 #define INFO_ID_MIN                     1U
 #define INFO_ID_MAX                     100000U
@@ -52,6 +53,12 @@ typedef enum tagInfo_Sex
 #define INFO_HEIGHT_MAX                 300U
 #define INFO_HEIGHT_ISVALID(uiHeight)   ((INFO_HEIGHT_MIN <= (uiHeight)) && ((uiHeight) <= INFO_HEIGHT_MAX))
 
+/* 数据量 */
+#define INFO_DATA_MAX  				1000U
+
+/* 第一个数据 */
+#define INFO_FIRST 0
+
 /* 配置数据 */
 typedef struct tagInfo_Cfg
 {
@@ -61,6 +68,16 @@ typedef struct tagInfo_Cfg
     INFO_SEX_E enSex;                   /* 性别 */
     CHAR szName[INFO_NAME_MAXLEN + 1];  /* 姓名 */
 }INFO_CFG_S;
+
+/* 所有数据 */
+typedef struct gInfo_Data
+{
+                            /* 数据组织相关[*] */
+    INFO_CFG_S stCfg;       /* 配置数据 */
+}INFO_DATA_S;
+
+INFO_DATA_S alData[INFO_DATA_MAX]; 
+
 
 /* 全部数据合法 */
 #define INFO_ALL_ISVALID(pstCfg) \

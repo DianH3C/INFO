@@ -32,6 +32,9 @@ extern "C"{
 /* module   private */
 #include "info.h"
 
+/* struct length*/
+#define INFO_CFG_S_LEN 32
+
 /*****************************************************************************
     Func Name: info_parse_Each
  Date Created: 2011-12-29
@@ -118,7 +121,8 @@ VOID INFO_parse_InputStr(IN const CHAR *pcInputStr, OUT INFO_CFG_S *pstCfg)
     DBGASSERT(NULL != pstCfg);
 
     /* 出参初始化为非法值 */
-    memset(pstCfg, 0, sizeof(INFO_CFG_S));
+    //pstCfg = ( struct INFO_CFG_S* )malloc(INFO_CFG_S_LEN);
+    memset(pstCfg, 0, INFO_CFG_S_LEN);
 
     /* 解析用户输入字符串 */
     strlcpy(szString, pcInputStr, sizeof(szString));
