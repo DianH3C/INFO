@@ -40,7 +40,7 @@ INFO_CFG_S *INFO_proc_IsInputValid(IN const CHAR *pcInputStr)
     INFO_CFG_S *pstCfg=(INFO_CFG_S*)malloc(sizeof(INFO_CFG_S));
     DBGASSERT(pstCfg);
     INFO_parse_InputStr(pcInputStr,pstCfg);
-    if(!INFO_ID_ISVALID(pstCfg->uiId))
+    if(!INFO_ALL_ISVALID(pstCfg))
     {
         free(pstCfg);
         return NULL;
@@ -104,12 +104,12 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
     if(pstCfg==NULL)
     {
         printf("The parameter is incorrect.\n");
-        return ERROR_FAILED;
+        return ERROR_INVALID_PARAMETER;
     }
     if(INFO_data_IsExist(pstCfg->uiId))
     {
         printf("The item already exists.\n");
-        return ERROR_SUCCESS;
+        return ERROR_ALREADY_EXIST;
     }
     INFO_data_Insert(pstCfg);
     printf("通过Display功能，可以看到新增信息\n");
@@ -140,13 +140,15 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
     if(!INFO_ID_ISVALID(pstCfg->uiId))
     {
         printf("The parameter is incorrect.\n");
-        return ERROR_FAILED;
+        return ERROR_INVALID_PARAMETER;
     }
+    if(BOOL_FALSE==INFO_data_IsExist(pstCfg->uiId))
+        return ERROR_INVALID_PARAMETER;
     if(BOOL_FALSE==INFO_data_Delete(pstCfg->uiId))
     {
         return ERROR_FAILED;
     }
-    return ERROR_SUCCESS;
+    return INFO_proc_Delete;
 }
 
 /*****************************************************************************
@@ -175,12 +177,12 @@ ULONG INFO_proc_Modify(IN const CHAR *pcInputStr)
     if(!INFO_ID_ISVALID(pstCfg->uiId))
     {
         printf("The parameter is incorrect.\n");
-        return ERROR_FAILED;
+        return ERROR_INVALID_PARAMETER;
     }
     if(BOOL_FALSE==INFO_data_IsExist(pstCfg->uiId))
     {
         printf("The specified item was not found.\n");
-        return ERROR_FAILED;
+        return ERROR_NOT_FOUND;
     }
     INFO_data_Modify(pstCfg);
     return ERROR_SUCCESS;
