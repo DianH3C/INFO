@@ -37,6 +37,7 @@ extern "C"{
 #include "info_dbg.h"
 #define RED BOOL_TRUE
 #define BLACK BOOL_FALSE
+#define VOLUME 100000
 /* 信息数据结构 */
 typedef struct tagInfo_Data
 {
@@ -348,6 +349,17 @@ STATIC VOID display(INFO_DATA_S *r)
 	}
 }
 
+VOID Traverse(INFO_DATA_S *pstNode,UINT *puiIndex,UINT *puiArr)
+{
+    if(pstNode)
+    {
+        Traverse(pstNode->pstLeft,puiIndex,puiArr);
+        puiArr[*puiIndex]=pstNode->stCfg.uiId;
+        ++(*puiIndex);
+        Traverse(pstNode->pstRight,puiIndex,puiArr);
+    }
+}
+
 INFO_DATA_S *find(INFO_DATA_S *pNode, UINT uiId)
 {
     if (pNode)
@@ -491,7 +503,10 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 *****************************************************************************/
 UINT INFO_data_GetFirst(VOID)
 {
-
+    INFO_DATA_S *pstFirst=Find_Min(g_pstRoot);
+    if(NULL==pstFirst)
+        return INFO_ID_INVALID;
+    return pstFirst->stCfg.uiId;
 }
 
 /*****************************************************************************
@@ -513,6 +528,14 @@ UINT INFO_data_GetFirst(VOID)
 *****************************************************************************/
 UINT INFO_data_GetNext(IN UINT uiId)
 {
+    UINT auiArr[VOLUME];
+    UINT uiIndex=0;
+    Traverse(g_pstRoot,&uiIndex,auiArr);
+    UINT i=0;
+    for(;i<uiIndex && auiArr[i]!=uiId;++i)
+        ;
+    if(uiIndex!=0 && i<uiIndex-1)
+        return auiArr[i+1];
     return INFO_ID_INVALID;
 }
 

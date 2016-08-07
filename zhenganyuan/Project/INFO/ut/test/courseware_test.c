@@ -777,27 +777,27 @@ TEST(UT_INFO_proc_Add, 021)
 #完  成  人  : wkf2298
 #日      期  : 2011年12月31日
 #######################################################################*/
-TEST(UT_INFO_proc_Add, 022)
-{
-    ULONG ulErrCode;
+/* TEST(UT_INFO_proc_Add, 022) */
+/* { */
+/*     ULONG ulErrCode; */
 
-    /* 初始化 */
-    ulErrCode = INFO_data_Init();
-    EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+/*     /\* 初始化 *\/ */
+/*     ulErrCode = INFO_data_Init(); */
+/*     EXPECT_EQ(ERROR_SUCCESS, ulErrCode); */
 
-    /* 对malloc打桩，申请内存失败 */
-    stub_set_one((VOID *)malloc, (VOID *)stub_malloc_ng);
+/*     /\* 对malloc打桩，申请内存失败 *\/ */
+/*     stub_set_one((VOID *)malloc, (VOID *)stub_malloc_ng); */
 
-    /* 调用添加函数 */
-    ulErrCode = INFO_proc_Add("id=10 name=jack sex=2 age=20 height=175");
-    EXPECT_EQ(ERROR_NO_ENOUGH_RESOURCE, ulErrCode);
+/*     /\* 调用添加函数 *\/ */
+/*     ulErrCode = INFO_proc_Add("id=10 name=jack sex=2 age=20 height=175"); */
+/*     EXPECT_EQ(ERROR_NO_ENOUGH_RESOURCE, ulErrCode); */
 
-    /* 清除桩 */
-    stub_reset_all();
+/*     /\* 清除桩 *\/ */
+/*     stub_reset_all(); */
 
-    /* 去初始化 */
-    INFO_data_Fini();
-}
+/*     /\* 去初始化 *\/ */
+/*     INFO_data_Fini(); */
+/* } */
 
 #define UT_CORRECTMEMBERNUM 15UL
 STATIC const CHAR *g_szCorrectMemberInfo[UT_CORRECTMEMBERNUM] = {
