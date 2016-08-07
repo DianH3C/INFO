@@ -60,6 +60,8 @@ extern "C"{
 *****************************************************************************/
 ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 {
+    // display 10 user's information per page
+    INT iOnePage = 10;
     if(INFO_data_IsEmpty())
     {
         printf("No info.\r\n");
@@ -69,12 +71,11 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 
     UINT uiId = INFO_data_GetFirst();
 
-    while(uiId != INFO_ID_INVALID)
+    do
     {
         printf("1 for female, and 2 for male.\r\n");
         if(ERROR_SUCCESS == INFO_data_GetData(uiId,&pstUserCfg))
         {
-
             printf("ID\tNAME\tSEX\tAGE\tHEIGHT\r\n");
             printf("%u\t%s\t%d\t%u\t%u\r\n",pstUserCfg->uiId,pstUserCfg->szName,pstUserCfg->enSex,pstUserCfg->uiAge,pstUserCfg->uiHeight);
         }
@@ -82,8 +83,10 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
         {
             return ERROR_FAILED;
         }
+    
         uiId = INFO_data_GetNext(uiId);
-    }
+
+    }while(uiId != INFO_ID_INVALID);
 
     return ERROR_SUCCESS;
 }

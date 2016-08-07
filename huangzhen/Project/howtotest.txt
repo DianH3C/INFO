@@ -1,0 +1,10 @@
+【编译环境】
+1.在虚拟机(VitualBox或VMWare，物理机也可)中安装CentOS或Ubuntu或其他Linux操作系统，如果自己以前装过则跳过这一步
+2.配置好虚拟机的网络使得可以传文件到虚拟机
+3.将Project目录拷贝到虚拟机中，运行build.sh，生成info文件(相应目录终端输入./build.sh)
+4.运行info(输入./info)，如果有bug则用gdb调试该文件
+
+【CLT环境】
+1.在虚拟机中，进入代码根目录/INFO/ut, 运行run_ut.sh(CLT环境的搭建和运行脚本,sudo bash ./run_ut.sh)
+  第一次运行会安装Google Test的库，出现#### Gtest Compile Success ####表示库编译成功。
+  还没写代码的时候测试用例都不通过是正常的，写完如果用测试用例FAILED表明代码功能有问题，打开Project\INFO\ut\test\courseware_test.c找到对应的失败用例
