@@ -40,7 +40,7 @@ TEST(UT_INFO_proc_Add, 001)
 {
     ULONG ulErrCode;
     BOOL_T bIsExist;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
 
     /* 初始化 */
     ulErrCode = INFO_data_Init();
@@ -53,13 +53,13 @@ TEST(UT_INFO_proc_Add, 001)
     /* 检查预期结果 */
     bIsExist = INFO_data_IsExist(10);
     EXPECT_EQ(BOOL_TRUE, bIsExist);
-    ulErrCode = INFO_data_GetData(10, &stCfg);
+    ulErrCode = INFO_data_GetData(10, &pstCfg);
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
-    EXPECT_EQ(10, stCfg.uiId);
-    EXPECT_EQ(2, stCfg.enSex);
-    EXPECT_EQ(20, stCfg.uiAge);
-    EXPECT_EQ(175, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "jack"));
+    EXPECT_EQ(10, pstCfg->uiId);
+    EXPECT_EQ(2, pstCfg->enSex);
+    EXPECT_EQ(20, pstCfg->uiAge);
+    EXPECT_EQ(175, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "jack"));
 
     /* 去初始化 */
     INFO_data_Fini();
@@ -87,7 +87,7 @@ TEST(UT_INFO_proc_Add, 002)
 {
     ULONG ulErrCode;
     UINT uiId;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
 
     /* 初始化 */
     ulErrCode = INFO_data_Init();
@@ -103,40 +103,40 @@ TEST(UT_INFO_proc_Add, 002)
 
     /* 检查预期结果 */
     uiId = INFO_data_GetFirst();
-    ulErrCode = INFO_data_GetData(uiId, &stCfg);
-    EXPECT_EQ(1, stCfg.uiId);
-    EXPECT_EQ(2, stCfg.enSex);
-    EXPECT_EQ(40, stCfg.uiAge);
-    EXPECT_EQ(250, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "jack1"));
+    ulErrCode = INFO_data_GetData(uiId, &pstCfg);
+    EXPECT_EQ(1, pstCfg->uiId);
+    EXPECT_EQ(2, pstCfg->enSex);
+    EXPECT_EQ(40, pstCfg->uiAge);
+    EXPECT_EQ(250, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "jack1"));
     uiId = INFO_data_GetNext(uiId);
-    ulErrCode = INFO_data_GetData(uiId, &stCfg);
-    EXPECT_EQ(10, stCfg.uiId);
-    EXPECT_EQ(1, stCfg.enSex);
-    EXPECT_EQ(30, stCfg.uiAge);
-    EXPECT_EQ(100, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "jack10"));
+    ulErrCode = INFO_data_GetData(uiId, &pstCfg);
+    EXPECT_EQ(10, pstCfg->uiId);
+    EXPECT_EQ(1, pstCfg->enSex);
+    EXPECT_EQ(30, pstCfg->uiAge);
+    EXPECT_EQ(100, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "jack10"));
     uiId = INFO_data_GetNext(uiId);
-    ulErrCode = INFO_data_GetData(uiId, &stCfg);
-    EXPECT_EQ(44, stCfg.uiId);
-    EXPECT_EQ(1, stCfg.enSex);
-    EXPECT_EQ(22, stCfg.uiAge);
-    EXPECT_EQ(222, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "jack44"));
+    ulErrCode = INFO_data_GetData(uiId, &pstCfg);
+    EXPECT_EQ(44, pstCfg->uiId);
+    EXPECT_EQ(1, pstCfg->enSex);
+    EXPECT_EQ(22, pstCfg->uiAge);
+    EXPECT_EQ(222, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "jack44"));
     uiId = INFO_data_GetNext(uiId);
-    ulErrCode = INFO_data_GetData(uiId, &stCfg);
-    EXPECT_EQ(50, stCfg.uiId);
-    EXPECT_EQ(1, stCfg.enSex);
-    EXPECT_EQ(50, stCfg.uiAge);
-    EXPECT_EQ(200, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "jack50"));
+    ulErrCode = INFO_data_GetData(uiId, &pstCfg);
+    EXPECT_EQ(50, pstCfg->uiId);
+    EXPECT_EQ(1, pstCfg->enSex);
+    EXPECT_EQ(50, pstCfg->uiAge);
+    EXPECT_EQ(200, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "jack50"));
     uiId = INFO_data_GetNext(uiId);
-    ulErrCode = INFO_data_GetData(uiId, &stCfg);
-    EXPECT_EQ(99, stCfg.uiId);
-    EXPECT_EQ(2, stCfg.enSex);
-    EXPECT_EQ(33, stCfg.uiAge);
-    EXPECT_EQ(111, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "jack99"));
+    ulErrCode = INFO_data_GetData(uiId, &pstCfg);
+    EXPECT_EQ(99, pstCfg->uiId);
+    EXPECT_EQ(2, pstCfg->enSex);
+    EXPECT_EQ(33, pstCfg->uiAge);
+    EXPECT_EQ(111, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "jack99"));
 
     /* 去初始化 */
     INFO_data_Fini();
@@ -164,7 +164,7 @@ TEST(UT_INFO_proc_Add, 003)
 {
     ULONG ulErrCode;
     UINT uiId;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
 
     /* 初始化 */
     ulErrCode = INFO_data_Init();
@@ -181,47 +181,47 @@ TEST(UT_INFO_proc_Add, 003)
 
     /* 检查预期结果 */
     uiId = INFO_data_GetFirst();
-    ulErrCode = INFO_data_GetData(uiId, &stCfg);
-    EXPECT_EQ(1, stCfg.uiId);
-    EXPECT_EQ(1, stCfg.enSex);
-    EXPECT_EQ(18, stCfg.uiAge);
-    EXPECT_EQ(1, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "1"));
+    ulErrCode = INFO_data_GetData(uiId, &pstCfg);
+    EXPECT_EQ(1, pstCfg->uiId);
+    EXPECT_EQ(1, pstCfg->enSex);
+    EXPECT_EQ(18, pstCfg->uiAge);
+    EXPECT_EQ(1, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "1"));
     uiId = INFO_data_GetNext(uiId);
-    ulErrCode = INFO_data_GetData(uiId, &stCfg);
-    EXPECT_EQ(2, stCfg.uiId);
-    EXPECT_EQ(1, stCfg.enSex);
-    EXPECT_EQ(19, stCfg.uiAge);
-    EXPECT_EQ(2, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "11"));
+    ulErrCode = INFO_data_GetData(uiId, &pstCfg);
+    EXPECT_EQ(2, pstCfg->uiId);
+    EXPECT_EQ(1, pstCfg->enSex);
+    EXPECT_EQ(19, pstCfg->uiAge);
+    EXPECT_EQ(2, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "11"));
     uiId = INFO_data_GetNext(uiId);
-    ulErrCode = INFO_data_GetData(uiId, &stCfg);
-    EXPECT_EQ(3, stCfg.uiId);
-    EXPECT_EQ(1, stCfg.enSex);
-    EXPECT_EQ(20, stCfg.uiAge);
-    EXPECT_EQ(3, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "111"));
+    ulErrCode = INFO_data_GetData(uiId, &pstCfg);
+    EXPECT_EQ(3, pstCfg->uiId);
+    EXPECT_EQ(1, pstCfg->enSex);
+    EXPECT_EQ(20, pstCfg->uiAge);
+    EXPECT_EQ(3, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "111"));
     uiId = INFO_data_GetNext(uiId);
-    ulErrCode = INFO_data_GetData(uiId, &stCfg);
-    EXPECT_EQ(99998, stCfg.uiId);
-    EXPECT_EQ(2, stCfg.enSex);
-    EXPECT_EQ(63, stCfg.uiAge);
-    EXPECT_EQ(298, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "1234567890123"));
+    ulErrCode = INFO_data_GetData(uiId, &pstCfg);
+    EXPECT_EQ(99998, pstCfg->uiId);
+    EXPECT_EQ(2, pstCfg->enSex);
+    EXPECT_EQ(63, pstCfg->uiAge);
+    EXPECT_EQ(298, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "1234567890123"));
     uiId = INFO_data_GetNext(uiId);
-    ulErrCode = INFO_data_GetData(uiId, &stCfg);
-    EXPECT_EQ(99999, stCfg.uiId);
-    EXPECT_EQ(2, stCfg.enSex);
-    EXPECT_EQ(64, stCfg.uiAge);
-    EXPECT_EQ(299, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "12345678901234"));
+    ulErrCode = INFO_data_GetData(uiId, &pstCfg);
+    EXPECT_EQ(99999, pstCfg->uiId);
+    EXPECT_EQ(2, pstCfg->enSex);
+    EXPECT_EQ(64, pstCfg->uiAge);
+    EXPECT_EQ(299, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "12345678901234"));
     uiId = INFO_data_GetNext(uiId);
-    ulErrCode = INFO_data_GetData(uiId, &stCfg);
-    EXPECT_EQ(100000, stCfg.uiId);
-    EXPECT_EQ(2, stCfg.enSex);
-    EXPECT_EQ(65, stCfg.uiAge);
-    EXPECT_EQ(300, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "123456789012345"));
+    ulErrCode = INFO_data_GetData(uiId, &pstCfg);
+    EXPECT_EQ(100000, pstCfg->uiId);
+    EXPECT_EQ(2, pstCfg->enSex);
+    EXPECT_EQ(65, pstCfg->uiAge);
+    EXPECT_EQ(300, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "123456789012345"));
 
     /* 去初始化 */
     INFO_data_Fini();
@@ -245,7 +245,7 @@ TEST(UT_INFO_proc_Add, 004)
     ULONG ulErrCode;
     UINT uiLoop;
     CHAR szInputStr[512];
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
 
     /* 初始化 */
     ulErrCode = INFO_data_Init();
@@ -260,13 +260,13 @@ TEST(UT_INFO_proc_Add, 004)
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
 
     /* 检查预期结果 */
-    ulErrCode = INFO_data_GetData(5001, &stCfg);
+    ulErrCode = INFO_data_GetData(5001, &pstCfg);
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
-    EXPECT_EQ(5001, stCfg.uiId);
-    EXPECT_EQ(2, stCfg.enSex);
-    EXPECT_EQ(20, stCfg.uiAge);
-    EXPECT_EQ(175, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "jack"));
+    EXPECT_EQ(5001, pstCfg->uiId);
+    EXPECT_EQ(2, pstCfg->enSex);
+    EXPECT_EQ(20, pstCfg->uiAge);
+    EXPECT_EQ(175, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "jack"));
 
     /* 去初始化 */
     INFO_data_Fini();
@@ -291,7 +291,7 @@ TEST(UT_INFO_proc_Add, 005)
 {
     ULONG ulErrCode;
     BOOL_T bIsExist;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
 
     /* 初始化 */
     ulErrCode  = INFO_data_Init();
@@ -305,13 +305,13 @@ TEST(UT_INFO_proc_Add, 005)
     /* 检查预期结果 */
     bIsExist = INFO_data_IsExist(10);
     EXPECT_EQ(BOOL_TRUE, bIsExist);
-    ulErrCode = INFO_data_GetData(10, &stCfg);
+    ulErrCode = INFO_data_GetData(10, &pstCfg);
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
-    EXPECT_EQ(10, stCfg.uiId);
-    EXPECT_EQ(2, stCfg.enSex);
-    EXPECT_EQ(20, stCfg.uiAge);
-    EXPECT_EQ(175, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "jack"));
+    EXPECT_EQ(10, pstCfg->uiId);
+    EXPECT_EQ(2, pstCfg->enSex);
+    EXPECT_EQ(20, pstCfg->uiAge);
+    EXPECT_EQ(175, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "jack"));
 
     /* 去初始化 */
     INFO_data_Fini();
@@ -856,7 +856,7 @@ INFO_CFG_S g_stMemberData[UT_CORRECTMEMBERNUM] = {
 TEST(UT_INFO_proc_Delete, 001)
 {
     ULONG ulErrCode;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
     ULONG ulFirstMember = 0;
 
     /* 初始化环境 */
@@ -866,13 +866,13 @@ TEST(UT_INFO_proc_Delete, 001)
     ulErrCode = INFO_proc_Add(g_szCorrectMemberInfo[ulFirstMember]);
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
 
-    ulErrCode = INFO_data_GetData(g_stMemberData[ulFirstMember].uiId, &stCfg);
+    ulErrCode = INFO_data_GetData(g_stMemberData[ulFirstMember].uiId, &pstCfg);
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
 
     /* 调用被测函数 */
     ulErrCode = INFO_proc_Delete("id=11");
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
-    ulErrCode = INFO_data_GetData(g_stMemberData[ulFirstMember].uiId, &stCfg);
+    ulErrCode = INFO_data_GetData(g_stMemberData[ulFirstMember].uiId, &pstCfg);
     EXPECT_EQ(ERROR_FAILED, ulErrCode);
 
 
@@ -896,7 +896,7 @@ TEST(UT_INFO_proc_Delete, 001)
 TEST(UT_INFO_proc_Delete, 002)
 {
     ULONG ulErrCode;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
     INT iMemberNum = 3;
     INT iCurMember;
     BOOL_T bIsEmpty;
@@ -910,7 +910,7 @@ TEST(UT_INFO_proc_Delete, 002)
         ulErrCode = INFO_proc_Add(g_szCorrectMemberInfo[iCurMember]);
         EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
 
-        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &stCfg);
+        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &pstCfg);
         EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
     }
 
@@ -919,7 +919,7 @@ TEST(UT_INFO_proc_Delete, 002)
         /* 调用被测函数 */
         ulErrCode = INFO_proc_Delete(g_szCorrectMemberInfo[iCurMember]);
         EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
-        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &stCfg);
+        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &pstCfg);
         EXPECT_EQ(ERROR_FAILED, ulErrCode);
     }
 
@@ -946,7 +946,7 @@ TEST(UT_INFO_proc_Delete, 002)
 TEST(UT_INFO_proc_Delete, 003)
 {
     ULONG ulErrCode;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
     INT iMemberNum = 5;
     INT iCurMember;
     BOOL_T bIsEmpty;
@@ -960,7 +960,7 @@ TEST(UT_INFO_proc_Delete, 003)
         ulErrCode = INFO_proc_Add(g_szCorrectMemberInfo[iCurMember]);
         EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
 
-        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &stCfg);
+        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &pstCfg);
         EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
     }
 
@@ -969,7 +969,7 @@ TEST(UT_INFO_proc_Delete, 003)
         /* 调用被测函数 */
         ulErrCode = INFO_proc_Delete(g_szCorrectMemberInfo[iCurMember]);
         EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
-        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &stCfg);
+        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &pstCfg);
         EXPECT_EQ(ERROR_FAILED, ulErrCode);
     }
 
@@ -996,7 +996,7 @@ TEST(UT_INFO_proc_Delete, 003)
 TEST(UT_INFO_proc_Delete, 004)
 {
     ULONG ulErrCode;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
     INT iMemberNum = 5;
     INT iCurMember;
 
@@ -1009,7 +1009,7 @@ TEST(UT_INFO_proc_Delete, 004)
         ulErrCode = INFO_proc_Add(g_szCorrectMemberInfo[iCurMember]);
         EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
 
-        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &stCfg);
+        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &pstCfg);
         EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
     }
 
@@ -1019,7 +1019,7 @@ TEST(UT_INFO_proc_Delete, 004)
 
     for (iCurMember = 0; iCurMember < iMemberNum; iCurMember++)
     {
-        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &stCfg);
+        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &pstCfg);
         EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
     }
 
@@ -1043,7 +1043,7 @@ TEST(UT_INFO_proc_Delete, 004)
 TEST(UT_INFO_proc_Delete, 005)
 {
     ULONG ulErrCode;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
     INT iMemberNum = 5;
     INT iCurMember;
 
@@ -1056,7 +1056,7 @@ TEST(UT_INFO_proc_Delete, 005)
         ulErrCode = INFO_proc_Add(g_szCorrectMemberInfo[iCurMember]);
         EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
 
-        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &stCfg);
+        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &pstCfg);
         EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
     }
 
@@ -1066,7 +1066,7 @@ TEST(UT_INFO_proc_Delete, 005)
 
     for (iCurMember = 0; iCurMember < iMemberNum; iCurMember++)
     {
-        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &stCfg);
+        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &pstCfg);
         EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
     }
 
@@ -1076,7 +1076,7 @@ TEST(UT_INFO_proc_Delete, 005)
 
     for (iCurMember = 0; iCurMember < iMemberNum; iCurMember++)
     {
-        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &stCfg);
+        ulErrCode = INFO_data_GetData(g_stMemberData[iCurMember].uiId, &pstCfg);
         EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
     }
 
@@ -1100,7 +1100,7 @@ TEST(UT_INFO_proc_Delete, 005)
 TEST(UT_INFO_proc_Delete, 006)
 {
     ULONG ulErrCode;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
     INT iMemberNum = 10000;
     INT iCurMember;
     BOOL_T bIsEmpty;
@@ -1164,7 +1164,7 @@ TEST(UT_INFO_proc_Delete, 006)
 TEST(UT_INFO_proc_Modify, 001)
 {
     ULONG ulErrCode;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
 
     /* 初始化 */
     ulErrCode  = INFO_data_Init();
@@ -1176,13 +1176,13 @@ TEST(UT_INFO_proc_Modify, 001)
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
 
     /* 检查预期结果 */
-    ulErrCode = INFO_data_GetData(10, &stCfg);
+    ulErrCode = INFO_data_GetData(10, &pstCfg);
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
-    EXPECT_EQ(10, stCfg.uiId);
-    EXPECT_EQ(2, stCfg.enSex);
-    EXPECT_EQ(20, stCfg.uiAge);
-    EXPECT_EQ(175, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "jackabc"));
+    EXPECT_EQ(10, pstCfg->uiId);
+    EXPECT_EQ(2, pstCfg->enSex);
+    EXPECT_EQ(20, pstCfg->uiAge);
+    EXPECT_EQ(175, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "jackabc"));
 
     /* 去初始化 */
     INFO_data_Fini();
@@ -1205,7 +1205,7 @@ TEST(UT_INFO_proc_Modify, 001)
 TEST(UT_INFO_proc_Modify, 002)
 {
     ULONG ulErrCode;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
 
     /* 初始化 */
     ulErrCode  = INFO_data_Init();
@@ -1217,13 +1217,13 @@ TEST(UT_INFO_proc_Modify, 002)
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
 
     /* 检查预期结果 */
-    ulErrCode = INFO_data_GetData(10, &stCfg);
+    ulErrCode = INFO_data_GetData(10, &pstCfg);
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
-    EXPECT_EQ(10, stCfg.uiId);
-    EXPECT_EQ(1, stCfg.enSex);
-    EXPECT_EQ(20, stCfg.uiAge);
-    EXPECT_EQ(175, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "jack"));
+    EXPECT_EQ(10, pstCfg->uiId);
+    EXPECT_EQ(1, pstCfg->enSex);
+    EXPECT_EQ(20, pstCfg->uiAge);
+    EXPECT_EQ(175, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "jack"));
 
     /* 去初始化 */
     INFO_data_Fini();
@@ -1246,7 +1246,7 @@ TEST(UT_INFO_proc_Modify, 002)
 TEST(UT_INFO_proc_Modify, 003)
 {
     ULONG ulErrCode;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
 
     /* 初始化 */
     ulErrCode  = INFO_data_Init();
@@ -1258,13 +1258,13 @@ TEST(UT_INFO_proc_Modify, 003)
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
 
     /* 检查预期结果 */
-    ulErrCode = INFO_data_GetData(10, &stCfg);
+    ulErrCode = INFO_data_GetData(10, &pstCfg);
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
-    EXPECT_EQ(10, stCfg.uiId);
-    EXPECT_EQ(2, stCfg.enSex);
-    EXPECT_EQ(35, stCfg.uiAge);
-    EXPECT_EQ(175, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "jack"));
+    EXPECT_EQ(10, pstCfg->uiId);
+    EXPECT_EQ(2, pstCfg->enSex);
+    EXPECT_EQ(35, pstCfg->uiAge);
+    EXPECT_EQ(175, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "jack"));
 
     /* 去初始化 */
     INFO_data_Fini();
@@ -1287,7 +1287,7 @@ TEST(UT_INFO_proc_Modify, 003)
 TEST(UT_INFO_proc_Modify, 004)
 {
     ULONG ulErrCode;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
 
     /* 初始化 */
     ulErrCode  = INFO_data_Init();
@@ -1299,13 +1299,13 @@ TEST(UT_INFO_proc_Modify, 004)
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
 
     /* 检查预期结果 */
-    ulErrCode = INFO_data_GetData(10, &stCfg);
+    ulErrCode = INFO_data_GetData(10, &pstCfg);
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
-    EXPECT_EQ(10, stCfg.uiId);
-    EXPECT_EQ(2, stCfg.enSex);
-    EXPECT_EQ(20, stCfg.uiAge);
-    EXPECT_EQ(181, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "jack"));
+    EXPECT_EQ(10, pstCfg->uiId);
+    EXPECT_EQ(2, pstCfg->enSex);
+    EXPECT_EQ(20, pstCfg->uiAge);
+    EXPECT_EQ(181, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "jack"));
 
     /* 去初始化 */
     INFO_data_Fini();
@@ -1328,7 +1328,7 @@ TEST(UT_INFO_proc_Modify, 004)
 TEST(UT_INFO_proc_Modify, 005)
 {
     ULONG ulErrCode;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
 
     /* 初始化 */
     ulErrCode  = INFO_data_Init();
@@ -1340,13 +1340,13 @@ TEST(UT_INFO_proc_Modify, 005)
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
 
     /* 检查预期结果 */
-    ulErrCode = INFO_data_GetData(10, &stCfg);
+    ulErrCode = INFO_data_GetData(10, &pstCfg);
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
-    EXPECT_EQ(10, stCfg.uiId);
-    EXPECT_EQ(2, stCfg.enSex);
-    EXPECT_EQ(45, stCfg.uiAge);
-    EXPECT_EQ(175, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "jack123456"));
+    EXPECT_EQ(10, pstCfg->uiId);
+    EXPECT_EQ(2, pstCfg->enSex);
+    EXPECT_EQ(45, pstCfg->uiAge);
+    EXPECT_EQ(175, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "jack123456"));
 
     /* 去初始化 */
     INFO_data_Fini();
@@ -1369,7 +1369,7 @@ TEST(UT_INFO_proc_Modify, 005)
 TEST(UT_INFO_proc_Modify, 006)
 {
     ULONG ulErrCode;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
 
     /* 初始化 */
     ulErrCode  = INFO_data_Init();
@@ -1381,13 +1381,13 @@ TEST(UT_INFO_proc_Modify, 006)
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
 
     /* 检查预期结果 */
-    ulErrCode = INFO_data_GetData(10, &stCfg);
+    ulErrCode = INFO_data_GetData(10, &pstCfg);
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
-    EXPECT_EQ(10, stCfg.uiId);
-    EXPECT_EQ(1, stCfg.enSex);
-    EXPECT_EQ(20, stCfg.uiAge);
-    EXPECT_EQ(185, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "jack"));
+    EXPECT_EQ(10, pstCfg->uiId);
+    EXPECT_EQ(1, pstCfg->enSex);
+    EXPECT_EQ(20, pstCfg->uiAge);
+    EXPECT_EQ(185, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "jack"));
 
     /* 去初始化 */
     INFO_data_Fini();
@@ -1409,7 +1409,7 @@ TEST(UT_INFO_proc_Modify, 006)
 TEST(UT_INFO_proc_Modify, 007)
 {
     ULONG ulErrCode;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
 
     /* 初始化 */
     ulErrCode  = INFO_data_Init();
@@ -1440,7 +1440,7 @@ TEST(UT_INFO_proc_Modify, 007)
 TEST(UT_INFO_proc_Modify, 008)
 {
     ULONG ulErrCode;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
 
     /* 初始化 */
     ulErrCode  = INFO_data_Init();
@@ -1474,7 +1474,7 @@ TEST(UT_INFO_proc_Modify, 009)
     ULONG ulErrCode;
     UINT uiId;
     CHAR szInputStr[512];
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
 
     /* 初始化 */
     ulErrCode = INFO_data_Init();
@@ -1495,13 +1495,13 @@ TEST(UT_INFO_proc_Modify, 009)
 
     /* 检查预期结果 */
     uiId = INFO_data_GetNext(993);
-    ulErrCode = INFO_data_GetData(uiId, &stCfg);
+    ulErrCode = INFO_data_GetData(uiId, &pstCfg);
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
-    EXPECT_EQ(uiId, stCfg.uiId);
-    EXPECT_EQ(1, stCfg.enSex);
-    EXPECT_EQ(35, stCfg.uiAge);
-    EXPECT_EQ(195, stCfg.uiHeight);
-    EXPECT_EQ(0, strcmp(stCfg.szName, "jackabc"));
+    EXPECT_EQ(uiId, pstCfg->uiId);
+    EXPECT_EQ(1, pstCfg->enSex);
+    EXPECT_EQ(35, pstCfg->uiAge);
+    EXPECT_EQ(195, pstCfg->uiHeight);
+    EXPECT_EQ(0, strcmp(pstCfg->szName, "jackabc"));
 
     /* 去初始化 */
     INFO_data_Fini();
@@ -1523,7 +1523,7 @@ TEST(UT_INFO_proc_Modify, 009)
 TEST(UT_INFO_proc_Modify, 011)
 {
     ULONG ulErrCode;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
     ULONG ulFirstMember = 12;
 
     /* 初始化环境 */
@@ -1533,18 +1533,18 @@ TEST(UT_INFO_proc_Modify, 011)
     ulErrCode = INFO_proc_Add(g_szCorrectMemberInfo[ulFirstMember]);
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
 
-    ulErrCode = INFO_data_GetData(g_stMemberData[ulFirstMember].uiId, &stCfg);
+    ulErrCode = INFO_data_GetData(g_stMemberData[ulFirstMember].uiId, &pstCfg);
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
 
     /* 调用被测函数 */
     ulErrCode = INFO_proc_Modify(g_szCorrectMemberInfo[ulFirstMember + 1]);
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
-    ulErrCode = INFO_data_GetData(g_stMemberData[ulFirstMember].uiId, &stCfg);
+    ulErrCode = INFO_data_GetData(g_stMemberData[ulFirstMember].uiId, &pstCfg);
     EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
-    EXPECT_EQ(g_stMemberData[ulFirstMember + 1].enSex, stCfg.enSex);
-    EXPECT_EQ(g_stMemberData[ulFirstMember + 1].uiAge, stCfg.uiAge);
-    EXPECT_EQ(g_stMemberData[ulFirstMember + 1].uiHeight, stCfg.uiHeight);
-    EXPECT_STREQ(g_stMemberData[ulFirstMember + 1].szName, stCfg.szName);
+    EXPECT_EQ(g_stMemberData[ulFirstMember + 1].enSex, pstCfg->enSex);
+    EXPECT_EQ(g_stMemberData[ulFirstMember + 1].uiAge, pstCfg->uiAge);
+    EXPECT_EQ(g_stMemberData[ulFirstMember + 1].uiHeight, pstCfg->uiHeight);
+    EXPECT_STREQ(g_stMemberData[ulFirstMember + 1].szName, pstCfg->szName);
 
     /* 去初始化环境 */
     INFO_data_Fini();
@@ -1566,7 +1566,7 @@ TEST(UT_INFO_proc_Modify, 011)
 TEST(UT_INFO_proc_Modify, 012)
 {
     ULONG ulErrCode;
-    INFO_CFG_S stCfg;
+    INFO_CFG_S * pstCfg;
     INT iStart = 6;
     INT iEnd = 9;
     INT iModifyStart = 9;
@@ -1583,7 +1583,7 @@ TEST(UT_INFO_proc_Modify, 012)
         ulErrCode = INFO_proc_Add(g_szCorrectMemberInfo[iCur]);
         EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
 
-        ulErrCode = INFO_data_GetData(g_stMemberData[iCur].uiId, &stCfg);
+        ulErrCode = INFO_data_GetData(g_stMemberData[iCur].uiId, &pstCfg);
         EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
     }
 
@@ -1592,12 +1592,12 @@ TEST(UT_INFO_proc_Modify, 012)
         /* 调用被测函数 */
         ulErrCode = INFO_proc_Modify(g_szCorrectMemberInfo[iCur]);
         EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
-        ulErrCode = INFO_data_GetData(g_stMemberData[iCur].uiId, &stCfg);
+        ulErrCode = INFO_data_GetData(g_stMemberData[iCur].uiId, &pstCfg);
         EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
-        EXPECT_EQ(g_stMemberData[iCur].enSex, stCfg.enSex);
-        EXPECT_EQ(g_stMemberData[iCur].uiAge, stCfg.uiAge);
-        EXPECT_EQ(g_stMemberData[iCur].uiHeight, stCfg.uiHeight);
-        EXPECT_STREQ(g_stMemberData[iCur].szName, stCfg.szName);
+        EXPECT_EQ(g_stMemberData[iCur].enSex, pstCfg->enSex);
+        EXPECT_EQ(g_stMemberData[iCur].uiAge, pstCfg->uiAge);
+        EXPECT_EQ(g_stMemberData[iCur].uiHeight, pstCfg->uiHeight);
+        EXPECT_STREQ(g_stMemberData[iCur].szName, pstCfg->szName);
     }
 
     bIsEmpty = INFO_data_IsEmpty();
@@ -1607,3 +1607,194 @@ TEST(UT_INFO_proc_Modify, 012)
     INFO_data_Fini();
 }
 
+/*#######################################################################
+#测试用例编号: UT_INFO_proc_Modify_013
+#测  试  项  : 功能测试
+#测试用例标题: 修改10000个成员所有信息成功
+#重 要 级 别 : 高
+#预 置 条 件 : 添加10000个成员
+#输       入 : pcInputStr=员工信息
+#操 作 步 骤 : 执行测试例
+#预 期 结 果 : 所有成员删除
+#              INFO_proc_Modify返回成功
+#完  成  人  : liaohui kf2309
+#日      期  : 2011-12-31
+#######################################################################*/
+TEST(UT_INFO_proc_Modify, 013)
+{
+    ULONG ulErrCode;
+    INFO_CFG_S * pstCfg;
+    INT iMemberNum = 10000;
+    INT iCurMember;
+    CHAR szInfo[INFO_IOBUF_MAXLEN];
+    CHAR *pcString;
+    UINT uiId;
+    UINT uiCount;
+    UINT uiModifyAge = 18;
+    UINT uiModifyHeight = 180;
+    INFO_SEX_E enModifySex = INFO_SEX_FEMALE;
+    CHAR * szModifyName = "onename";
+    
+    BOOL_T bIsEmpty;
+
+    /* 初始化环境 */
+    INFO_data_Init();
+
+    pcString = szInfo;
+    /* 添加成员 */
+    for (iCurMember = 1; iCurMember < iMemberNum; iCurMember++)
+    {
+        (VOID)scnprintf(pcString, sizeof(szInfo), "id=%d name=jack01 sex=1 age=21 height=170", iCurMember);
+        ulErrCode = INFO_proc_Add(pcString);
+        EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+    }
+    
+    uiCount = 0;
+    INFO_FOREACH(uiId)
+    {
+        uiCount++;
+    }
+    
+    for (iCurMember = iMemberNum; iCurMember > 0; iCurMember--)
+    {
+        pcString = szInfo;
+        (VOID)scnprintf(pcString, sizeof(szInfo), "id=%u name=%s height=%u sex=%d age=%u", iCurMember,szModifyName,uiModifyHeight,enModifySex,uiModifyAge);
+        /* 调用被测函数 */
+        ulErrCode = INFO_proc_Modify(pcString);
+        EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+    }
+
+
+    for (iCurMember = iMemberNum; iCurMember > 0; iCurMember--)
+    {
+        /* 调用被测函数 */
+        ulErrCode = INFO_proc_Modify(g_szCorrectMemberInfo[iCur]);
+        EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+        ulErrCode = INFO_data_GetData(g_stMemberData[iCur].uiId, &pstCfg);
+        EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+        EXPECT_EQ(INFO_SEX_FEMALE, pstCfg->enSex);
+        EXPECT_EQ(uiModifyAge, pstCfg->uiAge);
+        EXPECT_EQ(uiModifyHeight, pstCfg->uiHeight);
+        EXPECT_STREQ(szModifyName, pstCfg->szName);
+    }
+
+    bIsEmpty = INFO_data_IsEmpty();
+    EXPECT_EQ(BOOL_FALSE, bIsEmpty);
+
+    /* 去初始化环境 */
+    INFO_data_Fini();
+}
+
+
+#define UTC_INFO_data_IsExist
+/*#######################################################################
+#测试用例编号: UT_INFO_data_IsExist_001
+#测  试  项  : 功能测试
+#测试用例标题: 测试6个成员ID是否存在
+#重 要 级 别 : 高
+#预 置 条 件 : 添加6个成员
+#输       入 : pcInputStr=员工信息
+#操 作 步 骤 : 执行测试例
+#预 期 结 果 : 前三个存在，后三个不存在
+#              INFO_dataa_IsExist依次返回BOOL_TRUE和BOOL_FALSE
+#完  成  人  : 黄振
+#日      期  : 2016-08-07
+#######################################################################*/
+TEST(UT_INFO_data_IsExist, 001)
+{
+    ULONG ulErrCode;
+    
+    INFO_CFG_S * pstCfg;
+    INT iStart = 0;
+    INT iStop = 6;
+    UINT uiTestId[6] = {11,12,14,-11,5,0};
+    INT iCur;
+    BOOL_T bIsEmpty;
+    BOOL_T bIsExist;
+
+    /* 初始化环境 */
+    INFO_data_Init();
+
+    /* 添加成员 */
+    for (iCur = iStart; iCur < iEnd; iCur++)
+    {
+        ulErrCode = INFO_proc_Add(g_szCorrectMemberInfo[iCur]);
+        EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+        ulErrCode = INFO_data_GetData(g_stMemberData[iCur].uiId, &pstCfg);
+        EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+    }
+
+    for (iCur = 0; iCur < 3; iCur++)
+    {
+        /* 调用被测函数 */
+        bIsExist = INFO_data_IsExist(uiTestId[iCur]);
+        EXPECT_EQ(BOOL_TRUE,bIsExist);
+    }    
+    for (iCur = 3; iCur < 6; iCur++)
+    {
+        /* 调用被测函数 */
+        bIsExist = INFO_data_IsExist(uiTestId[iCur]);
+        EXPECT_EQ(BOOL_FALSE,bIsExist);
+    } 
+
+    /* 去初始化环境 */
+    INFO_data_Fini();
+}
+
+
+
+/*#######################################################################
+#测试用例编号: UT_INFO_data_IsExist_001
+#测  试  项  : 功能测试
+#测试用例标题: 测试6个成员ID是否存在
+#重 要 级 别 : 高
+#预 置 条 件 : 添加6个成员
+#输       入 : pcInputStr=员工信息
+#操 作 步 骤 : 执行测试例
+#预 期 结 果 : 前三个存在，后三个不存在
+#              INFO_dataa_IsExist依次返回BOOL_TRUE和BOOL_FALSE
+#完  成  人  : 黄振
+#日      期  : 2016-08-07
+#######################################################################*/
+TEST(UT_INFO_data_IsExist, 001)
+{
+    ULONG ulErrCode;
+    
+    INFO_CFG_S * pstCfg;
+    INT iStart = 0;
+    INT iStop = 6;
+    UINT uiTestId[6] = {11,12,14,-11,5,0};
+    INT iCur;
+    BOOL_T bIsEmpty;
+    BOOL_T bIsExist;
+
+    /* 初始化环境 */
+    INFO_data_Init();
+
+    /* 添加成员 */
+    for (iCur = iStart; iCur < iEnd; iCur++)
+    {
+        ulErrCode = INFO_proc_Add(g_szCorrectMemberInfo[iCur]);
+        EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+
+        ulErrCode = INFO_data_GetData(g_stMemberData[iCur].uiId, &pstCfg);
+        EXPECT_EQ(ERROR_SUCCESS, ulErrCode);
+    }
+
+    for (iCur = 0; iCur < 3; iCur++)
+    {
+        /* 调用被测函数 */
+        bIsExist = INFO_data_IsExist(uiTestId[iCur]);
+        EXPECT_EQ(BOOL_TRUE,bIsExist);
+    }    
+    for (iCur = 3; iCur < 6; iCur++)
+    {
+        /* 调用被测函数 */
+        bIsExist = INFO_data_IsExist(uiTestId[iCur]);
+        EXPECT_EQ(BOOL_FALSE,bIsExist);
+    } 
+
+    /* 去初始化环境 */
+    INFO_data_Fini();
+}

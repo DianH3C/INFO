@@ -23,18 +23,15 @@ extern "C"{
 
 /* standard library */
 #include <stdlib.h>
-#include <string.h>
 
 /* system   public  */
 #include <sys/basetype.h>
 #include <sys/error.h>
 #include <sys/assert.h>
 #include <sys/list.h>
-#include <sys/string_ex.h>
 
 /* module   private */
 #include "info.h"
-#include "info_dbg.h"
 
 /* 信息数据结构 */
 typedef struct tagInfo_Data
@@ -42,6 +39,9 @@ typedef struct tagInfo_Data
                             /* 数据组织相关[*] */
     INFO_CFG_S stCfg;       /* 配置数据 */
 }INFO_DATA_S;
+
+/* the head point of pstCfg*/
+INFO_CFG_S* g_pstCfghead = NULL;
 
 /*****************************************************************************
     Func Name: INFO_data_IsExist[*]
@@ -62,6 +62,14 @@ typedef struct tagInfo_Data
 *****************************************************************************/
 BOOL_T INFO_data_IsExist(IN UINT uiId)
 {
+    INFO_CFG_S* pstCfgtemp = g_pstCfghead;
+    for( ; pstCfgtemp != NULL; pstCfgtemp = pstCfgtemp->pstCfgnext )
+    {
+        if(pstCfgtemp->uiId == uiId)
+        {
+            return BOOL_TRUE;
+        }
+    }
     return BOOL_FALSE;
 }
 
@@ -84,7 +92,11 @@ BOOL_T INFO_data_IsExist(IN UINT uiId)
 *****************************************************************************/
 BOOL_T INFO_data_IsEmpty(VOID)
 {
-    return BOOL_TRUE;
+    if(g_pstCfghead == NULL)
+    {
+        return BOOL_TRUE;
+    }
+    return BOOL_FALSE;
 }
 
 /*****************************************************************************
@@ -106,6 +118,15 @@ BOOL_T INFO_data_IsEmpty(VOID)
 *****************************************************************************/
 ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 {
+    INFO_CFG_S* pstCfgtemp = g_pstCfghead;
+    for( ; pstCfgtemp != NULL; pstCfgtemp = pstCfgtemp->pstCfgnext )
+    {
+        if(pstCfgtemp->uiId == uiId)
+        {
+            *pstCfg = *pstCfgtemp;
+            return ERROR_SUCCESS;
+        }
+    }
     return ERROR_FAILED;
 }
 
@@ -128,7 +149,14 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 *****************************************************************************/
 UINT INFO_data_GetFirst(VOID)
 {
-    return INFO_ID_INVALID;
+    if(g_pstCfghead == NULL)
+    {
+        return INFO_ID_INVALID;
+    }
+    else
+    {
+        return g_pstCfghead->uiId;
+    }
 }
 
 /*****************************************************************************
@@ -150,6 +178,18 @@ UINT INFO_data_GetFirst(VOID)
 *****************************************************************************/
 UINT INFO_data_GetNext(IN UINT uiId)
 {
+    INFO_CFG_S* pstCfgtemp = g_pstCfghead;
+    for( ; pstCfgtemp != NULL; pstCfgtemp = pstCfgtemp->pstCfgnext)
+    {
+        if(pstCfgtemp->uiId == uiId && pstCfgtemp->pstCfgnext != NULL)
+        {
+            return pstCfgtemp->pstCfgnext->uiId;
+        }
+        if(pstCfgtemp->uiId > uiId)
+        {
+            return pstCfgtemp->uiId;
+        }
+    }
     return INFO_ID_INVALID;
 }
 
@@ -172,6 +212,7 @@ UINT INFO_data_GetNext(IN UINT uiId)
 *****************************************************************************/
 ULONG INFO_data_Init(VOID)
 {
+    g_pstCfghead = NULL;
     return ERROR_SUCCESS;
 }
 

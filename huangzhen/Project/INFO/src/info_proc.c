@@ -62,25 +62,29 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 {
     if(INFO_data_IsEmpty())
     {
-        printf("No info\r\n");
+        printf("No info.\r\n");
         return ERROR_FAILED;
     }
-    INFO_CFG_S * pstCfg,* pstUserCfg;
-    INFO_parse_InputStr(pcInputStr,pstCfg);
+    INFO_CFG_S * pstUserCfg = (INFO_CFG_S*)malloc(sizeof(INFO_CFG_S));
 
-    
     UINT uiId = INFO_data_GetFirst();
 
     while(uiId != INFO_ID_INVALID)
     {
-        INFO_data_GetData(uiId,pstUserCfg);
         printf("1 for female, and 2 for male.\r\n");
-        printf("ID\tNAME\tSEX\tAGE\tHEIGHT\r\n");
-        printf("%u\t%s\t%d\t%u\t%u\r\n",pstUserCfg->uiId,pstUserCfg->szName,pstUserCfg->enSex,pstUserCfg->uiHeight);         
-        
+        if(ERROR_SUCCESS == INFO_data_GetData(uiId,&pstUserCfg))
+        {
+
+            printf("ID\tNAME\tSEX\tAGE\tHEIGHT\r\n");
+            printf("%u\t%s\t%d\t%u\t%u\r\n",pstUserCfg->uiId,pstUserCfg->szName,pstUserCfg->enSex,pstUserCfg->uiAge,pstUserCfg->uiHeight);
+        }
+        else
+        {
+            return ERROR_FAILED;
+        }
         uiId = INFO_data_GetNext(uiId);
-     
     }
+
     return ERROR_SUCCESS;
 }
 
@@ -103,39 +107,59 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 
 *****************************************************************************/
 ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
-{   
-    INFO_CFG_S * pstCfg = (INFO_CFG_S*)malloc(sizeof(INFO_CFG_S));
+{
+    INFO_CFG_S * pstCfg=(INFO_CFG_S*)malloc(sizeof(INFO_CFG_S));
+    if(NULL == pstCfg)
+    {
+        return ERROR_NO_ENOUGH_RESOURCE;
+    }
     INFO_parse_InputStr(pcInputStr,pstCfg);
     
-    if(INFO_ALL_ISVALID(pstCfg))
+    //better to tell user which datum is invalid
+    if(!INFO_ALL_ISVALID(pstCfg))
+    {   
+        if(!INFO_ID_ISVALID(pstCfg->uiId))
+        {
+            printf("Sorry, the id you input are invalid.\r\n");
+        }
+        if(!INFO_AGE_ISVALID(pstCfg->uiAge))
+        {
+            printf("Sorry, the age you input are invalid.\r\n");
+        }
+        if(!INFO_SEX_ISVALID(pstCfg->enSex))
+        {
+            printf("Sorry, the sex you input are invalid.\r\n");
+        }
+        if(!INFO_HEIGHT_ISVALID(pstCfg->uiHeight))
+        {
+            printf("Sorry, the height you input are invalid.\r\n");
+        }
+        if(!INFO_NAME_ISVALID(pstCfg->szName))
+        {
+            printf("Sorry, the name you input are invalid.\r\n");
+        }
+        return ERROR_INVALID_PARAMETER;    
+    }
+
+    UINT uiId = pstCfg->uiId;
+    if(INFO_data_IsExist(uiId))
     {
-        UINT uiId = pstCfg->uiId;
-        if(INFO_data_IsExist(uiId))
-        {
-            printf("Sorry, id %u exists already, you can not add it.\r\n",uiId);
-            return ERROR_FAILED;
-        }
-        if((BOOL_T)INFO_data_Create(uiId))
-        {        
-            INFO_data_SetName(uiId,pstCfg->szName);
-            INFO_data_SetAge(uiId,pstCfg->uiAge);
-            INFO_data_SetHeight(uiId,pstCfg->uiHeight);
-            INFO_data_SetSex(uiId,pstCfg->enSex);
-            return ERROR_SUCCESS;
-        }
-        /*
-        else
-        {
-            printf("Sorry, failed to add data, something goes wrong.\r\n");
-            return ERROR_FAILED;
-        }*/
-     } 
-     else
-     {
-        printf("Sorry, the data you input are invalid.\r\n");
-        return ERROR_FAILED;
-     }
-   
+        printf("Sorry, id %u exists already, you can not add it.\r\n",uiId);
+        return ERROR_ALREADY_EXIST;
+    }
+
+    INFO_data_Create(uiId);
+
+    INFO_data_SetName(uiId,pstCfg->szName);
+    INFO_data_SetAge(uiId,pstCfg->uiAge);
+    INFO_data_SetHeight(uiId,pstCfg->uiHeight);
+    INFO_data_SetSex(uiId,pstCfg->enSex);
+    
+    free(pstCfg);
+    pstCfg = NULL;
+    return ERROR_SUCCESS;
+
+
 }
 
 /*****************************************************************************
@@ -161,24 +185,24 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
     INFO_CFG_S * pstCfg = (INFO_CFG_S*)malloc(sizeof(INFO_CFG_S));
     INFO_parse_InputStr(pcInputStr,pstCfg);
     UINT uiId = pstCfg->uiId;
-    if(INFO_ID_ISVALID(uiId))
-    {
-        if(INFO_data_IsExist(uiId))
-        {
-            INFO_data_Destroy(uiId);
-            return ERROR_SUCCESS;
-        }
-        else
-        {
-            printf("The id %u you want to delete does not exist!\r\n",uiId);
-            return ERROR_FAILED;
-         }
-    }
-    else
+    if(!INFO_ID_ISVALID(uiId))
     {
         printf("The id %u you want to delete is invalid!\r\n",pstCfg->uiId);
-        return ERROR_FAILED;
+        return ERROR_INVALID_PARAMETER;
     }
+
+    if(!INFO_data_IsExist(uiId))
+    {
+        printf("The id %u you want to delete does not exist!\r\n",uiId);
+        return ERROR_SUCCESS;
+    }
+
+    INFO_data_Destroy(uiId);
+
+    free(pstCfg);
+    pstCfg = NULL;
+    return ERROR_SUCCESS;
+
 }
 
 /*****************************************************************************
@@ -203,43 +227,44 @@ ULONG INFO_proc_Modify(IN const CHAR *pcInputStr)
 {
 
     INFO_CFG_S * pstCfg = (INFO_CFG_S*)malloc(sizeof(INFO_CFG_S));
-    INFO_CFG_S * pstUserCfg = (INFO_CFG_S*)malloc(sizeof(INFO_CFG_S));
-    
+
     INFO_parse_InputStr(pcInputStr,pstCfg);
 
     UINT uiId = pstCfg->uiId;
 
-    if(INFO_ID_ISVALID(uiId))
+    if(!INFO_ID_ISVALID(uiId))
     {
-        if(INFO_data_IsExist(uiId))
-        {   
-            INFO_data_GetData(uiId,pstUserCfg);
-            
-            if(INFO_SEX_ISVALID(pstCfg->enSex))
-            {
-                pstUserCfg->enSex = pstCfg->enSex;
-            }
-            if(INFO_AGE_ISVALID(pstCfg->uiAge))
-            {
-                pstUserCfg->uiAge = pstCfg->uiAge;
-            }
-            if(INFO_NAME_ISVALID(pstCfg->szName))
-            {
-                strlcpy(pstUserCfg->szName,pstCfg->szName,sizeof(pstUserCfg->szName));
-            }
-            return ERROR_SUCCESS;
-        }
-        else
-        {
-            printf("The id %u you want to modify does not exist!\r\n",uiId);
-            return ERROR_FAILED;
-        }
-     }
-     else
-     {
         printf("The id you want to modify is invalid!\r\n");
-        return ERROR_FAILED;
+        return ERROR_INVALID_PARAMETER;
      }
+
+    if(!INFO_data_IsExist(uiId))
+    {
+        printf("The id %u you want to modify does not exist!\r\n",uiId);
+        return ERROR_NOT_FOUND;
+    }
+
+    if(INFO_SEX_ISVALID(pstCfg->enSex))
+    {
+        INFO_data_SetSex(uiId,pstCfg->enSex);
+    }
+    if(INFO_AGE_ISVALID(pstCfg->uiAge))
+    {
+        INFO_data_SetAge(uiId,pstCfg->uiAge);
+    }
+    if(INFO_NAME_ISVALID(pstCfg->szName))
+    {
+        INFO_data_SetName(uiId,pstCfg->szName);
+    }
+    if(INFO_HEIGHT_ISVALID(pstCfg->uiHeight))
+    {
+        INFO_data_SetHeight(uiId,pstCfg->uiHeight);
+    }
+
+    free(pstCfg);
+    pstCfg = NULL;
+    return ERROR_SUCCESS;
+
 }
 
 /*****************************************************************************
@@ -320,4 +345,3 @@ ULONG INFO_proc_CloseDebug(IN const CHAR *pcInputStr)
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-

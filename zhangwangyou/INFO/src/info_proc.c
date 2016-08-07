@@ -150,21 +150,18 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
 ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 {
     ULONG ulErrCode = ERROR_FAILED;
-    const CHAR *pcErrInfo = NULL;
     INFO_CFG_S stCfg = { 0 };
 
     /* 解析输入字符串得到配置数据并存入stCfg中 */
     INFO_parse_InputStr(pcInputStr, &stCfg);
-    if (BOOL_FALSE == INFO_ALL_ISVALID(&stCfg))
+    if (!INFO_ALL_ISVALID(&stCfg))
     {
         /* 数据输入不全或数据取值非法 */
-        pcErrInfo = "The parameter is incorrect.\r\n";
         ulErrCode = ERROR_INVALID_PARAMETER;
     }
     else if (BOOL_TRUE == INFO_data_IsExist(stCfg.uiId))
     {
         /* 工号已经存在 */
-        pcErrInfo = "The item already exists.\r\n";
         ulErrCode = ERROR_ALREADY_EXIST;
     }
     else
@@ -174,16 +171,10 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
         if (ERROR_SUCCESS != ulErrCode)
         {
             /* 资源不足添加失败 */
-            pcErrInfo = "Not enough resources are available to complete the operation.\r\n";
-        }
-        else
-        {
-            /* 添加成功 */
-            pcErrInfo = "You can see the newly added info through Display function .\r\n";
+            ulErrCode = ERROR_NO_ENOUGH_RESOURCE;
         }
     }
 
-    printf("%s", pcErrInfo);
     return ulErrCode;
 }
 
@@ -207,15 +198,13 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 *****************************************************************************/
 ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 {
-    ULONG ulErrCode = ERROR_FAILED;
+    ULONG ulErrCode = ERROR_SUCCESS;
     UINT uiId = INFO_ID_INVALID;
-    const CHAR *pcErrInfo = NULL;
 
 
     if (0 != strncmp(pcInputStr, "id", strlen("id")))
     {
         /* 工号不合法 */
-        pcErrInfo = "The parameter is incorrect.\r\n";
         ulErrCode = ERROR_INVALID_PARAMETER;
     }
     else
@@ -224,38 +213,25 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
         if(-1 == sscanf(pcInputStr, "id=%u", &uiId))
         {
             /* 工号数值异常 */
-            pcErrInfo = "The parameter is incorrect.\r\n";
             ulErrCode = ERROR_INVALID_PARAMETER;
         }
-        else if (INFO_ID_ISVALID(uiId))
+        else if (!INFO_ID_ISVALID(uiId))
         {
             /* 工号数值异常 */
-            pcErrInfo = "The parameter is incorrect.\r\n";
             ulErrCode = ERROR_INVALID_PARAMETER;
         }
         else if (BOOL_FALSE == INFO_data_IsExist(uiId))
         {
             /* 工号不存在 */
-            pcErrInfo = "The specified item was not found.\r\n";
-            ulErrCode = ERROR_NOT_FOUND;
+            ulErrCode = ERROR_SUCCESS;
         }
         else
         {
             /* 工号存在 */
             ulErrCode = INFO_data_DelData(uiId);
-
-            if (ERROR_SUCCESS == ulErrCode)
-            {
-                pcErrInfo = "The info has been successfully deleted.\r\n";
-            }
-            else
-            {
-                pcErrInfo = "Fail to delete the info.\r\n";
-            }
         }
     }
 
-    printf("%s", pcErrInfo);
     return ulErrCode;
 }
 
@@ -280,15 +256,13 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 ULONG INFO_proc_Modify(IN const CHAR *pcInputStr)
 {
     ULONG ulErrCode = ERROR_FAILED;
-    const CHAR *pcErrInfo = NULL;
     INFO_CFG_S stCfg = { 0 };
 
     /* 解析输入字符串得到配置数据并存入stCfg中 */
     INFO_parse_InputStr(pcInputStr, &stCfg);
-    if (BOOL_FALSE == INFO_ID_ISVALID(stCfg.uiId))
+    if (!INFO_ID_ISVALID(stCfg.uiId))
     {
         /* 工号非法 */
-        pcErrInfo = "The parameter is incorrect.\r\n";
         ulErrCode = ERROR_INVALID_PARAMETER;
     }
     else
@@ -297,18 +271,15 @@ ULONG INFO_proc_Modify(IN const CHAR *pcInputStr)
         if (BOOL_FALSE == INFO_data_IsExist(stCfg.uiId))
         {
             /* 工号不存在 */
-            pcErrInfo = "The specified item was not found.\r\n";
             ulErrCode = ERROR_NOT_FOUND;
         }
         else
         {
             (VOID) INFO_data_ModifyData(&stCfg);
-            pcErrInfo = "Modification complete.\r\n";
+            printf("Modification complete.\r\n");
             ulErrCode = ERROR_SUCCESS;
         }
     }
-
-    printf("%s", pcErrInfo);
 
     return ulErrCode;
 }

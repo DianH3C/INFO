@@ -12,7 +12,7 @@
   Modification History
   DATE        NAME             DESCRIPTION
 --------------------------------------------------------------------------------
-  YYYY-MM-DD  
+  YYYY-MM-DD
 
 *******************************************************************************/
 
@@ -29,7 +29,7 @@ extern "C"{
        Author: xxxx 00000
   Description: 功能处理函数原型
         Input: IN const CHAR *pcInputStr    输入字符串
-       Output: 
+       Output:
        Return: ULONG, ERROR_SUCCESS         处理成功
                       OTHER                 处理失败
       Caution: 1.输入字符串在某些功能处理时可以忽略
@@ -61,4 +61,3 @@ ULONG INFO_proc_CloseDebug(IN const CHAR *pcInputStr);
 #endif /* __cplusplus */
 
 #endif /* _INFO_PROC_H_ */
-

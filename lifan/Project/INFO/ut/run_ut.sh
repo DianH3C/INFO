@@ -1,14 +1,15 @@
+#!/bin/sh
 
 UT_PATH=$(cd $(dirname $0) && pwd)
 HEADER_PATH=$UT_PATH/../../PUBLIC/include/comware
 SRC_PATH=$UT_PATH/../../INFO/src
 
-function msg_info
+msg_info()
 {
     echo "############################ $* ############################"
 }
 
-function gtest_isNotInstall
+gtest_isNotInstall()
 {
     cd $UT_PATH
     if [ -z "$(ls lib/libgtest*.a)" ]
@@ -19,7 +20,7 @@ function gtest_isNotInstall
     return 1
 }
 
-function gtest_install
+gtest_install()
 {
     msg_info "Compile GTest"
     cd $UT_PATH/gtest
@@ -39,7 +40,7 @@ function gtest_remove
     rm -rf $UT_PATH/gtest/gtest-1.7.0
 }
 
-function ut_compile
+ut_compile()
 {
     msg_info "Compile UT"
     cd $UT_PATH
@@ -52,8 +53,7 @@ function ut_compile
     gcc -D_UT_ -D_STRING_EX_COMPILE -I $HEADER_PATH -g -c stub/stub.c         -o objs/stub.o 2> /dev/null || return
     g++ -D_UT_ -D_STRING_EX_COMPILE -g -c -I $HEADER_PATH -I include/ test/courseware_test.c -o objs/courseware_test.o 
 
-    g++ -D_UT_ -lpthread \
-               objs/info_data.o \
+    g++ -D_UT_ objs/info_data.o \
                objs/info_dbg.o \
                objs/info_parse.o \
                objs/info_proc.o \
@@ -61,10 +61,11 @@ function ut_compile
                objs/courseware_test.o \
                lib/libgtest.a \
                lib/libgtest_main.a \
+               -lpthread \
         -o ut || return
 }
 
-function ut_run
+ut_run()
 {
     msg_info "Run UT"
     echo -e "\r\n\r\n\r\n\r\n\r\n\r\n"
