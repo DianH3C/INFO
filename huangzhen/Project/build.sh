@@ -1,3 +1,4 @@
+#!/bin/bash
 gcc -g\
    -D_DEBUG_VERSION \
    -D_STRING_EX_COMPILE \

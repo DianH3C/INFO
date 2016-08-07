@@ -6,14 +6,14 @@
    Module Name: INFO
   Date Created: 201x-xx-xx
         Author: xxxx 00000
-   Description: ÄÚ²¿Êý¾Ý²Ù×÷
-                °üÀ¨´´½¨¡¢É¾³ý¡¢ÉèÖÃ¡¢»ñÈ¡¡¢±éÀú
+   Description: ?ú2?êy?Y2ù×÷
+                °üà¨′′?¨?￠é?3y?￠éè???￠??è??￠±éàú
 
 --------------------------------------------------------------------------------
   Modification History
   DATE        NAME             DESCRIPTION
 --------------------------------------------------------------------------------
-  YYYY-MM-DD  
+  YYYY-MM-DD
 
 *******************************************************************************/
 
@@ -36,43 +36,27 @@ extern "C"{
 #include "info.h"
 #include "info_dbg.h"
 
-/* ÐÅÏ¢Êý¾Ý½á¹¹ */
+/* D??￠êy?Y?á11 */
 typedef struct tagInfo_Data
 {
-    /* Êý¾Ý×éÖ¯Ïà¹Ø[*] */
+    /* êy?Y×é?ˉ?à1?[*] */
     DTQ_NODE_S stNode;
-    INFO_CFG_S stCfg;       /* ÅäÖÃÊý¾Ý */
+    INFO_CFG_S stCfg;       /* ????êy?Y */
 }INFO_DATA_S;
 
 
 INFO_DATA_S * info_data_Get(IN UINT uiId);
-INFO_DATA_S * info_data_Alloc();
+INFO_DATA_S * info_data_Alloc(VOID);
 VOID info_data_Add(IN INFO_DATA_S * pstUser, IN UINT uiId);
-VOID info_data_Delete(INFO_DATA_S * pstUser);
+VOID info_data_Delete(IN INFO_DATA_S * pstUser);
 VOID info_data_Free(VOID * pstMem);
 
 
-static DTQ_HEAD_S * pstDataHead; 
-static INFO_DATA_S * pstDataNode;
+static DTQ_HEAD_S * pstList;
 
+//set the pstUserGet to return or IN argument value as user structure pointer
+INFO_DATA_S * pstUserGet;
 
-/*****************************************************************************
-    Func Name: INFO_data_IsExist[*]
- Date Created: 201x-xx-xx
-       Author: xxxx 00000
-  Description: ÅÐ¶ÏÖ¸¶¨¹¤ºÅµÄÊý¾ÝÊÇ·ñ´æÔÚ
-        Input: IN UINT uiId         ¹¤ºÅ
-       Output: 
-       Return: BOOL_T, BOOL_TRUE    ´æÔÚ
-                       BOOL_FALSE   ²»´æÔÚ
-      Caution: 
-------------------------------------------------------------------------------
-  Modification History
-  DATE        NAME             DESCRIPTION
-  --------------------------------------------------------------------------
-  YYYY-MM-DD
-
-*****************************************************************************/
 BOOL_T INFO_data_IsExist(IN UINT uiId)
 {
     //not exist when info_data_Get() return NULL
@@ -91,73 +75,31 @@ BOOL_T INFO_data_IsExist(IN UINT uiId)
 
 VOID INFO_data_SetName(IN UINT uiId, IN CHAR * szName)
 {
-
     strlcpy(info_data_Get(uiId)->stCfg.szName,szName,INFO_NAME_MAXLEN);
-/*
-    INFO_DATA_S ** pstUser = (INFO_DATA_S**)malloc(sizeof(INFO_DATA_S*));
-    *pstUser = (info_data_Get(uiId));
 
-    strlcpy((*pstUser)->stCfg.szName,szName,sizeof((*pstUser)->stCfg.szName));
-    info_data_Free(pstUser);
-*/
-    /*
-    int i;
-    if(pstUser)
-    {
-        for(i=0;i<strlen(szName);i++)
-        {
-            pstUser->stCfg.szName[i] = szName[i];
-        }
-        pstUser->stCfg.szName[i] = '\0';
-        info_data_Free(pstUser);
-    }
-    else
-    {
-        info_data_Free(pstUser);
-            printf("Failed to set name, something goes wrong...");
-    }
-    */
 }
 
 VOID INFO_data_SetAge(IN UINT uiId, IN UINT uiAge)
-{   
-    info_data_Get(uiId)->stCfg.uiHeight = uiAge;
-/*
-    INFO_DATA_S ** pstUser = (INFO_DATA_S**)malloc(sizeof(INFO_DATA_S*));
-    *pstUser = (info_data_Get(uiId));
-
-    (*pstUser)->stCfg.uiAge = uiAge;
-    info_data_Free(pstUser);*/
+{
+    info_data_Get(uiId)->stCfg.uiAge = uiAge;
 }
 
 VOID INFO_data_SetSex(IN UINT uiId, IN INFO_SEX_E enSex)
 {
     info_data_Get(uiId)->stCfg.enSex = enSex;
-/*
-    INFO_DATA_S ** pstUser = (INFO_DATA_S**)malloc(sizeof(INFO_DATA_S*));
-    *pstUser = (info_data_Get(uiId));
 
-    (*pstUser)->stCfg.enSex = enSex;
-    info_data_Free(pstUser);
-    */
 }
 VOID INFO_data_SetHeight(IN UINT uiId,IN UINT uiHeight)
 {
 
     info_data_Get(uiId)->stCfg.uiHeight = uiHeight;
-    /*
-    INFO_DATA_S ** pstUser = (INFO_DATA_S**)malloc(sizeof(INFO_DATA_S*));
-    *pstUser = (info_data_Get(uiId));
 
-    (*pstUser)->stCfg.uiHeight = uiHeight;
-    info_data_Free(pstUser);
-    */
 }
 
-BOOL_T INFO_data_IsEmpty()
+BOOL_T INFO_data_IsEmpty(VOID)
 {
 
-    if(DTQ_IsEmpty(pstDataHead))
+    if(DTQ_IsEmpty(pstList))
     {
         return BOOL_TRUE;
     }
@@ -168,119 +110,100 @@ BOOL_T INFO_data_IsEmpty()
 }//end INFO_data_IsEmpty()
 
 
-ULONG INFO_data_Create(IN UINT uiId)
+VOID INFO_data_Create(IN UINT uiId)
 {
 
-    INFO_DATA_S * pstNewUser = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
-//    memcpy(pstNewUser,info_data_Alloc(),sizeof(INFO_DATA_S));
+    INFO_DATA_S * pstNewUser;
     pstNewUser = info_data_Alloc();
 
     //initialize the pstNewUser
     (*pstNewUser).stNode.pstPrev = &((*pstNewUser).stNode);
     (*pstNewUser).stNode.pstNext = &((*pstNewUser).stNode);
-     
-    (*pstNewUser).stCfg.uiId = (UINT)0;
+
+    (*pstNewUser).stCfg.uiId = uiId;
     (*pstNewUser).stCfg.uiAge = (UINT)0;
     (*pstNewUser).stCfg.uiHeight = (UINT)0;
     (*pstNewUser).stCfg.enSex = 0;
     (*pstNewUser).stCfg.szName[0] = 0;
-    
-    info_data_Add(pstNewUser,uiId);
-    
-    /*
-    if(INFO_data_IsEmpty())
-    {
-        printf("Failed to reate user node, something goes wrong.\r\n"); 
-        return ERROR_FAILED;
-    }
-    else
-    {
-        printf("Succeded to create user node.\r\n");
-        return ERROR_SUCCESS;
-    }
-    */
+
+    pstUserGet = pstNewUser;
+    info_data_Add(pstUserGet,uiId);
 }
 
 VOID INFO_data_Destroy(UINT uiId)
 {
+    INFO_DATA_S * pstDestroy = info_data_Get(uiId);
+    info_data_Delete(pstDestroy);
 
-    INFO_DATA_S * pstUser = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
-    pstUser= info_data_Get(uiId);
-    if(NULL != pstUser)
-    {
-        info_data_Delete(pstUser);
+    info_data_Free(pstDestroy);
 
-        info_data_Free(pstUser);
-    }
-
-    else
-    {   
-        return;
-    }
 }//end INFO_data_Destroy()
 
 
 
 
 
-UINT INFO_data_GetFirst()
+UINT INFO_data_GetFirst(VOID)
 {
-    
-    INFO_DATA_S * pstUser = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
-    pstUser = DTQ_ENTRY_FIRST(pstDataHead,INFO_DATA_S,stNode);
-    UINT uiId = pstUser->stCfg.uiId;
-    if(!INFO_data_IsExist(uiId))
-    {
-        uiId = INFO_ID_INVALID;
-    }
-    info_data_Free(pstUser);
-    return uiId;
-}//end INFO_data_GetFirst()
+    pstUserGet = DTQ_ENTRY_FIRST(pstList,INFO_DATA_S,stNode);
 
+    UINT uiId = pstUserGet->stCfg.uiId;
 
-UINT INFO_data_GetNext(IN UINT uiId)
-{
     if(INFO_data_IsExist(uiId))
     {
-        INFO_DATA_S * pstUser = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
-        pstUser = info_data_Get(uiId);
-        INFO_DATA_S * pstNextUser = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
-
-    
-        //if pstUser is not the last node, say not equal to NULL,  then return the next id
-        pstNextUser = DTQ_ENTRY_NEXT(pstDataHead,pstUser,stNode);
-        if(NULL != pstNextUser)
-        {
-            uiId = (*pstNextUser).stCfg.uiId;
-        }
-        //else pstUser is the last node, then no next id
-        else
-        {
-            uiId = INFO_ID_INVALID;
-        }
-        info_data_Free(pstUser);
-        info_data_Free(pstNextUser);
         return uiId;
     }
     else
     {
         return INFO_ID_INVALID;
     }
+}//end INFO_data_GetFirst()
+
+
+UINT INFO_data_GetNext(IN UINT uiId)
+{
+/*
+    if(INFO_data_IsExist(uiId))
+    {
+        pstUserGet = info_data_Get(uiId);
+
+        INFO_DATA_S * pstNextUser;
+        //if pstUser is not the last node, say not equal to NULL,  then return the next id
+        pstNextUser = DTQ_ENTRY_NEXT(pstList,pstUserGet,stNode);
+        if(NULL != pstNextUser)
+        {
+            return pstNextUser->stCfg.uiId;
+        }
+        //else pstUser is the last node, then no next id
+        else
+        {
+            return INFO_ID_INVALID;
+        }
+    }*/
+
+    INFO_DATA_S * pstEntry;
+    DTQ_FOREACH_ENTRY(pstList,pstEntry,stNode)
+    {
+        if(uiId < pstEntry->stCfg.uiId)
+        {
+            return pstEntry->stCfg.uiId;
+        }
+    }  
+    return ERROR_FAILED;
 }
 
 //end INFO_data_GetNext()
 
 
 
-ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
+ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S ** ppstCfg)
 {
-    INFO_DATA_S * pstUser = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
-    pstUser = info_data_Get(uiId);
-    
-    if(NULL != pstUser)
+    pstUserGet = info_data_Get(uiId);
+
+    if(NULL != pstUserGet)
     {
-        memcpy(pstCfg,&(pstUser->stCfg),sizeof(INFO_CFG_S));
-        return ERROR_SUCCESS;
+       *ppstCfg = &(pstUserGet->stCfg);
+       return ERROR_SUCCESS;
     }
     else
     {
@@ -292,18 +215,13 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 
 
 
-
-
-
 ULONG INFO_data_Init(VOID)
 {
-    pstDataHead = (DTQ_HEAD_S*)malloc(sizeof(DTQ_HEAD_S));
-    pstDataNode = (DTQ_NODE_S*)malloc(sizeof(DTQ_HEAD_S));
-    DTQ_Init(pstDataHead);
-    
-    return ERROR_SUCCESS;
-  
+    pstList = (DTQ_HEAD_S*)malloc(sizeof(DTQ_HEAD_S));
+    pstUserGet = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
+    DTQ_Init(pstList);
 
+    return ERROR_SUCCESS;
 }//end INFO_data_Init()
 
 
@@ -311,22 +229,23 @@ VOID INFO_data_Fini(VOID)
 {
     if(INFO_data_Init())
     {
-       //DTQ_FreeAll(pstDataHead,(* info_data_Free)());
-        DTQ_NODE_S* pstCurNode;
-        DTQ_NODE_S* pstNextNode;
-        DTQ_FOREACH_SAFE(pstDataHead,pstCurNode,pstNextNode);
+
+        UINT uiIdForDestroy;
+        /*
+        INFO_FOREACH(uiIdForDestroy)
         {
-            info_data_Free(pstCurNode);
+            INFO_data_Destroy(uiIdForDestroy);
+        }*/
+
+
+        for ((uiIdForDestroy) = INFO_data_GetFirst(); \
+     (uiIdForDestroy) != INFO_ID_INVALID; \
+     (uiIdForDestroy)  = INFO_data_GetNext(uiIdForDestroy))
+        {
+            INFO_data_Destroy(uiIdForDestroy);
         }
-        info_data_Free(pstNextNode);
-        DTQ_Init(pstDataHead);
-        
-        info_data_Free(pstDataHead);
-        info_data_Free(pstDataNode);
-    }
-    else
-    {
-        return;
+        info_data_Free(pstList);
+        info_data_Free(pstUserGet);
     }
 }//end INFO_data_Fini()
 
@@ -339,30 +258,38 @@ VOID info_data_Add(IN INFO_DATA_S * pstUser, IN UINT uiId)
 {
 
     //if empty, then the pstUser will added as the fisrt node.
-    //and return 
+    //and return
     if(INFO_data_IsEmpty())
     {
-        printf("Add the first data....\r\n");
-        DTQ_AddHead(pstDataHead,&(pstUser->stNode));
-        
+        DTQ_AddHead(pstList,&(pstUser->stNode));
+
         return;
     }
 
-    /*
-    INFO_DATA_S * pstEntry = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
-    INFO_DATA_S * pstNextEntry = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
-    */
-
     INFO_DATA_S * pstEntry ;
     INFO_DATA_S * pstNextEntry;
-    DTQ_FOREACH_ENTRY_SAFE(pstDataHead,pstEntry,pstNextEntry,stNode)
-    {
-        
+
+    DTQ_FOREACH_ENTRY_SAFE(pstList,pstEntry,pstNextEntry,stNode)
+    {  
+        //if current entry is the last node, then pstNextEntry is NULL, so add to list tail
+        if(NULL == pstNextEntry)
+        {
+            if(uiId >= pstEntry->stCfg.uiId)
+            {
+                DTQ_AddAfter(&(pstEntry->stNode),&(pstUser->stNode));
+                break;
+            }
+            else
+            {
+                DTQ_AddBefore(&(pstEntry->stNode),&(pstUser->stNode));
+                break;
+            }
+        }
         if(NULL != pstNextEntry)
         {
+            //make the prev uiId is smaller or equal, and the next uiId is bigger.
             if(uiId >= pstEntry->stCfg.uiId && uiId < pstNextEntry->stCfg.uiId)
             {
-                 ;
                 DTQ_AddAfter(&(pstEntry->stNode),&(pstUser->stNode));
                 break;
             }
@@ -371,15 +298,8 @@ VOID info_data_Add(IN INFO_DATA_S * pstUser, IN UINT uiId)
                 continue;
             }
         }
-        else
-        {
-            DTQ_AddTail(pstDataHead,&(pstUser->stNode));
-         
-        }
     }
 
-
-    
 }
 
 //end info_data_Add()
@@ -390,32 +310,29 @@ VOID info_data_Delete(INFO_DATA_S * pstUser)
 }
 
 
-
+//???IMPORTANT
 INFO_DATA_S * info_data_Get(IN UINT uiId)
 {
-    INFO_DATA_S * pstUser = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
-    DTQ_FOREACH_ENTRY(pstDataHead,pstUser,stNode)
+    INFO_DATA_S * pstEntry;
+    DTQ_FOREACH_ENTRY(pstList,pstEntry,stNode)
     {
-        if(pstUser->stCfg.uiId == uiId)
+        if(pstEntry->stCfg.uiId == uiId)
         {
-            pstDataNode = pstUser;
-            info_data_Free(pstUser);
-            return pstDataNode;
+            pstUserGet = pstEntry;
+            return pstUserGet;
         }
     }
     return NULL;
-
-    
 
 }//end info_data_Get()
 
 
 
-INFO_DATA_S * info_data_Alloc()
+INFO_DATA_S * info_data_Alloc(VOID)
 {
-    INFO_DATA_S * pstNewNode = (INFO_DATA_S)malloc(sizeof(INFO_DATA_S));    
-    memset(pstNewNode,0,sizeof(INFO_DATA_S));
-    return pstNewNode;
+    INFO_DATA_S * pstNewUser = (INFO_DATA_S*)malloc(sizeof(INFO_DATA_S));
+    memset(pstNewUser,0,sizeof(INFO_DATA_S));
+    return pstNewUser;
 }//end info_data_Alloc()
 
 VOID info_data_Free(VOID * pstMem)
@@ -428,4 +345,3 @@ VOID info_data_Free(VOID * pstMem)
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
