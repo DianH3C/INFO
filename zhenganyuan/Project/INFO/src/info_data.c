@@ -37,7 +37,7 @@ extern "C"{
 #include "info_dbg.h"
 #define RED BOOL_TRUE
 #define BLACK BOOL_FALSE
-#define VOLUME 100000
+#define VOLUME 110000
 /* ÐÅÏ¢ÊýŸÝœá¹¹ */
 typedef struct tagInfo_Data
 {
@@ -48,7 +48,7 @@ typedef struct tagInfo_Data
 }INFO_DATA_S;
 
 INFO_DATA_S *g_pstRoot,*g_pstTmp;
-
+BOOL_T g_bTmp=BOOL_FALSE;
 /*****************************************************************************
     Func Name: IsRed
  Date Created: 2016-08-07
@@ -332,10 +332,16 @@ STATIC VOID Init(IN INFO_DATA_S **ppRoot)
 *****************************************************************************/
 STATIC INFO_DATA_S *CreateNode(IN INFO_CFG_S stValue , IN BOOL_T bColor)
 {
-	INFO_DATA_S *tmp = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
-    tmp->stCfg=stValue;
-	tmp->bColor = bColor;
-	tmp->pstLeft = tmp->pstRight = NULL;
+    INFO_DATA_S *tmp=NULL;
+	tmp = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
+    if(tmp!=NULL)
+    {
+        tmp->stCfg=stValue;
+        tmp->bColor = bColor;
+        tmp->pstLeft = tmp->pstRight = NULL;
+    }
+    else
+        g_bTmp=BOOL_TRUE;
 	return tmp;
 }
 
@@ -369,9 +375,10 @@ STATIC INFO_DATA_S *insert(IN INFO_DATA_S *r,IN INFO_CFG_S stValue)
 		r->pstRight = insert(r->pstRight, stValue);
 	else
 		r->stCfg = stValue;
-	if (!IsRed(r->pstLeft) && IsRed(r->pstRight))
+    
+	if (r->pstRight && !IsRed(r->pstLeft) && IsRed(r->pstRight))
 		r = RotateLeft(r);
-	if (IsRed(r->pstLeft) && IsRed(r->pstLeft->pstLeft))
+	if (r->pstLeft && IsRed(r->pstLeft) && IsRed(r->pstLeft->pstLeft))
 		r = RotateRight(r);
 	if (IsRed(r->pstLeft) && IsRed(r->pstRight))
 		FlipColors(r);
@@ -398,7 +405,8 @@ STATIC INFO_DATA_S *insert(IN INFO_DATA_S *r,IN INFO_CFG_S stValue)
 STATIC VOID Insert(IN INFO_DATA_S **ppRoot, IN INFO_CFG_S stValue)
 {
 	*ppRoot = insert(*ppRoot, stValue);
-	(*ppRoot)->bColor = BLACK;
+    if(NULL!=*ppRoot)
+	    (*ppRoot)->bColor = BLACK;
 }
 
 /*****************************************************************************
@@ -868,6 +876,7 @@ BOOL_T INFO_data_Delete(IN UINT uiId)
     if(NULL==pstTmp)
         return BOOL_FALSE;
     g_pstRoot=Remove(g_pstRoot,uiId);
+    printf("hehe");
     return BOOL_TRUE;
 }
 
@@ -892,7 +901,7 @@ VOID INFO_data_Modify(IN INFO_CFG_S *pstCfg)
 {
     INFO_DATA_S *pstTmp=Find(pstCfg->uiId);
     if(INFO_AGE_ISVALID(pstCfg->uiAge))
-        pstTmp->stCfg.uiAge;
+        pstTmp->stCfg.uiAge=pstCfg->uiAge;
     if(INFO_HEIGHT_ISVALID(pstCfg->uiHeight))
         pstTmp->stCfg.uiHeight=pstCfg->uiHeight;
     if(INFO_SEX_ISVALID(pstCfg->enSex))

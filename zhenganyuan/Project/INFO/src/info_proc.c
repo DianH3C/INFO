@@ -34,7 +34,7 @@ extern "C"{
 #include "info_dbg.h"
 #include "info_parse.h"
 #include "info_data.h"
-
+extern BOOL_T g_bTmp;
 /*****************************************************************************
     Func Name: INFO_proc_IsInputValid
  Date Created: 2016-08-07
@@ -132,6 +132,11 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
         return ERROR_ALREADY_EXIST;
     }
     INFO_data_Insert(pstCfg);
+    if(g_bTmp==BOOL_TRUE)
+    {
+        g_bTmp=BOOL_FALSE;
+        return ERROR_NO_ENOUGH_RESOURCE;
+    }
     printf("Íš¹ýDisplay¹ŠÄÜ£¬¿ÉÒÔ¿ŽµœÐÂÔöÐÅÏ¢\n");
     return ERROR_SUCCESS;
 }
@@ -156,19 +161,21 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 *****************************************************************************/
 ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 {
-    INFO_CFG_S *pstCfg=INFO_proc_IsInputValid(pcInputStr);
+    INFO_CFG_S *pstCfg=(INFO_CFG_S*)malloc(sizeof(INFO_CFG_S));
+    DBGASSERT(pstCfg);
+    INFO_parse_InputStr(pcInputStr,pstCfg);
     if(!INFO_ID_ISVALID(pstCfg->uiId))
     {
         printf("The parameter is incorrect.\n");
         return ERROR_INVALID_PARAMETER;
     }
     if(BOOL_FALSE==INFO_data_IsExist(pstCfg->uiId))
-        return ERROR_INVALID_PARAMETER;
+        return ERROR_SUCCESS;
     if(BOOL_FALSE==INFO_data_Delete(pstCfg->uiId))
     {
         return ERROR_FAILED;
     }
-    return INFO_proc_Delete;
+    return ERROR_SUCCESS;
 }
 
 /*****************************************************************************
