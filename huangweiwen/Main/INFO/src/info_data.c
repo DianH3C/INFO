@@ -35,8 +35,21 @@ extern "C"{
 /* module   private */
 #include "info.h"
 #include "info_dbg.h"
+#include "info_data.h"
 #include "info_proc.h"
 
+/* 信息数据结构 */
+typedef struct tagInfo_Data
+{
+    /* 数据组织相关--链表[*] */
+    struct tagInfo_Data *pstPrior;   /* 指向上一个结点 */
+    struct tagInfo_Data *pstNext;    /* 指向下一个结点 */
+    BOOL_T bIsEmpty;                /* 结点是否为空的标志 空--BOOL_TRUE 非空--BOOL_FALSE */
+    INFO_CFG_S stCfg;              /* 配置数据 */
+}INFO_DATA_S;
+
+/* 链表头指针 */
+INFO_DATA_S *g_pstINFO_DATA_HEAD = NULL;
 
 /*****************************************************************************
     Func Name: INFO_data_IsExist[*]
@@ -57,9 +70,9 @@ extern "C"{
 *****************************************************************************/
 BOOL_T INFO_data_IsExist(IN UINT uiId)
 {
-    INFO_DATA_S *pstNode = INFO_DATA_HEAD;
+    INFO_DATA_S *pstNode = g_pstINFO_DATA_HEAD;
 
-    while ((NULL != pstNode) && (BOOL_FALSE == pstNode->isEmpty))
+    while ((NULL != pstNode) && (BOOL_FALSE == pstNode->bIsEmpty))
     {
         if (uiId == pstNode->stCfg.uiId)
         {
@@ -67,7 +80,7 @@ BOOL_T INFO_data_IsExist(IN UINT uiId)
         }
         else if (uiId > pstNode->stCfg.uiId)
         {
-            pstNode = pstNode->pNext;
+            pstNode = pstNode->pstNext;
         }
         else
         {
@@ -99,7 +112,7 @@ BOOL_T INFO_data_IsExist(IN UINT uiId)
 BOOL_T INFO_data_IsEmpty(VOID)
 {
     /* 判断头结点是否为空即可 */
-    if (BOOL_TRUE == INFO_DATA_HEAD->isEmpty)
+    if (BOOL_TRUE == g_pstINFO_DATA_HEAD->bIsEmpty)
     {
         return BOOL_TRUE;
     }
@@ -128,10 +141,10 @@ BOOL_T INFO_data_IsEmpty(VOID)
 *****************************************************************************/
 ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 {
-    INFO_DATA_S *pstNode = INFO_DATA_HEAD;
+    INFO_DATA_S *pstNode = g_pstINFO_DATA_HEAD;
 
     /* 遍历链表 */
-    while ((BOOL_FALSE == pstNode->isEmpty) && (NULL != pstNode))
+    while ((BOOL_FALSE == pstNode->bIsEmpty) && (NULL != pstNode))
     {
         if (uiId == pstNode->stCfg.uiId)
         {
@@ -140,7 +153,7 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
         }
         else
         {
-            pstNode = pstNode->pNext;
+            pstNode = pstNode->pstNext;
         }
     }
     return ERROR_FAILED;
@@ -165,13 +178,13 @@ ULONG INFO_data_GetData(IN UINT uiId, OUT INFO_CFG_S *pstCfg)
 *****************************************************************************/
 UINT INFO_data_GetFirst(VOID)
 {
-    if (BOOL_TRUE == INFO_DATA_HEAD->isEmpty)
+    if (BOOL_TRUE == g_pstINFO_DATA_HEAD->bIsEmpty)
     {
         return INFO_ID_INVALID;
     }
     else
     {
-        return INFO_DATA_HEAD->stCfg.uiId;
+        return g_pstINFO_DATA_HEAD->stCfg.uiId;
     }
 }
 
@@ -194,11 +207,11 @@ UINT INFO_data_GetFirst(VOID)
 *****************************************************************************/
 UINT INFO_data_GetNext(IN UINT uiId)
 {
-    INFO_DATA_S *pstNode = INFO_DATA_HEAD;
+    INFO_DATA_S *pstNode = g_pstINFO_DATA_HEAD;
     UINT uiReId = INFO_ID_INVALID;
 
     /* 遍历链表 */
-    while ((BOOL_FALSE == pstNode->isEmpty) && (NULL != pstNode))
+    while ((BOOL_FALSE == pstNode->bIsEmpty) && (NULL != pstNode))
     {
         if (uiId < pstNode->stCfg.uiId)
         {
@@ -207,10 +220,195 @@ UINT INFO_data_GetNext(IN UINT uiId)
         }
         else
         {
-            pstNode = pstNode->pNext;
+            pstNode = pstNode->pstNext;
         }
     }
     return uiReId;
+}
+
+/*****************************************************************************
+    Func Name: INFO_data_Add[*]
+ Date Created: 201x-xx-xx
+       Author: xxxx 00000
+  Description: 向链表中添加数据
+        Input: IN INFO_CFG_S const *pstCfg
+       Output:
+       Return: LONG, == ERROR_SUCCESS    添加成功
+                     == ERROR_FAILED     添加失败
+      Caution:
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+ULONG INFO_data_Add(IN INFO_CFG_S *pstCfg)
+{
+    ULONG ulErrCode = ERROR_FAILED;
+    INFO_DATA_S *pstNode = g_pstINFO_DATA_HEAD;
+    INFO_DATA_S *pNewNode = NULL;
+
+    /* 将新数据插入的链表当中 */
+    if (pstCfg->uiId < INFO_data_GetFirst())
+    {
+        /* 增加的结点工号比头结点小 */
+        pNewNode = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
+        if (NULL == pNewNode)
+        {
+            ulErrCode = ERROR_FAILED;
+        }
+        else
+        {
+            pstNode = pNewNode;
+            pstNode->pstNext = pstNode;
+            pstNode->bIsEmpty = BOOL_FALSE;
+            pstNode->stCfg = *pstCfg;
+            pstNode->pstPrior = pNewNode;
+            ulErrCode = ERROR_SUCCESS;
+        }
+    }
+    else
+    {
+        /* 遍历链表，找到新增结点插入的位置，否则直接从末尾添加 */
+        while ((BOOL_FALSE == pstNode->bIsEmpty) && (NULL != pstNode))
+        {
+            if ((pstCfg->uiId > pstNode->stCfg.uiId)
+                && ((NULL == pstNode->pstNext) || (pstCfg->uiId < pstNode->pstNext->stCfg.uiId)))
+            {
+                pNewNode = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
+                if (NULL == pNewNode)
+                {
+                    ulErrCode = ERROR_FAILED;
+                }
+                else
+                {
+                    pNewNode->pstPrior = pstNode->pstPrior;
+                    pNewNode->pstNext = pstNode->pstNext;
+                    pNewNode->bIsEmpty = BOOL_FALSE;
+                    pNewNode->stCfg = *pstCfg;
+                    pstNode->pstNext = pNewNode;
+                    pstNode->pstPrior = pNewNode;
+                    ulErrCode = ERROR_SUCCESS;
+                }
+            }
+            else
+            {
+                pstNode = pstNode->pstNext;
+            }
+        }
+    }
+    return ulErrCode;
+}
+
+/*****************************************************************************
+    Func Name: INFO_data_Delete[*]
+ Date Created: 201x-xx-xx
+       Author: xxxx 00000
+  Description: 从链表中删除数据
+        Input: IN UINT uiId
+       Output:
+       Return: ULONG, == ERROR_SUCCESS    删除成功
+                     == ERROR_FAILED     删除失败
+      Caution:
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+ULONG INFO_data_Delete(IN UINT uiId)
+{
+    ULONG ulErrCode = ERROR_FAILED;
+    INFO_DATA_S *pstNode = g_pstINFO_DATA_HEAD;
+    INFO_DATA_S *pDelNode;
+
+    /* 定位该id所在的结点 */
+    while ((BOOL_FALSE == pstNode->bIsEmpty) && (NULL != pstNode))
+    {
+        if (uiId == pstNode->stCfg.uiId)
+        {
+            /* 当前结点是头结点 */
+            if (NULL == pstNode->pstPrior)
+            {
+                /* 判断头结点后是否还有结点 */
+                if (NULL == pstNode->pstNext)
+                {
+                    /* 清空头结点的内容 */
+                    memset(&(pstNode->stCfg), 0, sizeof(INFO_CFG_S));
+                    pstNode->bIsEmpty = BOOL_TRUE;
+                }
+                else
+                {
+                    pstNode->pstNext->pstPrior = NULL;
+                    pstNode = pstNode->pstNext;
+                    free(pstNode);
+                }
+            }
+            else
+            {
+                /* 当前结点不是头结点 */
+                pDelNode = pstNode;
+                pstNode->pstPrior->pstNext = pstNode->pstNext;
+                if (NULL != pstNode->pstNext)
+                {
+                    pstNode->pstNext->pstPrior = pstNode->pstPrior;
+                }
+                free(pDelNode);
+            }
+            ulErrCode = ERROR_SUCCESS;
+        }
+        else
+        {
+            pstNode = pstNode->pstNext;
+        }
+    }
+    return ulErrCode;
+}
+
+/*****************************************************************************
+    Func Name: INFO_data_Modify[*]
+ Date Created: 201x-xx-xx
+       Author: xxxx 00000
+  Description: 从链表中修改数据
+        Input: IN INFO_CFG_S *pstCfg
+       Output:
+       Return: ULONG, == ERROR_SUCCESS    修改成功
+                     == ERROR_FAILED     修改失败
+      Caution:
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+*****************************************************************************/
+ULONG INFO_data_Modify(IN INFO_CFG_S *pstCfg)
+{
+    ULONG ulErrCode = ERROR_FAILED;
+    INFO_DATA_S *pstNode = g_pstINFO_DATA_HEAD;
+
+    /* 从链表中找到指定id对应的配置数据 */
+    ulErrCode = INFO_data_GetData(pstCfg->uiId, &(pstNode->stCfg));
+    if (BOOL_TRUE == INFO_NAME_ISVALID(pstCfg->szName))
+    {
+        strlcpy(pstNode->stCfg.szName, pstCfg->szName, sizeof(pstNode->stCfg.szName));
+    }
+    if (BOOL_TRUE == INFO_SEX_ISVALID(pstCfg->enSex))
+    {
+        pstNode->stCfg.enSex = pstCfg->enSex;
+    }
+    if (BOOL_TRUE == INFO_AGE_ISVALID(pstCfg->uiAge))
+    {
+        pstNode->stCfg.uiAge = pstCfg->uiAge;
+    }
+    if (BOOL_TRUE == INFO_HEIGHT_ISVALID(pstCfg->uiHeight))
+    {
+        pstNode->stCfg.uiHeight = pstCfg->uiHeight;
+    }
+    ulErrCode = ERROR_SUCCESS;
+    return ulErrCode;
 }
 
 /*****************************************************************************
@@ -233,17 +431,17 @@ UINT INFO_data_GetNext(IN UINT uiId)
 ULONG INFO_data_Init(VOID)
 {
     /* 给链表头结点分配内存空间 */
-    INFO_DATA_HEAD = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
-    if (NULL == INFO_DATA_HEAD)
+    g_pstINFO_DATA_HEAD = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
+    if (NULL == g_pstINFO_DATA_HEAD)
     {
         return ERROR_FAILED;
     }
     else
     {
         /* 初始化构造链表结构 */
-        INFO_DATA_HEAD->pPrior = NULL;
-        INFO_DATA_HEAD->pNext = NULL;
-        INFO_DATA_HEAD->isEmpty = BOOL_TRUE;
+        g_pstINFO_DATA_HEAD->pstPrior = NULL;
+        g_pstINFO_DATA_HEAD->pstNext = NULL;
+        g_pstINFO_DATA_HEAD->bIsEmpty = BOOL_TRUE;
     }
     return ERROR_SUCCESS;
 }
@@ -269,11 +467,11 @@ VOID INFO_data_Fini(VOID)
     INFO_DATA_S *pstNode = NULL;
 
     /* 从链头开始逐个结点释放内存 */
-    while (NULL != INFO_DATA_HEAD)
+    while (NULL != g_pstINFO_DATA_HEAD)
     {
-        pstNode = INFO_DATA_HEAD->pNext;
-        free(INFO_DATA_HEAD);
-        INFO_DATA_HEAD = pstNode;
+        pstNode = g_pstINFO_DATA_HEAD->pstNext;
+        free(g_pstINFO_DATA_HEAD);
+        g_pstINFO_DATA_HEAD = pstNode;
     }
     return;
 }

@@ -23,6 +23,7 @@
 extern "C"{
 #endif
 
+
 /*************************************** 公共定义 ***************************************/
 /* 工号 */
 #define INFO_ID_MIN                     1U
@@ -62,19 +63,6 @@ typedef struct tagInfo_Cfg
     CHAR szName[INFO_NAME_MAXLEN + 1];  /* 姓名 */
 }INFO_CFG_S;
 
-/* 信息数据结构 */
-typedef struct tagInfo_Data
-{
-    /* 数据组织相关--链表[*] */
-    struct tagInfo_Data *pstPrior;   /* 指向上一个结点 */
-    struct tagInfo_Data *pstNext;    /* 指向下一个结点 */
-    BOOL_T isEmpty;                /* 结点是否为空的标志 空--BOOL_TRUE 非空--BOOL_FALSE */
-    INFO_CFG_S stCfg;              /* 配置数据 */
-}INFO_DATA_S;
-
-/* 链表头指针 */
-INFO_DATA_S *INFO_DATA_HEAD = NULL;
-
 /* 全部数据合法 */
 #define INFO_ALL_ISVALID(pstCfg) \
             (INFO_ID_ISVALID((pstCfg)->uiId) && \
@@ -89,8 +77,6 @@ INFO_DATA_S *INFO_DATA_HEAD = NULL;
 /* 存储数据的最大数目 */
 #define INFO_DATA_MAX                   1000UL
 
-/* 全局变量 */
-//INFO_CFG_S alData[INFO_DATA_MAX];
 
 /*************************************** 对外接口 ***************************************/
 /* 初始化 */
