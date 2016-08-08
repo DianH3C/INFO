@@ -69,6 +69,7 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
     if (BOOL_TRUE == INFO_data_IsEmpty())
     {
         printf("No info.\r\n");
+        ulErrCode = ERROR_SUCCESS;
     }
     else
     {
@@ -80,17 +81,17 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
             printf("%u \t %s \t ", uiId, stCfg.szName);
             if (INFO_SEX_MALE == stCfg.enSex)
             {
-                printf("MALE\t");
+                printf("MALE \t");
             }
             else
             {
-                printf("FEMALE\t");
+                printf("FEMALE \t");
             }
             printf("%u \t %u \r\n", stCfg.uiAge, stCfg.uiHeight);
             uiId = INFO_data_GetNext(uiId);
         }
     }
-    return ERROR_SUCCESS;
+    return ulErrCode;
 }
 
 /*****************************************************************************
@@ -165,7 +166,7 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
     else
     {
         sscanf(pcInputStr, "id=%u", &uiId);
-        if (INFO_ID_ISVALID(uiId))
+        if (BOOL_FALSE == INFO_ID_ISVALID(uiId))
         {
             /* 输入的id不合法 */
             ulErrCode = ERROR_INVALID_PARAMETER;

@@ -211,7 +211,7 @@ UINT INFO_data_GetNext(IN UINT uiId)
     UINT uiReId = INFO_ID_INVALID;
 
     /* 遍历链表 */
-    while ((BOOL_FALSE == pstNode->bIsEmpty) && (NULL != pstNode))
+    while ((NULL != pstNode) && (BOOL_FALSE == pstNode->bIsEmpty))
     {
         if (uiId < pstNode->stCfg.uiId)
         {
@@ -250,7 +250,25 @@ ULONG INFO_data_Add(IN INFO_CFG_S *pstCfg)
     INFO_DATA_S *pNewNode = NULL;
 
     /* 将新数据插入的链表当中 */
-    if (pstCfg->uiId < INFO_data_GetFirst())
+    if (BOOL_TRUE == pstNode->bIsEmpty)
+    {
+        /* 链表内容为空 */
+        pNewNode = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
+        if (NULL == pNewNode)
+        {
+            ulErrCode = ERROR_FAILED;
+        }
+        else
+        {
+            g_pstINFO_DATA_HEAD = pNewNode;
+            pNewNode->pstPrior = NULL;
+            pNewNode->pstNext = NULL;
+            pNewNode->bIsEmpty = BOOL_FALSE;
+            pNewNode->stCfg = *pstCfg;
+            ulErrCode = ERROR_SUCCESS;
+        }
+    }
+    else if (pstCfg->uiId < INFO_data_GetFirst())
     {
         /* 增加的结点工号比头结点小 */
         pNewNode = (INFO_DATA_S *)malloc(sizeof(INFO_DATA_S));
@@ -260,10 +278,10 @@ ULONG INFO_data_Add(IN INFO_CFG_S *pstCfg)
         }
         else
         {
-            pstNode = pNewNode;
-            pstNode->pstNext = pstNode;
-            pstNode->bIsEmpty = BOOL_FALSE;
-            pstNode->stCfg = *pstCfg;
+            g_pstINFO_DATA_HEAD = pNewNode;
+            pNewNode->pstNext = pstNode;
+            pNewNode->bIsEmpty = BOOL_FALSE;
+            pNewNode->stCfg = *pstCfg;
             pstNode->pstPrior = pNewNode;
             ulErrCode = ERROR_SUCCESS;
         }
@@ -283,12 +301,15 @@ ULONG INFO_data_Add(IN INFO_CFG_S *pstCfg)
                 }
                 else
                 {
-                    pNewNode->pstPrior = pstNode->pstPrior;
+                    pNewNode->pstPrior = pstNode;
                     pNewNode->pstNext = pstNode->pstNext;
                     pNewNode->bIsEmpty = BOOL_FALSE;
                     pNewNode->stCfg = *pstCfg;
                     pstNode->pstNext = pNewNode;
-                    pstNode->pstPrior = pNewNode;
+                    if (NULL != pstNode->pstNext)
+                    {
+                        pstNode->pstNext->pstPrior = pNewNode;
+                    }
                     ulErrCode = ERROR_SUCCESS;
                 }
             }
@@ -309,7 +330,7 @@ ULONG INFO_data_Add(IN INFO_CFG_S *pstCfg)
         Input: IN UINT uiId
        Output:
        Return: ULONG, == ERROR_SUCCESS    删除成功
-                     == ERROR_FAILED     删除失败
+                      == ERROR_FAILED     删除失败
       Caution:
 ------------------------------------------------------------------------------
   Modification History
@@ -341,14 +362,15 @@ ULONG INFO_data_Delete(IN UINT uiId)
                 }
                 else
                 {
+                    pDelNode = pstNode;
                     pstNode->pstNext->pstPrior = NULL;
                     pstNode = pstNode->pstNext;
-                    free(pstNode);
+                    free(pDelNode);
                 }
             }
+            /* 当前结点不是头结点 */
             else
             {
-                /* 当前结点不是头结点 */
                 pDelNode = pstNode;
                 pstNode->pstPrior->pstNext = pstNode->pstNext;
                 if (NULL != pstNode->pstNext)
@@ -375,7 +397,7 @@ ULONG INFO_data_Delete(IN UINT uiId)
         Input: IN INFO_CFG_S *pstCfg
        Output:
        Return: ULONG, == ERROR_SUCCESS    修改成功
-                     == ERROR_FAILED     修改失败
+                      == ERROR_FAILED     修改失败
       Caution:
 ------------------------------------------------------------------------------
   Modification History
@@ -388,26 +410,40 @@ ULONG INFO_data_Modify(IN INFO_CFG_S *pstCfg)
 {
     ULONG ulErrCode = ERROR_FAILED;
     INFO_DATA_S *pstNode = g_pstINFO_DATA_HEAD;
+    INFO_CFG_S stCfg = {0};
 
     /* 从链表中找到指定id对应的配置数据 */
-    ulErrCode = INFO_data_GetData(pstCfg->uiId, &(pstNode->stCfg));
-    if (BOOL_TRUE == INFO_NAME_ISVALID(pstCfg->szName))
+    ulErrCode = INFO_data_GetData(pstCfg->uiId, &(stCfg));
+
+    /* 遍历链表 */
+    while ((BOOL_FALSE == pstNode->bIsEmpty) && (NULL != pstNode))
     {
-        strlcpy(pstNode->stCfg.szName, pstCfg->szName, sizeof(pstNode->stCfg.szName));
+        if (pstCfg->uiId != pstNode->stCfg.uiId)
+        {
+            pstNode = pstNode->pstNext;
+        }
+        else
+        {
+            if (BOOL_TRUE == INFO_NAME_ISVALID(pstCfg->szName))
+            {
+                strlcpy(pstNode->stCfg.szName, pstCfg->szName, sizeof(pstNode->stCfg.szName));
+            }
+            if (BOOL_TRUE == INFO_SEX_ISVALID(pstCfg->enSex))
+            {
+                pstNode->stCfg.enSex = pstCfg->enSex;
+            }
+            if (BOOL_TRUE == INFO_AGE_ISVALID(pstCfg->uiAge))
+            {
+                pstNode->stCfg.uiAge = pstCfg->uiAge;
+            }
+            if (BOOL_TRUE == INFO_HEIGHT_ISVALID(pstCfg->uiHeight))
+            {
+                pstNode->stCfg.uiHeight = pstCfg->uiHeight;
+            }
+            ulErrCode = ERROR_SUCCESS;
+            break;
+        }
     }
-    if (BOOL_TRUE == INFO_SEX_ISVALID(pstCfg->enSex))
-    {
-        pstNode->stCfg.enSex = pstCfg->enSex;
-    }
-    if (BOOL_TRUE == INFO_AGE_ISVALID(pstCfg->uiAge))
-    {
-        pstNode->stCfg.uiAge = pstCfg->uiAge;
-    }
-    if (BOOL_TRUE == INFO_HEIGHT_ISVALID(pstCfg->uiHeight))
-    {
-        pstNode->stCfg.uiHeight = pstCfg->uiHeight;
-    }
-    ulErrCode = ERROR_SUCCESS;
     return ulErrCode;
 }
 
