@@ -89,6 +89,7 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
             }
             printf("%u \t %u \r\n", stCfg.uiAge, stCfg.uiHeight);
             uiId = INFO_data_GetNext(uiId);
+            ulErrCode = INFO_data_GetData(uiId, &stCfg);
         }
     }
     return ulErrCode;
@@ -178,7 +179,7 @@ ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
         else
         {
             /* 输入的id不存在 */
-            ulErrCode = ERROR_NOT_FOUND;
+            ulErrCode = ERROR_INVALID_PARAMETER;
         }
     }
         return ulErrCode;
