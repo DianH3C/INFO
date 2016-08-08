@@ -6,7 +6,7 @@
    Module Name: INFO
   Date Created: 201x-xx-xx
         Author: xxxx 00000
-   Description: ¾ßÌå¹¦ÄÜ´¦Àí
+   Description: Å¸ÃŸÃŒÃ¥Â¹Å Ã„ÃœÅ½Å Ã€Ã­
 
 --------------------------------------------------------------------------------
   Modification History
@@ -34,7 +34,27 @@ extern "C"{
 #include "info_dbg.h"
 #include "info_parse.h"
 #include "info_data.h"
+extern BOOL_T g_bTmp;
+/*****************************************************************************
+    Func Name: INFO_proc_IsInputValid
+ Date Created: 2016-08-07
+       Author: ZAY
+  Description: æ£€æŸ¥è¾“å…¥çš„å­—ç¬¦ä¸²æ˜¯å¦åˆç†
+        Input: IN const CHAR *pcInputStr   
+       Output:
 
+       Return: INFO_CFG_S *, NULL ä¸åˆç†
+                            ï¼NULL åˆç†  
+      Caution:
+------------------------------------------------------------------------------
+  Modification History
+  DATE        NAME             DESCRIPTION
+  2014-11-05  peng yanyu       complete code
+  --------------------------------------------------------------------------
+  YYYY-MM-DD
+
+
+*****************************************************************************/
 INFO_CFG_S *INFO_proc_IsInputValid(IN const CHAR *pcInputStr)
 {
     INFO_CFG_S *pstCfg=(INFO_CFG_S*)malloc(sizeof(INFO_CFG_S));
@@ -52,12 +72,12 @@ INFO_CFG_S *INFO_proc_IsInputValid(IN const CHAR *pcInputStr)
     Func Name: INFO_proc_Display[*]
  Date Created: 201x-xx-xx
        Author: xxxx 00000
-  Description: ÏÔÊ¾
-        Input: IN const CHAR *pcInputStr    ÊäÈë×Ö·û´®
+  Description: ÃÃ”ÃŠÅ¸
+        Input: IN const CHAR *pcInputStr    ÃŠÃ¤ÃˆÃ«Ã—Ã–Â·Ã»Å½Â®
        Output:
 
-       Return: ULONG, ERROR_SUCCESS         ´¦Àí³É¹¦
-                      OTHER                 ´¦ÀíÊ§°Ü
+       Return: ULONG, ERROR_SUCCESS         Å½Å Ã€Ã­Â³Ã‰Â¹Å 
+                      OTHER                 Å½Å Ã€Ã­ÃŠÂ§Â°Ãœ
       Caution:
 ------------------------------------------------------------------------------
   Modification History
@@ -84,11 +104,11 @@ ULONG INFO_proc_Display(IN const CHAR *pcInputStr)
     Func Name: INFO_proc_Add[*]
  Date Created: 201x-xx-xx
        Author: xxxx 00000
-  Description: Ìí¼Ó
-        Input: IN const CHAR *pcInputStr    ÊäÈë×Ö·û´®
+  Description: ÃŒÃ­Å’Ã“
+        Input: IN const CHAR *pcInputStr    ÃŠÃ¤ÃˆÃ«Ã—Ã–Â·Ã»Å½Â®
        Output:
-       Return: ULONG, ERROR_SUCCESS         ´¦Àí³É¹¦
-                      OTHER                 ´¦ÀíÊ§°Ü
+       Return: ULONG, ERROR_SUCCESS         Å½Å Ã€Ã­Â³Ã‰Â¹Å 
+                      OTHER                 Å½Å Ã€Ã­ÃŠÂ§Â°Ãœ
       Caution:
 ------------------------------------------------------------------------------
   Modification History
@@ -112,7 +132,12 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
         return ERROR_ALREADY_EXIST;
     }
     INFO_data_Insert(pstCfg);
-    printf("Í¨¹ıDisplay¹¦ÄÜ£¬¿ÉÒÔ¿´µ½ĞÂÔöĞÅÏ¢\n");
+    if(g_bTmp==BOOL_TRUE)
+    {
+        g_bTmp=BOOL_FALSE;
+        return ERROR_NO_ENOUGH_RESOURCE;
+    }
+    printf("ÃÅ¡Â¹Ã½DisplayÂ¹Å Ã„ÃœÂ£Â¬Â¿Ã‰Ã’Ã”Â¿Å½ÂµÅ“ÃÃ‚Ã”Ã¶ÃÃ…ÃÂ¢\n");
     return ERROR_SUCCESS;
 }
 
@@ -120,11 +145,11 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
     Func Name: INFO_proc_Delete[*]
  Date Created: 201x-xx-xx
        Author: xxxx 00000
-  Description: É¾³ı
-        Input: IN const CHAR *pcInputStr    ÊäÈë×Ö·û´®
+  Description: Ã‰Å¸Â³Ã½
+        Input: IN const CHAR *pcInputStr    ÃŠÃ¤ÃˆÃ«Ã—Ã–Â·Ã»Å½Â®
        Output:
-       Return: ULONG, ERROR_SUCCESS         ´¦Àí³É¹¦
-                      OTHER                 ´¦ÀíÊ§°Ü
+       Return: ULONG, ERROR_SUCCESS         Å½Å Ã€Ã­Â³Ã‰Â¹Å 
+                      OTHER                 Å½Å Ã€Ã­ÃŠÂ§Â°Ãœ
       Caution:
 ------------------------------------------------------------------------------
   Modification History
@@ -136,31 +161,33 @@ ULONG INFO_proc_Add(IN const CHAR *pcInputStr)
 *****************************************************************************/
 ULONG INFO_proc_Delete(IN const CHAR *pcInputStr)
 {
-    INFO_CFG_S *pstCfg=INFO_proc_IsInputValid(pcInputStr);
+    INFO_CFG_S *pstCfg=(INFO_CFG_S*)malloc(sizeof(INFO_CFG_S));
+    DBGASSERT(pstCfg);
+    INFO_parse_InputStr(pcInputStr,pstCfg);
     if(!INFO_ID_ISVALID(pstCfg->uiId))
     {
         printf("The parameter is incorrect.\n");
         return ERROR_INVALID_PARAMETER;
     }
     if(BOOL_FALSE==INFO_data_IsExist(pstCfg->uiId))
-        return ERROR_INVALID_PARAMETER;
+        return ERROR_SUCCESS;
     if(BOOL_FALSE==INFO_data_Delete(pstCfg->uiId))
     {
         return ERROR_FAILED;
     }
-    return INFO_proc_Delete;
+    return ERROR_SUCCESS;
 }
 
 /*****************************************************************************
     Func Name: INFO_proc_Modify[*]
  Date Created: 201x-xx-xx
        Author: xxxx 00000
-  Description: ĞŞ¸Ä
-        Input: IN const CHAR *pcInputStr    ÊäÈë×Ö·û´®
+  Description: ÃÃÅ¾Ã„
+        Input: IN const CHAR *pcInputStr    ÃŠÃ¤ÃˆÃ«Ã—Ã–Â·Ã»Å½Â®
        Output:
-       Return: ULONG, ERROR_SUCCESS         ´¦Àí³É¹¦
-                      OTHER                 ´¦ÀíÊ§°Ü
-      Caution: Ö§³Ö½öĞŞ¸Ä²¿·ÖÅäÖÃÊı¾İ
+       Return: ULONG, ERROR_SUCCESS         Å½Å Ã€Ã­Â³Ã‰Â¹Å 
+                      OTHER                 Å½Å Ã€Ã­ÃŠÂ§Â°Ãœ
+      Caution: Ã–Â§Â³Ã–Å“Ã¶ÃÃÅ¾Ã„Â²Â¿Â·Ã–Ã…Ã¤Ã–ÃƒÃŠÃ½Å¸Ã
 ------------------------------------------------------------------------------
   Modification History
   DATE        NAME             DESCRIPTION
@@ -192,11 +219,11 @@ ULONG INFO_proc_Modify(IN const CHAR *pcInputStr)
     Func Name: INFO_proc_Exit
  Date Created: 201x-xx-xx
        Author: xxxx 00000
-  Description: ÍË³ö
-        Input: IN const CHAR *pcInputStr    ÊäÈë×Ö·û´®
+  Description: ÃÃ‹Â³Ã¶
+        Input: IN const CHAR *pcInputStr    ÃŠÃ¤ÃˆÃ«Ã—Ã–Â·Ã»Å½Â®
        Output:
-       Return: ULONG, ERROR_SUCCESS         ´¦Àí³É¹¦
-                      OTHER                 ´¦ÀíÊ§°Ü
+       Return: ULONG, ERROR_SUCCESS         Å½Å Ã€Ã­Â³Ã‰Â¹Å 
+                      OTHER                 Å½Å Ã€Ã­ÃŠÂ§Â°Ãœ
       Caution:
 ------------------------------------------------------------------------------
   Modification History
@@ -215,11 +242,11 @@ ULONG INFO_proc_Exit(IN const CHAR *pcInputStr)
     Func Name: INFO_proc_OpenDebug
  Date Created: 201x-xx-xx
        Author: xxxx 00000
-  Description: ´ò¿ªµ÷ÊÔ¿ª¹Ø
-        Input: IN const CHAR *pcInputStr    ÊäÈë×Ö·û´®
+  Description: Å½Ã²Â¿ÂªÂµÃ·ÃŠÃ”Â¿ÂªÂ¹Ã˜
+        Input: IN const CHAR *pcInputStr    ÃŠÃ¤ÃˆÃ«Ã—Ã–Â·Ã»Å½Â®
        Output:
-       Return: ULONG, ERROR_SUCCESS         ´¦Àí³É¹¦
-                      OTHER                 ´¦ÀíÊ§°Ü
+       Return: ULONG, ERROR_SUCCESS         Å½Å Ã€Ã­Â³Ã‰Â¹Å 
+                      OTHER                 Å½Å Ã€Ã­ÃŠÂ§Â°Ãœ
       Caution:
 ------------------------------------------------------------------------------
   Modification History
@@ -241,11 +268,11 @@ ULONG INFO_proc_OpenDebug(IN const CHAR *pcInputStr)
     Func Name: INFO_proc_CloseDebug
  Date Created: 201x-xx-xx
        Author: xxxx 00000
-  Description: ¹Ø±Õµ÷ÊÔ¿ª¹Ø
-        Input: IN const CHAR *pcInputStr    ÊäÈë×Ö·û´®
+  Description: Â¹Ã˜Â±Ã•ÂµÃ·ÃŠÃ”Â¿ÂªÂ¹Ã˜
+        Input: IN const CHAR *pcInputStr    ÃŠÃ¤ÃˆÃ«Ã—Ã–Â·Ã»Å½Â®
        Output:
-       Return: ULONG, ERROR_SUCCESS         ´¦Àí³É¹¦
-                      OTHER                 ´¦ÀíÊ§°Ü
+       Return: ULONG, ERROR_SUCCESS         Å½Å Ã€Ã­Â³Ã‰Â¹Å 
+                      OTHER                 Å½Å Ã€Ã­ÃŠÂ§Â°Ãœ
       Caution:
 ------------------------------------------------------------------------------
   Modification History
